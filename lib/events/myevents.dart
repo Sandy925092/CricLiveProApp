@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kisma_livescore/commonwidget.dart';
 import 'package:kisma_livescore/events/myeventsdays.dart';
+import 'package:kisma_livescore/events/myeventsseries.dart';
 import 'package:kisma_livescore/events/seriesevent.dart';
 
 class MyEventsScreen extends StatefulWidget {
@@ -129,7 +130,10 @@ class _MyEventsScreenState extends State<MyEventsScreen> {
                     activePageIndex = i;
                   });
                 },
-                children: <Widget>[MyEventsDaysScreen(), SeriesEventScreen()],
+                children: <Widget>[
+                  MyEventsDaysScreen(),
+                  MyEventsSeriesScreen()
+                ],
               ),
             ),
           ],

@@ -1,20 +1,20 @@
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:kisma_livescore/commonwidget.dart';
-import 'package:kisma_livescore/events/myallevents.dart';
+import 'package:kisma_livescore/events/seriesevent.dart';
 
-class MyEventsDaysScreen extends StatefulWidget {
-  const MyEventsDaysScreen({super.key});
+class MyEventsSeriesScreen extends StatefulWidget {
+  const MyEventsSeriesScreen({super.key});
 
   @override
-  State<MyEventsDaysScreen> createState() => _MyEventsDaysScreenState();
+  State<MyEventsSeriesScreen> createState() => _MyEventsSeriesScreenState();
 }
 
-class _MyEventsDaysScreenState extends State<MyEventsDaysScreen>
+class _MyEventsSeriesScreenState extends State<MyEventsSeriesScreen>
     with TickerProviderStateMixin {
   TabController? _controller;
   int _currentIndex = 0;
-  @override
+
   void initState() {
     _controller = TabController(length: 5, vsync: this);
     // TODO: implement initState
@@ -51,7 +51,7 @@ class _MyEventsDaysScreenState extends State<MyEventsDaysScreen>
                   Tab(
                     // height: 20,
                     child: Text(
-                      'Men',
+                      'Test cricket',
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 14,
@@ -61,7 +61,7 @@ class _MyEventsDaysScreenState extends State<MyEventsDaysScreen>
                   Tab(
                     // height: 20,
                     child: Text(
-                      'T20',
+                      'One Day International',
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 14,
@@ -71,7 +71,7 @@ class _MyEventsDaysScreenState extends State<MyEventsDaysScreen>
                   Tab(
                     // height: 20,
                     child: Text(
-                      'ODI',
+                      'Asia Cup',
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 14,
@@ -81,7 +81,7 @@ class _MyEventsDaysScreenState extends State<MyEventsDaysScreen>
                   Tab(
                     // height: 20,
                     child: Text(
-                      'Int.',
+                      'World Cup',
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 14,
@@ -97,7 +97,7 @@ class _MyEventsDaysScreenState extends State<MyEventsDaysScreen>
               controller: _controller,
               children: [
                 // first tab bar view widget
-                MyAllEventsScreen(),
+                SeriesEventScreen(),
 
                 // second tab bar viiew widget
                 Container(
