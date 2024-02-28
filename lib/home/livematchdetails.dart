@@ -162,7 +162,492 @@ class _LiveMatchDetailsState extends State<LiveMatchDetails> {
                 ).pSymmetric(h: 20 , v: 2),
               ).p(15),
             ],
-          )
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset("assets/images/Info.png" , height: 13, width: 13),
+              SizedBox(width: 10),
+              commonText(
+                  data: "Realtime Win %",
+                  fontSize: 13,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Poppins",
+                  color: primaryColors),
+            ],
+          ),
+          Row(
+            children: [
+              Expanded(
+                flex: 3,
+                child: Container(
+                  margin: EdgeInsets.only(left: 20),
+                  height: 50,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.rectangle,
+                      border: Border.all(color: primaryColors),
+                      color: buttonColors,),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.only(left : 5 , top : 3 , bottom: 3, right: 3),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(30)),
+                        child: commonText(
+                          data: "56 %",
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          fontFamily: "Poppins",
+                          color: black,
+                        ),
+                      ).pOnly(left: 10),
+                      commonText(
+                        data: "  TM1",
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "Poppins",
+                        color: primaryColors,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Container(
+                  height: 50,
+                  margin: EdgeInsets.only(right: 20),
+
+                  decoration: BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    border: Border.all(color: primaryColors),
+                    color: primaryColors,),
+                  child:Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      commonText(
+                        data: "TM1",
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "Poppins",
+                        color: white.withOpacity(0.8),
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(left : 5 , top : 3 , bottom: 3, right: 3),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(30)),
+                        child: commonText(
+                          data: "44 %",
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          fontFamily: "Poppins",
+                          color: black,
+                        ),
+                      ).pOnly(left: 10 , right: 10),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 2),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              commonText(
+                  data: "Total Votes: 20K",
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Poppins",
+                  color: primaryColors),
+            ],
+          ).pOnly(right: 18),
+
+          Container(
+            height: 40,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+                color: buttonColors,
+              borderRadius: BorderRadius.all(Radius.circular(10))
+            ),
+
+            child: Center(
+              child: commonText(
+                  data: "Bet",
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: "Poppins",
+                  color: black),
+            ),
+          ).pOnly(left: 20 , right: 20 , top: 20),
+
+          Container(
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: disableColors),
+            ),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    commonText(
+                        data: "Batter",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: "Poppins",
+                        color: Colors.black),
+                    commonText(
+                        data: "R",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: "Poppins",
+                        color: Colors.black),
+                    commonText(
+                        data: "B",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: "Poppins",
+                        color: Colors.black),
+                    commonText(
+                        data: "4s",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: "Poppins",
+                        color: Colors.black),
+                    commonText(
+                        data: "6s",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: "Poppins",
+                        color: Colors.black),
+                    commonText(
+                        data: "S/R",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: "Poppins",
+                        color: Colors.black)
+                  ],
+                ).pOnly(left: 10 , right: 10 , top: 5),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    commonText(
+                        data: "Name",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "Poppins",
+                        color: primaryColors),
+                    commonText(
+                        data: "1",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "Poppins",
+                        color: primaryColors),
+                    commonText(
+                        data: "2",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "Poppins",
+                        color: primaryColors),
+                    commonText(
+                        data: "-",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "Poppins",
+                        color: primaryColors),
+                    commonText(
+                        data: "-",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "Poppins",
+                        color: primaryColors),
+                    commonText(
+                        data: "50.00",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "Poppins",
+                        color: primaryColors)
+                  ],
+                ).pOnly(left: 10 , right: 10 , top: 10),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    commonText(
+                        data: "Name",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "Poppins",
+                        color: primaryColors),
+                    commonText(
+                        data: "1",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "Poppins",
+                        color: primaryColors),
+                    commonText(
+                        data: "2",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "Poppins",
+                        color: primaryColors),
+                    commonText(
+                        data: "-",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "Poppins",
+                        color: primaryColors),
+                    commonText(
+                        data: "-",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "Poppins",
+                        color: primaryColors),
+                    commonText(
+                        data: "50.00",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "Poppins",
+                        color: primaryColors)
+                  ],
+                ).pOnly(left: 10 , right: 10 , top: 10),
+
+                Container(
+                  height: 35,
+                  color: greyColor,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      commonText(
+                          data: "CRR: 9.04",
+                          fontSize: 11,
+                          fontWeight: FontWeight.w300,
+                          fontFamily: "Poppins",
+                          color: primaryColors),
+                      commonText(
+                          data: "RRR: 7.57",
+                          fontSize: 11,
+                          fontWeight: FontWeight.w300,
+                          fontFamily: "Poppins",
+                          color: primaryColors),
+                      commonText(
+                          data: "TN1 needs 00 run in 00 balls to win",
+                          fontSize: 11,
+                          fontWeight: FontWeight.w300,
+                          fontFamily: "Poppins",
+                          color: primaryColors),
+                    ],
+                  ),
+                ).pOnly(top: 20),
+
+              ],
+            ),
+          ).p(20),
+
+          Container(
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: disableColors),
+            ),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    commonText(
+                        data: "Bowler",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: "Poppins",
+                        color: Colors.black),
+                    commonText(
+                        data: "O",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: "Poppins",
+                        color: Colors.black),
+                    commonText(
+                        data: "M",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: "Poppins",
+                        color: Colors.black),
+                    commonText(
+                        data: "R",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: "Poppins",
+                        color: Colors.black),
+                    commonText(
+                        data: "W",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: "Poppins",
+                        color: Colors.black),
+                    commonText(
+                        data: "ECON",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: "Poppins",
+                        color: Colors.black)
+                  ],
+                ).pOnly(left: 10 , right: 10 , top: 5),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    commonText(
+                        data: "Name",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "Poppins",
+                        color: primaryColors),
+                    commonText(
+                        data: "1",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "Poppins",
+                        color: primaryColors),
+                    commonText(
+                        data: "2",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "Poppins",
+                        color: primaryColors),
+                    commonText(
+                        data: "-",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "Poppins",
+                        color: primaryColors),
+                    commonText(
+                        data: "-",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "Poppins",
+                        color: primaryColors),
+                    commonText(
+                        data: "-",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "Poppins",
+                        color: primaryColors)
+                  ],
+                ).pOnly(left: 10 , right: 10 , top: 0 , bottom: 10),
+
+
+              ],
+            ),
+          ).pOnly(left : 20 , right: 20),
+
+          Container(
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: disableColors),
+            ),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    commonText(
+                        data: "Bowler",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: "Poppins",
+                        color: Colors.black),
+                    commonText(
+                        data: "O",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: "Poppins",
+                        color: Colors.black),
+                    commonText(
+                        data: "M",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: "Poppins",
+                        color: Colors.black),
+                    commonText(
+                        data: "R",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: "Poppins",
+                        color: Colors.black),
+                    commonText(
+                        data: "W",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: "Poppins",
+                        color: Colors.black),
+                    commonText(
+                        data: "ECON",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: "Poppins",
+                        color: Colors.black)
+                  ],
+                ).pOnly(left: 10 , right: 10 , top: 5),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    commonText(
+                        data: "Name",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "Poppins",
+                        color: primaryColors),
+                    commonText(
+                        data: "1",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "Poppins",
+                        color: primaryColors),
+                    commonText(
+                        data: "2",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "Poppins",
+                        color: primaryColors),
+                    commonText(
+                        data: "-",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "Poppins",
+                        color: primaryColors),
+                    commonText(
+                        data: "-",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "Poppins",
+                        color: primaryColors),
+                    commonText(
+                        data: "-",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "Poppins",
+                        color: primaryColors)
+                  ],
+                ).pOnly(left: 10 , right: 10 , top: 0 , bottom: 10),
+
+
+              ],
+            ),
+          ).pOnly(left : 20 , right: 20)
+
+
+
+
+
+
         ],
       ),
     );
