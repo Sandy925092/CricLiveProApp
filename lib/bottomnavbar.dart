@@ -2,6 +2,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:kisma_livescore/home/homeScreen.dart';
+import 'package:kisma_livescore/commonwidget.dart';
+import 'package:kisma_livescore/events/myevents.dart';
 
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
@@ -22,9 +24,7 @@ class _DashboardState extends State<Dashboard> {
     List<Widget> buildScreens() {
       return [
         HomeScreen(),
-        Container(
-          color: Colors.black,
-        ),
+        MyEventsScreen(),
         Container(
           color: Colors.blue,
         ),
@@ -38,7 +38,7 @@ class _DashboardState extends State<Dashboard> {
       return [
         PersistentBottomNavBarItem(
           // icon:Icon(Icons.home),
-          icon: const Icon(CupertinoIcons.chart_pie),
+          icon: Icon(MyFlutterApp.home),
           title: ("Home"),
           textStyle: TextStyle(
             fontFamily: "Poppins",
@@ -50,7 +50,7 @@ class _DashboardState extends State<Dashboard> {
           inactiveColorPrimary: Color(0xff96A0B7),
         ),
         PersistentBottomNavBarItem(
-          icon: const Icon(Icons.sports_cricket_outlined),
+          icon: const Icon(MyFlutterApp.calendar),
           title: ("My Events"),
           textStyle: TextStyle(
             fontFamily: "Poppins",
@@ -63,7 +63,7 @@ class _DashboardState extends State<Dashboard> {
         ),
         PersistentBottomNavBarItem(
           icon: const Icon(
-            Icons.schedule,
+            MyFlutterApp.series,
           ),
           title: "Series",
           textStyle: TextStyle(
@@ -77,7 +77,7 @@ class _DashboardState extends State<Dashboard> {
         ),
         PersistentBottomNavBarItem(
           icon: const Icon(
-            Icons.settings_sharp,
+            MyFlutterApp.setting,
           ),
           title: "Settings",
           textStyle: TextStyle(
