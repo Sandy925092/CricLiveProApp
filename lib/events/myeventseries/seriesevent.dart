@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kisma_livescore/commonwidget.dart';
+import 'package:kisma_livescore/events/myeventseries/myeventseriesdetail.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -17,41 +18,7 @@ class _SeriesEventScreenState extends State<SeriesEventScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Today',
-                  style: TextStyle(
-                      color: darkBlue,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700),
-                ),
-                Column(
-                  children: [
-                    Text(
-                      '08/12',
-                      style: TextStyle(
-                          color: darkBlue,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700),
-                    ),
-                    Text(
-                      '16:02',
-                      style: TextStyle(
-                          color: darkBlue,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ],
-                ),
-                Icon(
-                  MyFlutterApp.calendar,
-                  color: Color(0xff96A0B7),
-                  size: 30,
-                )
-              ],
-            ),
+            1.h.heightBox,
             ListView.builder(
                 itemCount: 14,
                 shrinkWrap: true,
@@ -213,7 +180,13 @@ class _SeriesEventScreenState extends State<SeriesEventScreen> {
                         1.h.heightBox
                       ],
                     ).pSymmetric(h: 10),
-                  );
+                  ).onTap(() {
+                    Navigator.of(context, rootNavigator: true).push(
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const MyEventSeriesDetailScreen()),
+                    );
+                  });
                 })
           ],
         ).pSymmetric(h: 10),

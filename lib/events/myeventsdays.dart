@@ -1,7 +1,7 @@
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:kisma_livescore/commonwidget.dart';
-import 'package:kisma_livescore/events/myallevents.dart';
+import 'package:kisma_livescore/events/myeventdays/myallevents.dart';
 
 class MyEventsDaysScreen extends StatefulWidget {
   const MyEventsDaysScreen({super.key});
