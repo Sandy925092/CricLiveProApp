@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:kisma_livescore/home/homeScreen.dart';
 import 'package:kisma_livescore/commonwidget.dart';
 import 'package:kisma_livescore/events/myevents.dart';
 
@@ -22,9 +23,7 @@ class _DashboardState extends State<Dashboard> {
 
     List<Widget> buildScreens() {
       return [
-        Container(
-          color: Colors.red,
-        ),
+        HomeScreen(),
         MyEventsScreen(),
         Container(
           color: Colors.blue,
