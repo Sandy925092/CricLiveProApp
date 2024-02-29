@@ -69,115 +69,138 @@ class _LiveMatchDetailsState extends State<LiveMatchDetails>
               // border: Border.all(color: txtGrey),
               // borderRadius: BorderRadius.circular(10)
             ),
-            child: Column(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                3.h.heightBox,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      children: [
-                        Image.asset(
-                          'assets/images/indiaflag.png',
-                          scale: 3,
-                        ),
-                        1.heightBox,
-                        Text(
-                          'India',
-                          style: TextStyle(
-                              color: Color(0xffE4E5E9),
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400),
-                        )
-                      ],
-                    ).pOnly(left: 20),
-                    Container(
-                      decoration: BoxDecoration(
-                          color: neonColor,
-                          borderRadius: BorderRadius.circular(30)),
-                      child: Text(
-                        '146/2',
-                        style: TextStyle(
-                            color: Color(0xff001648),
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700),
-                      ).pOnly(left: 10, right: 10, top: 4, bottom: 4),
-                    ),
-                    Text(
-                      '12.1',
-                      style: TextStyle(
-                          color: Color(0xffE4E5E9),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700),
-                    ),
-                    1.heightBox,
-                    Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: buttonColors),
+                Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Image.asset(
+                            'assets/images/indiaflag.png',
+                            scale: 3,
+                          ),
+                          5.w.widthBox,
+                          Image.asset(
+                            'assets/images/bat.png',
+                            scale: 2.5,
+                            color: neonColor,
+                          )
+                        ],
                       ),
-                      child: commonText(
-                              data: "14",
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              fontFamily: "Poppins",
-                              color: buttonColors)
-                          .p(20),
-                    )
-                  ],
+                      2.h.heightBox,
+                      Text(
+                        'India',
+                        style: TextStyle(
+                            color: Color(0xffE4E5E9),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400),
+                      )
+                    ],
+                  ),
                 ),
-                commonText(
-                    data: "Target: 168",
-                    fontSize: 11,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: "Poppins",
-                    color: white),
+                Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                                color: neonColor,
+                                borderRadius: BorderRadius.circular(30)),
+                            child: Text(
+                              '146/2',
+                              style: TextStyle(
+                                  color: Color(0xff001648),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700),
+                            ).pOnly(left: 10, right: 10, top: 4, bottom: 4),
+                          ),
+                          3.w.widthBox,
+                          Text(
+                            '12.1',
+                            style: TextStyle(
+                                color: Color(0xffE4E5E9),
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700),
+                          ),
+                        ],
+                      ),
+                      2.h.heightBox,
+                      commonText(
+                          data: "Target: 168",
+                          fontSize: 11,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: "Poppins",
+                          color: white),
+                    ],
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: buttonColors),
+                  ),
+                  child: commonText(
+                          data: "14",
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          fontFamily: "Poppins",
+                          color: buttonColors)
+                      .p(20),
+                )
               ],
-            ).pSymmetric(h: 10),
+            ).pSymmetric(h: 30, v: 20),
           ),
           SizedBox(
             height: 50,
             child: AppBar(
               backgroundColor: Color(0xff001548).withOpacity(0.7),
-              bottom: ButtonsTabBar(
-                contentPadding: EdgeInsets.symmetric(horizontal: 30),
-                radius: 30,
-                height: 35,
-                unselectedBackgroundColor: Colors.white,
-                decoration: BoxDecoration(color: neonColor),
-                controller: _controller,
-                tabs: [
-                  Tab(
-                    // height: 20,
-                    child: Text(
-                      'Details',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500),
+              bottom: PreferredSize(
+                preferredSize: Size.fromHeight(20),
+                child: ButtonsTabBar(
+                  contentPadding: EdgeInsets.symmetric(horizontal: 30),
+                  radius: 30,
+                  height: 35,
+                  unselectedBackgroundColor: Colors.white,
+                  decoration: BoxDecoration(color: neonColor),
+                  controller: _controller,
+                  tabs: [
+                    Tab(
+                      // height: 20,
+                      child: Text(
+                        'Details',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500),
+                      ),
                     ),
-                  ),
-                  Tab(
-                    // height: 20,
-                    child: Text(
-                      'Scorecard',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500),
+                    Tab(
+                      // height: 20,
+                      child: Text(
+                        'Scorecard',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500),
+                      ),
                     ),
-                  ),
-                  Tab(
-                    // height: 20,
-                    child: Text(
-                      'Lineup',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500),
+                    Tab(
+                      // height: 20,
+                      child: Text(
+                        'Lineup',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ).objectCenterLeft(),
               ),
             ),
           ),

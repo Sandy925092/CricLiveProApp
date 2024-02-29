@@ -170,55 +170,58 @@ class _MyEventSeriesDetailScreenState extends State<MyEventSeriesDetailScreen>
             height: 50,
             child: AppBar(
               backgroundColor: Color(0xff001548).withOpacity(0.7),
-              bottom: ButtonsTabBar(
-                contentPadding: EdgeInsets.symmetric(horizontal: 30),
-                radius: 30,
-                height: 35,
-                unselectedBackgroundColor: Colors.white,
-                decoration: BoxDecoration(color: neonColor),
-                controller: _controller,
-                tabs: [
-                  Tab(
-                    // height: 20,
-                    child: Text(
-                      'Overview',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500),
+              bottom: PreferredSize(
+                preferredSize: Size.fromHeight(20),
+                child: ButtonsTabBar(
+                  contentPadding: EdgeInsets.symmetric(horizontal: 30),
+                  radius: 30,
+                  height: 35,
+                  unselectedBackgroundColor: Colors.white,
+                  decoration: BoxDecoration(color: neonColor),
+                  controller: _controller,
+                  tabs: [
+                    Tab(
+                      // height: 20,
+                      child: Text(
+                        'Overview',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500),
+                      ),
                     ),
-                  ),
-                  Tab(
-                    // height: 20,
-                    child: Text(
-                      'Matches',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500),
+                    Tab(
+                      // height: 20,
+                      child: Text(
+                        'Matches',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500),
+                      ),
                     ),
-                  ),
-                  Tab(
-                    // height: 20,
-                    child: Text(
-                      'Squads',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500),
+                    Tab(
+                      // height: 20,
+                      child: Text(
+                        'Squads',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500),
+                      ),
                     ),
-                  ),
-                  // Tab(
-                  //   // height: 20,
-                  //   child: Text(
-                  //     'Stats',
-                  //     style: TextStyle(
-                  //         color: Colors.black,
-                  //         fontSize: 14,
-                  //         fontWeight: FontWeight.w500),
-                  //   ),
-                  // ),
-                ],
+                    // Tab(
+                    //   // height: 20,
+                    //   child: Text(
+                    //     'Stats',
+                    //     style: TextStyle(
+                    //         color: Colors.black,
+                    //         fontSize: 14,
+                    //         fontWeight: FontWeight.w500),
+                    //   ),
+                    // ),
+                  ],
+                ).objectCenterLeft(),
               ),
             ),
           ),

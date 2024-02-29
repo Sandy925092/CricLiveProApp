@@ -49,9 +49,10 @@ class _LiveMatchDetailsFirstState extends State<LiveMatchDetailsFirst> {
               children: [
                 Container(
                   padding:
-                  EdgeInsets.only(left: 14, top: 6, bottom: 6, right: 14),
+                      EdgeInsets.only(left: 14, top: 6, bottom: 6, right: 14),
                   decoration: BoxDecoration(
-                      color: greyColor, borderRadius: BorderRadius.circular(25)),
+                      color: greyColor,
+                      borderRadius: BorderRadius.circular(25)),
                   child: commonText(
                     data: "Over 12",
                     fontSize: 13,
@@ -62,7 +63,7 @@ class _LiveMatchDetailsFirstState extends State<LiveMatchDetailsFirst> {
                 ).p(15),
                 SizedBox(
                   height: 30,
-                  width: 230,
+                  width: 50.w,
                   child: ListView.builder(
                       shrinkWrap: true,
                       itemCount: 6,
@@ -71,21 +72,26 @@ class _LiveMatchDetailsFirstState extends State<LiveMatchDetailsFirst> {
                       itemBuilder: (context, index) {
                         return Container(
                           width: 35,
-                          decoration: index == 1 ? BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(color: disableColors)
-                          ) :  BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: buttonColors),
+                          decoration: index == 1
+                              ? BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(color: disableColors))
+                              : BoxDecoration(
+                                  shape: BoxShape.circle, color: buttonColors),
                           child: Center(
                             child: commonText(
-                              data: index == 1 ? "2" : index == 2 ? "6" : "4",
+                              data: index == 1
+                                  ? "2"
+                                  : index == 2
+                                      ? "6"
+                                      : "4",
                               fontSize: 13,
                               fontWeight: FontWeight.w700,
                               fontFamily: "Poppins",
-                              color: index == 1 ?  primaryColors : black,
+                              color: index == 1 ? primaryColors : black,
                             ),
-                          ),).p(2);
+                          ),
+                        ).p(2);
                       }),
                 ),
                 Container(
@@ -99,14 +105,14 @@ class _LiveMatchDetailsFirstState extends State<LiveMatchDetailsFirst> {
                     fontWeight: FontWeight.w400,
                     fontFamily: "Poppins",
                     color: primaryColors,
-                  ).pSymmetric(h: 20 , v: 2),
+                  ).pSymmetric(h: 20, v: 2),
                 ).p(15),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset("assets/images/Info.png" , height: 13, width: 13),
+                Image.asset("assets/images/Info.png", height: 13, width: 13),
                 SizedBox(width: 10),
                 commonText(
                     data: "Realtime Win %",
@@ -126,11 +132,13 @@ class _LiveMatchDetailsFirstState extends State<LiveMatchDetailsFirst> {
                     decoration: BoxDecoration(
                       shape: BoxShape.rectangle,
                       border: Border.all(color: primaryColors),
-                      color: buttonColors,),
+                      color: buttonColors,
+                    ),
                     child: Row(
                       children: [
                         Container(
-                          padding: EdgeInsets.only(left : 5 , top : 3 , bottom: 3, right: 3),
+                          padding: EdgeInsets.only(
+                              left: 5, top: 3, bottom: 3, right: 3),
                           decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(30)),
@@ -158,12 +166,12 @@ class _LiveMatchDetailsFirstState extends State<LiveMatchDetailsFirst> {
                   child: Container(
                     height: 38,
                     margin: EdgeInsets.only(right: 20),
-
                     decoration: BoxDecoration(
                       shape: BoxShape.rectangle,
                       border: Border.all(color: primaryColors),
-                      color: primaryColors,),
-                    child:Row(
+                      color: primaryColors,
+                    ),
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         commonText(
@@ -174,7 +182,8 @@ class _LiveMatchDetailsFirstState extends State<LiveMatchDetailsFirst> {
                           color: white.withOpacity(0.8),
                         ),
                         Container(
-                          padding: EdgeInsets.only(left : 5 , top : 3 , bottom: 3, right: 3),
+                          padding: EdgeInsets.only(
+                              left: 5, top: 3, bottom: 3, right: 3),
                           decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(30)),
@@ -185,7 +194,7 @@ class _LiveMatchDetailsFirstState extends State<LiveMatchDetailsFirst> {
                             fontFamily: "Poppins",
                             color: black,
                           ),
-                        ).pOnly(left: 10 , right: 10),
+                        ).pOnly(left: 10, right: 10),
                       ],
                     ),
                   ),
@@ -204,15 +213,12 @@ class _LiveMatchDetailsFirstState extends State<LiveMatchDetailsFirst> {
                     color: primaryColors),
               ],
             ).pOnly(right: 18),
-
             Container(
               height: 40,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                   color: buttonColors,
-                  borderRadius: BorderRadius.all(Radius.circular(10))
-              ),
-
+                  borderRadius: BorderRadius.all(Radius.circular(10))),
               child: Center(
                 child: commonText(
                     data: "Bet",
@@ -221,8 +227,7 @@ class _LiveMatchDetailsFirstState extends State<LiveMatchDetailsFirst> {
                     fontFamily: "Poppins",
                     color: black),
               ),
-            ).pOnly(left: 20 , right: 20 , top: 20),
-
+            ).pOnly(left: 20, right: 20, top: 20),
             Container(
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
@@ -271,8 +276,7 @@ class _LiveMatchDetailsFirstState extends State<LiveMatchDetailsFirst> {
                           fontFamily: "Poppins",
                           color: Colors.black)
                     ],
-                  ).pOnly(left: 10 , right: 10 , top: 5),
-
+                  ).pOnly(left: 10, right: 10, top: 5),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -313,8 +317,7 @@ class _LiveMatchDetailsFirstState extends State<LiveMatchDetailsFirst> {
                           fontFamily: "Poppins",
                           color: primaryColors)
                     ],
-                  ).pOnly(left: 10 , right: 10 , top: 10),
-
+                  ).pOnly(left: 10, right: 10, top: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -358,14 +361,14 @@ class _LiveMatchDetailsFirstState extends State<LiveMatchDetailsFirst> {
                           fontFamily: "Poppins",
                           color: primaryColors)
                     ],
-                  ).pOnly(left: 10 , right: 10 , top: 10),
-
+                  ).pOnly(left: 10, right: 10, top: 10),
                   Container(
                     height: 35,
                     decoration: BoxDecoration(
-                      color: greyColor,
-                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10.0) , bottomRight:Radius.circular(10.0) )
-                    ),
+                        color: greyColor,
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(10.0),
+                            bottomRight: Radius.circular(10.0))),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -387,7 +390,6 @@ class _LiveMatchDetailsFirstState extends State<LiveMatchDetailsFirst> {
                         ),
                         Row(
                           children: [
-
                             Image.asset(
                               'assets/images/LastWicket.png',
                               height: 20,
@@ -405,12 +407,12 @@ class _LiveMatchDetailsFirstState extends State<LiveMatchDetailsFirst> {
                         ),
                       ],
                     ),
-                  ).pOnly(top: 18 , ),
-
+                  ).pOnly(
+                    top: 18,
+                  ),
                 ],
               ),
             ).p(20),
-
             Container(
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
@@ -459,8 +461,7 @@ class _LiveMatchDetailsFirstState extends State<LiveMatchDetailsFirst> {
                           fontFamily: "Poppins",
                           color: Colors.black)
                     ],
-                  ).pOnly(left: 10 , right: 10 , top: 5),
-
+                  ).pOnly(left: 10, right: 10, top: 5),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -501,12 +502,10 @@ class _LiveMatchDetailsFirstState extends State<LiveMatchDetailsFirst> {
                           fontFamily: "Poppins",
                           color: primaryColors)
                     ],
-                  ).pOnly(left: 10 , right: 10 , top: 10 , bottom: 10),
-
-
+                  ).pOnly(left: 10, right: 10, top: 10, bottom: 10),
                 ],
               ),
-            ).pOnly(left : 20 , right: 20),
+            ).pOnly(left: 20, right: 20),
             1.h.heightBox,
             Container(
               margin: EdgeInsets.only(bottom: 10),
@@ -572,7 +571,7 @@ class _LiveMatchDetailsFirstState extends State<LiveMatchDetailsFirst> {
                   ),
                 ],
               ).pSymmetric(h: 10, v: 10),
-            ).pOnly(left : 20 , right: 20),
+            ).pOnly(left: 20, right: 20),
           ],
         ),
       ),
