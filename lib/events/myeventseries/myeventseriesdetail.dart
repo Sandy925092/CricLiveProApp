@@ -33,7 +33,7 @@ class _MyEventSeriesDetailScreenState extends State<MyEventSeriesDetailScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(30.0),
+        preferredSize: const Size.fromHeight(40.0),
         child: AppBar(
           automaticallyImplyLeading: false,
           backgroundColor: primaryColors,
@@ -47,11 +47,16 @@ class _MyEventSeriesDetailScreenState extends State<MyEventSeriesDetailScreen>
                   fontFamily: "Poppins",
                   color: Colors.white)
               .p(10),
-          leading: Padding(
-            padding: const EdgeInsets.only(left: 10.0),
-            child: Image.asset(
-              "assets/images/backicon.png",
-              height: 0,
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10.0),
+              child: Image.asset(
+                "assets/images/backicon.png",
+                height: 0,
+              ),
             ),
           ).onTap(() {
             Navigator.of(context).pop();

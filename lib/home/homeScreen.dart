@@ -1,9 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kisma_livescore/customwidget/commonwidget.dart';
-import 'package:kisma_livescore/home/foryou.dart';
+import 'package:kisma_livescore/home/finished/finishscreen.dart';
+import 'package:kisma_livescore/home/foryou/foryou.dart';
+import 'package:kisma_livescore/home/livematchdetails.dart';
 import 'package:kisma_livescore/home/livescreen.dart';
+import 'package:kisma_livescore/home/searchscreen.dart';
+import 'package:kisma_livescore/home/upcoming/upcomingmatchesscreen.dart';
 import 'package:kisma_livescore/utils/colorfile.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -29,9 +34,19 @@ class _HomeScreenState extends State<HomeScreen> {
           leadingWidth: 130,
           centerTitle: false,
           actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 18.0),
-              child: Icon(Icons.search, color: buttonColors),
+            GestureDetector(
+              onTap: () {
+                PersistentNavBarNavigator.pushNewScreen(
+                  context,
+                  screen: const SearchScreen(),
+                  withNavBar: true, // OPTIONAL VALUE. True by default.
+                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(right: 18.0),
+                child: Icon(Icons.search, color: buttonColors),
+              ),
             )
           ],
           leading: Padding(
@@ -99,8 +114,8 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               LiveScreen(),
               ForYou(),
-              Center(child: Text('Settings')),
-              Center(child: Text('Settings')),
+              UpcomingMatchScreen(),
+              FinishedScreen()
             ],
           ),
         ),

@@ -1,0 +1,12 @@
+flutter_native_splash:
+  background_image: "assets/images/splashIos.png"
+#  branding : "assets/images/ScreenSS.gif"
+  image_ios: assets/images/splashIos.png
+  android: true
+  ios: true
+  fullscreen : true
+  android_gravity: center
+#  android_fullscreen: true
+  android_12:
+    color: "#001648"
+    image: "assets/images/appicon.png"
