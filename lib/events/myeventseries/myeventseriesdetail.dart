@@ -58,7 +58,8 @@ class _MyEventSeriesDetailScreenState extends State<MyEventSeriesDetailScreen>
                   height: 0,
                 ),
               ),
-            )),
+            ),
+        ),
       ),
       body: Column(
         children: [
