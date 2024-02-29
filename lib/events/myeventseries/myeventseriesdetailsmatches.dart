@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:kisma_livescore/commonwidget.dart';
-import 'package:kisma_livescore/series/seriesallmatches.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-class MyEventSeriesDetailsOverviewScreen extends StatefulWidget {
-  const MyEventSeriesDetailsOverviewScreen({super.key});
+class MyEventSeriesDetailsMatchesScreen extends StatefulWidget {
+  const MyEventSeriesDetailsMatchesScreen({super.key});
 
   @override
-  State<MyEventSeriesDetailsOverviewScreen> createState() =>
-      _MyEventSeriesDetailsOverviewScreenState();
+  State<MyEventSeriesDetailsMatchesScreen> createState() =>
+      _MyEventSeriesDetailsMatchesScreenState();
 }
 
-class _MyEventSeriesDetailsOverviewScreenState
-    extends State<MyEventSeriesDetailsOverviewScreen> {
+class _MyEventSeriesDetailsMatchesScreenState
+    extends State<MyEventSeriesDetailsMatchesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,12 +36,7 @@ class _MyEventSeriesDetailsOverviewScreenState
                       color: Color(0xff96A0B7),
                       fontSize: 12,
                       fontWeight: FontWeight.w400),
-                ).onTap(() {
-                  Navigator.of(context, rootNavigator: true).push(
-                    MaterialPageRoute(
-                        builder: (context) => const SeriesAllMatchesScreen()),
-                  );
-                })
+                )
               ],
             ),
             ListView.builder(

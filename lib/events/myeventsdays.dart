@@ -100,38 +100,10 @@ class _MyEventsDaysScreenState extends State<MyEventsDaysScreen>
                 MyAllEventsScreen(),
 
                 // second tab bar viiew widget
-                Container(
-                  color: Colors.pink,
-                  child: Center(
-                    child: Text(
-                      'Car',
-                    ),
-                  ),
-                ),
-                Container(
-                  color: Colors.pink,
-                  child: Center(
-                    child: Text(
-                      'Car',
-                    ),
-                  ),
-                ),
-                Container(
-                  color: Colors.pink,
-                  child: Center(
-                    child: Text(
-                      'Car',
-                    ),
-                  ),
-                ),
-                Container(
-                  color: Colors.pink,
-                  child: Center(
-                    child: Text(
-                      'Car',
-                    ),
-                  ),
-                ),
+                MyAllEventsScreen(),
+                MyAllEventsScreen(),
+                MyAllEventsScreen(),
+                MyAllEventsScreen(),
               ],
             ),
           ),

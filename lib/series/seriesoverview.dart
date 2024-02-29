@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kisma_livescore/commonwidget.dart';
+import 'package:kisma_livescore/series/seriesallmatches.dart';
+import 'package:kisma_livescore/series/seriesmtachscorecard.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -34,7 +36,12 @@ class _SeriesOverviewScreenState extends State<SeriesOverviewScreen> {
                       color: Color(0xff96A0B7),
                       fontSize: 12,
                       fontWeight: FontWeight.w400),
-                )
+                ).onTap(() {
+                  Navigator.of(context, rootNavigator: true).push(
+                    MaterialPageRoute(
+                        builder: (context) => const SeriesAllMatchesScreen()),
+                  );
+                })
               ],
             ),
             ListView.builder(
@@ -99,7 +106,13 @@ class _SeriesOverviewScreenState extends State<SeriesOverviewScreen> {
                         ),
                       ],
                     ).pSymmetric(h: 10, v: 10),
-                  );
+                  ).onTap(() {
+                    Navigator.of(context, rootNavigator: true).push(
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const SeriesMatchScorecardScreen()),
+                    );
+                  });
                 })
           ],
         ).pSymmetric(h: 10),

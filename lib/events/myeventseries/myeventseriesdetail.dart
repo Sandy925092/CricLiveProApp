@@ -2,7 +2,10 @@ import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:kisma_livescore/commonwidget.dart';
 import 'package:kisma_livescore/customwidget/commonwidget.dart';
+import 'package:kisma_livescore/events/myeventseries/myeventseriesdetailsmatches.dart';
 import 'package:kisma_livescore/events/myeventseries/myeventseriesdetailsoverview.dart';
+import 'package:kisma_livescore/series/seriesmatches.dart';
+import 'package:kisma_livescore/series/seriessquad.dart';
 import 'package:kisma_livescore/utils/colorfile.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -21,7 +24,7 @@ class _MyEventSeriesDetailScreenState extends State<MyEventSeriesDetailScreen>
   int _currentIndex = 0;
 
   void initState() {
-    _controller = TabController(length: 4, vsync: this);
+    _controller = TabController(length: 3, vsync: this);
     // TODO: implement initState
     super.initState();
   }
@@ -50,7 +53,9 @@ class _MyEventSeriesDetailScreenState extends State<MyEventSeriesDetailScreen>
               "assets/images/backicon.png",
               height: 0,
             ),
-          ),
+          ).onTap(() {
+            Navigator.of(context).pop();
+          }),
         ),
       ),
       body: Column(
@@ -201,16 +206,16 @@ class _MyEventSeriesDetailScreenState extends State<MyEventSeriesDetailScreen>
                           fontWeight: FontWeight.w500),
                     ),
                   ),
-                  Tab(
-                    // height: 20,
-                    child: Text(
-                      'Stats',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
+                  // Tab(
+                  //   // height: 20,
+                  //   child: Text(
+                  //     'Stats',
+                  //     style: TextStyle(
+                  //         color: Colors.black,
+                  //         fontSize: 14,
+                  //         fontWeight: FontWeight.w500),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -223,30 +228,16 @@ class _MyEventSeriesDetailScreenState extends State<MyEventSeriesDetailScreen>
                 MyEventSeriesDetailsOverviewScreen(),
 
                 // second tab bar viiew widget
-                Container(
-                  color: Colors.pink,
-                  child: Center(
-                    child: Text(
-                      'Car',
-                    ),
-                  ),
-                ),
-                Container(
-                  color: Colors.pink,
-                  child: Center(
-                    child: Text(
-                      'Car',
-                    ),
-                  ),
-                ),
-                Container(
-                  color: Colors.pink,
-                  child: Center(
-                    child: Text(
-                      'Car',
-                    ),
-                  ),
-                ),
+                SeriesMatchesScreen(),
+                SeriesSquadScreen(),
+                // Container(
+                //   color: Colors.pink,
+                //   child: Center(
+                //     child: Text(
+                //       'Car',
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),
