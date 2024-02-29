@@ -58,9 +58,7 @@ class _MyEventSeriesDetailScreenState extends State<MyEventSeriesDetailScreen>
                 height: 0,
               ),
             ),
-          ).onTap(() {
-            Navigator.of(context).pop();
-          }),
+          )
         ),
       ),
       body: Column(
