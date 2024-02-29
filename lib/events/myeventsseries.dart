@@ -100,38 +100,10 @@ class _MyEventsSeriesScreenState extends State<MyEventsSeriesScreen>
                 SeriesEventScreen(),
 
                 // second tab bar viiew widget
-                Container(
-                  color: Colors.pink,
-                  child: Center(
-                    child: Text(
-                      'Car',
-                    ),
-                  ),
-                ),
-                Container(
-                  color: Colors.pink,
-                  child: Center(
-                    child: Text(
-                      'Car',
-                    ),
-                  ),
-                ),
-                Container(
-                  color: Colors.pink,
-                  child: Center(
-                    child: Text(
-                      'Car',
-                    ),
-                  ),
-                ),
-                Container(
-                  color: Colors.pink,
-                  child: Center(
-                    child: Text(
-                      'Car',
-                    ),
-                  ),
-                ),
+                SeriesEventScreen(),
+                SeriesEventScreen(),
+                SeriesEventScreen(),
+                SeriesEventScreen(),
               ],
             ),
           ),
