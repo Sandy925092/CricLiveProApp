@@ -2,6 +2,7 @@ import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:kisma_livescore/commonwidget.dart';
 import 'package:kisma_livescore/customwidget/commonwidget.dart';
+import 'package:kisma_livescore/home/linedetails.dart';
 import 'package:kisma_livescore/utils/colorfile.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -2396,9 +2397,8 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                       ],
                     ),
                   ),
-
-                  // second tab bar viiew widget
-                  Container(),
+                  LineUpDetails(),  
+                  
                 ],
               ),
             ),
