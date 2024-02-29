@@ -637,7 +637,7 @@ class _ForYouState extends State<ForYou> {
                 ).pOnly(left: 10),
                 0.5.h.heightBox,
                 SizedBox(
-                  height: 14.h,
+                  height: 16.h,
                   width: 100.w,
                   child: ListView.builder(
                       shrinkWrap: true,
