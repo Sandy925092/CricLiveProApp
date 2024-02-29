@@ -32,7 +32,7 @@ class _LiveMatchDetailsState extends State<LiveMatchDetails>
     return Scaffold(
       backgroundColor: white,
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(30.0),
+        preferredSize: const Size.fromHeight(40.0),
         child: AppBar(
           automaticallyImplyLeading: false,
           backgroundColor: primaryColors,
@@ -46,11 +46,16 @@ class _LiveMatchDetailsState extends State<LiveMatchDetails>
                   fontFamily: "Poppins",
                   color: Colors.white)
               .p(10),
-          leading: Padding(
-            padding: const EdgeInsets.only(left: 10.0),
-            child: Image.asset(
-              "assets/images/backicon.png",
-              height: 0,
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10.0),
+              child: Image.asset(
+                "assets/images/backicon.png",
+                height: 0,
+              ),
             ),
           ),
         ),
@@ -145,7 +150,7 @@ class _LiveMatchDetailsState extends State<LiveMatchDetails>
                   Tab(
                     // height: 20,
                     child: Text(
-                      'All',
+                      'Details',
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 14,

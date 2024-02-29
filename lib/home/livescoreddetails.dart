@@ -308,12 +308,13 @@ class _LiveScoredDetailsState extends State<LiveScoredDetails> {
                             ),
                             Row(
                               children: [
-                                Image.asset(
-                                  'assets/images/bat.png',
-                                  scale: 3,
-                                ),
-                                1.w.widthBox,
-                                Text('WK')
+                                commonText(
+                                    data: "SR: 114.73",
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: "Poppins",
+                                    color: primaryColors),
+
                               ],
                             )
                           ],

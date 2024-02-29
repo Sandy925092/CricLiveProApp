@@ -120,7 +120,7 @@ class _LineAll16State extends State<LineAll16> {
                                   scale: 3,
                                 ),
                                 1.w.widthBox,
-                                Text('WK')
+                                Text('LH')
                               ],
                             )
                           ],

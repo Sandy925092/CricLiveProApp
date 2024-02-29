@@ -120,7 +120,7 @@ class _LineBat8State extends State<LineBat8> {
                                   scale: 3,
                                 ),
                                 1.w.widthBox,
-                                Text('WK')
+                                Text('Pacer')
                               ],
                             )
                           ],

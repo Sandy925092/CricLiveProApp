@@ -38,11 +38,11 @@ class _LineUpAr2State extends State<LineUpAr2> {
                               fontFamily: "Poppins",
                               color: black),
                           commonText(
-                              data: "  146-2 (20.0)",
-                              fontSize: 10,
-                              fontWeight: FontWeight.w300,
-                              fontFamily: "Poppins",
-                              color: black)
+                                  data: "  146-2 (20.0)",
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w300,
+                                  fontFamily: "Poppins",
+                                  color: black)
                               .pOnly(top: 8),
                         ],
                       ).pOnly(left: 20),
@@ -67,11 +67,11 @@ class _LineUpAr2State extends State<LineUpAr2> {
                               fontFamily: "Poppins",
                               color: black),
                           commonText(
-                              data: "  000-0 (00.0)",
-                              fontSize: 10,
-                              fontWeight: FontWeight.w300,
-                              fontFamily: "Poppins",
-                              color: black)
+                                  data: "  000-0 (00.0)",
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w300,
+                                  fontFamily: "Poppins",
+                                  color: black)
                               .pOnly(top: 8),
                         ],
                       ).pOnly(left: 20),
@@ -120,7 +120,13 @@ class _LineUpAr2State extends State<LineUpAr2> {
                                   scale: 3,
                                 ),
                                 1.w.widthBox,
-                                Text('WK')
+                                Text(
+                                  'All Rounder',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w200),
+                                )
                               ],
                             )
                           ],
