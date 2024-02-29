@@ -50,12 +50,14 @@ class _ForYouState extends State<ForYou> {
                     ),
                     2.w.widthBox,
                     commonText(
-                      data: "International Twenty20 Matches",
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      fontFamily: "Poppins",
-                      color: black,
-                    ),
+                        data: "International Twenty20 Matches",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: "Poppins",
+                        color: black,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis),
+                    Spacer(),
                     Container(
                       width: 35,
                       decoration: BoxDecoration(
@@ -303,9 +305,10 @@ class _ForYouState extends State<ForYou> {
                               PersistentNavBarNavigator.pushNewScreen(
                                 context,
                                 screen: const ForYouMatchDetails(),
-                                withNavBar: true, // OPTIONAL VALUE. True by default.
+                                withNavBar:
+                                    true, // OPTIONAL VALUE. True by default.
                                 pageTransitionAnimation:
-                                PageTransitionAnimation.cupertino,
+                                    PageTransitionAnimation.cupertino,
                               );
                             },
                             child: Container(
@@ -465,9 +468,10 @@ class _ForYouState extends State<ForYou> {
                               PersistentNavBarNavigator.pushNewScreen(
                                 context,
                                 screen: const ForYouMatchDetails(),
-                                withNavBar: true, // OPTIONAL VALUE. True by default.
+                                withNavBar:
+                                    true, // OPTIONAL VALUE. True by default.
                                 pageTransitionAnimation:
-                                PageTransitionAnimation.cupertino,
+                                    PageTransitionAnimation.cupertino,
                               );
                             },
                             child: Column(
@@ -642,15 +646,14 @@ class _ForYouState extends State<ForYou> {
                       itemBuilder: (context, index) {
                         return Row(
                           children: [
-                            Column(
-                                children: [
-                                  Image.asset(
-                                    'assets/images/nzvsafg.png',
-                                    fit: BoxFit.contain,
-                                    height: 100,
-                                    width: 100,
-                                  ),
-                                  0.5.h.heightBox,
+                            Column(children: [
+                              Image.asset(
+                                'assets/images/nzvsafg.png',
+                                fit: BoxFit.contain,
+                                height: 100,
+                                width: 100,
+                              ),
+                              0.5.h.heightBox,
                               commonText(
                                 data: "Test Match",
                                 alignment: TextAlign.center,

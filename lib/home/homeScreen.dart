@@ -9,6 +9,8 @@ import 'package:kisma_livescore/home/searchscreen.dart';
 import 'package:kisma_livescore/home/upcoming/upcomingmatchesscreen.dart';
 import 'package:kisma_livescore/utils/colorfile.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -74,11 +76,30 @@ class _HomeScreenState extends State<HomeScreen> {
                 dividerColor: buttonColors,
                 tabs: [
                   Tab(
-                      child: commonText(
-                    data: "Live 1",
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: "Poppins",
+                      child: Row(
+                    children: [
+                      commonText(
+                        data: "Live",
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: "Poppins",
+                      ),
+                      1.w.widthBox,
+                      Container(
+                        width: 5.w,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle, color: buttonColors),
+                        child: Center(
+                          child: commonText(
+                            data: "1",
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: "Poppins",
+                            color: black,
+                          ),
+                        ),
+                      ).p(2)
+                    ],
                   )), // Changed from icon to text
 
                   Tab(
