@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kisma_livescore/commonwidget.dart';
 import 'package:kisma_livescore/events/myeventseries/myeventseriesdetail.dart';
+import 'package:kisma_livescore/utils/colorfile.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -15,6 +16,7 @@ class _SeriesEventScreenState extends State<SeriesEventScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: bgColor,
       body: SingleChildScrollView(
         child: Column(
           children: [

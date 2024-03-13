@@ -17,6 +17,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: bgColor,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(40.0),
         child: AppBar(
@@ -97,7 +98,8 @@ class _SearchScreenState extends State<SearchScreen> {
                         color: primaryColors,
                       ).pOnly(left: 20.0, right: 16.0),
                       Padding(
-                        padding: const EdgeInsets.only(left: 16.0, right: 16.0 , bottom: 9),
+                        padding: const EdgeInsets.only(
+                            left: 16.0, right: 16.0, bottom: 9),
                         child: Divider(
                           thickness: 1.0,
                           color: buttonColors,

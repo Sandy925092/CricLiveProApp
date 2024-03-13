@@ -29,7 +29,7 @@ class _MyEventsDaysScreenState extends State<MyEventsDaysScreen>
           SizedBox(
             height: 50,
             child: AppBar(
-              backgroundColor: Color(0xff001548),
+              backgroundColor: Color(0xff263963).withOpacity(0.8),
               bottom: ButtonsTabBar(
                 contentPadding: EdgeInsets.symmetric(horizontal: 30),
                 radius: 30,

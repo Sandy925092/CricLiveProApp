@@ -15,6 +15,7 @@ class _LiveScoredDetailsState extends State<LiveScoredDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: bgColor,
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -47,7 +48,6 @@ class _LiveScoredDetailsState extends State<LiveScoredDetails> {
                 ],
               ),
             ),
-
             Row(
               children: [
                 Expanded(
@@ -68,11 +68,12 @@ class _LiveScoredDetailsState extends State<LiveScoredDetails> {
                               fontFamily: "Poppins",
                               color: black),
                           commonText(
-                              data: "  146-2 (20.0)",
-                              fontSize: 10,
-                              fontWeight: FontWeight.w300,
-                              fontFamily: "Poppins",
-                              color: black).pOnly(top: 8),
+                                  data: "  146-2 (20.0)",
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w300,
+                                  fontFamily: "Poppins",
+                                  color: black)
+                              .pOnly(top: 8),
                         ],
                       ).pOnly(left: 20),
                     ),
@@ -96,11 +97,12 @@ class _LiveScoredDetailsState extends State<LiveScoredDetails> {
                               fontFamily: "Poppins",
                               color: black),
                           commonText(
-                              data: "  000-0 (00.0)",
-                              fontSize: 10,
-                              fontWeight: FontWeight.w300,
-                              fontFamily: "Poppins",
-                              color: black).pOnly(top: 8),
+                                  data: "  000-0 (00.0)",
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w300,
+                                  fontFamily: "Poppins",
+                                  color: black)
+                              .pOnly(top: 8),
                         ],
                       ).pOnly(left: 20),
                     ),
@@ -110,139 +112,339 @@ class _LiveScoredDetailsState extends State<LiveScoredDetails> {
             ),
             2.h.heightBox,
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Table(
+              columnWidths: {
+                0: FlexColumnWidth(2),
+              },
+              border: TableBorder(
+                  horizontalInside: BorderSide(color: bgColor, width: 10.0)),
               children: [
-                commonText(
-                    data: "Batter",
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    fontFamily: "Poppins",
-                    color: Colors.black),
-                commonText(
-                    data: "R",
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    fontFamily: "Poppins",
-                    color: Colors.black),
-                commonText(
-                    data: "B",
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    fontFamily: "Poppins",
-                    color: Colors.black),
-                commonText(
-                    data: "4s",
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    fontFamily: "Poppins",
-                    color: Colors.black),
-                commonText(
-                    data: "6s",
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    fontFamily: "Poppins",
-                    color: Colors.black),
-                commonText(
-                    data: "S/R",
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    fontFamily: "Poppins",
-                    color: Colors.black)
+                //This table row is for the table header which is static
+                TableRow(children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Text(
+                      "Batter",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black87),
+                    ),
+                  ),
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Text(
+                        "R",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.black87),
+                      ),
+                    ),
+                  ),
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Text(
+                        "B",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.black87),
+                      ),
+                    ),
+                  ),
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Text(
+                        "4s",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.black87),
+                      ),
+                    ),
+                  ),
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Text(
+                        "6s",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.black87),
+                      ),
+                    ),
+                  ),
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Text(
+                        "S/R",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.black87),
+                      ),
+                    ),
+                  ),
+                ]),
+
+                TableRow(
+                    decoration: BoxDecoration(
+                        color: Color(0xffF6F6F8),
+                        borderRadius: BorderRadius.circular(10)),
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 20, horizontal: 6),
+                        child: Row(
+                          children: [
+                            Text(
+                              'N.Name',
+                            ),
+                            3.w.widthBox,
+                            Image.asset(
+                              "assets/images/bat.png",
+                              scale: 3,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          child: Text('1',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700)),
+                        ),
+                      ),
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          child: Text(
+                            '2',
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          child: Text(
+                            '-',
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          child: Text(
+                            '-',
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          child: Text(
+                            '50.00',
+                          ),
+                        ),
+                      ),
+                    ]),
+                TableRow(
+                    decoration: BoxDecoration(
+                        color: Color(0xffF6F6F8),
+                        borderRadius: BorderRadius.circular(10)),
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 20, horizontal: 6),
+                        child: Row(
+                          children: [
+                            Text(
+                              'N.Name',
+                            ),
+                            3.w.widthBox,
+                            Image.asset(
+                              "assets/images/bat.png",
+                              scale: 3,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          child: Text('1',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700)),
+                        ),
+                      ),
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          child: Text(
+                            '2',
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          child: Text(
+                            '-',
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          child: Text(
+                            '-',
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          child: Text(
+                            '50.00',
+                          ),
+                        ),
+                      ),
+                    ])
               ],
-            ).pOnly(left: 30, right: 30, top: 5),
-            1.h.heightBox,
-            Container(
-              height: 35,
-              color: greyColor.withOpacity(0.4),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  commonText(
-                      data: "Name",
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: "Poppins",
-                      color: primaryColors),
-                  commonText(
-                      data: "1",
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: "Poppins",
-                      color: primaryColors),
-                  commonText(
-                      data: "2",
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: "Poppins",
-                      color: primaryColors),
-                  commonText(
-                      data: "-",
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: "Poppins",
-                      color: primaryColors),
-                  commonText(
-                      data: "-",
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: "Poppins",
-                      color: primaryColors),
-                  commonText(
-                      data: "50.00",
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: "Poppins",
-                      color: primaryColors)
-                ],
-              ).pOnly(left: 10, right: 10, top: 8, bottom: 10),
-            ).pOnly(left: 20, right: 20, top: 5),
-            1.h.heightBox,
-            Container(
-              height: 35,
-              color: greyColor.withOpacity(0.4),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  commonText(
-                      data: "Name",
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: "Poppins",
-                      color: primaryColors),
-                  commonText(
-                      data: "1",
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: "Poppins",
-                      color: primaryColors),
-                  commonText(
-                      data: "2",
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: "Poppins",
-                      color: primaryColors),
-                  commonText(
-                      data: "-",
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: "Poppins",
-                      color: primaryColors),
-                  commonText(
-                      data: "-",
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: "Poppins",
-                      color: primaryColors),
-                  commonText(
-                      data: "50.00",
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: "Poppins",
-                      color: primaryColors)
-                ],
-              ).pOnly(left: 10, right: 10, top: 8, bottom: 10),
-            ).pOnly(left: 20, right: 20, top: 5),
+            ).pSymmetric(h: 10),
+
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: [
+            //     commonText(
+            //         data: "Batter",
+            //         fontSize: 14,
+            //         fontWeight: FontWeight.w700,
+            //         fontFamily: "Poppins",
+            //         color: Colors.black),
+            //     commonText(
+            //         data: "R",
+            //         fontSize: 14,
+            //         fontWeight: FontWeight.w700,
+            //         fontFamily: "Poppins",
+            //         color: Colors.black),
+            //     commonText(
+            //         data: "B",
+            //         fontSize: 14,
+            //         fontWeight: FontWeight.w700,
+            //         fontFamily: "Poppins",
+            //         color: Colors.black),
+            //     commonText(
+            //         data: "4s",
+            //         fontSize: 14,
+            //         fontWeight: FontWeight.w700,
+            //         fontFamily: "Poppins",
+            //         color: Colors.black),
+            //     commonText(
+            //         data: "6s",
+            //         fontSize: 14,
+            //         fontWeight: FontWeight.w700,
+            //         fontFamily: "Poppins",
+            //         color: Colors.black),
+            //     commonText(
+            //         data: "S/R",
+            //         fontSize: 14,
+            //         fontWeight: FontWeight.w700,
+            //         fontFamily: "Poppins",
+            //         color: Colors.black)
+            //   ],
+            // ).pOnly(left: 30, right: 30, top: 5),
+            // 1.h.heightBox,
+            // Container(
+            //   height: 35,
+            //   color: greyColor.withOpacity(0.4),
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: [
+            //       commonText(
+            //           data: "Name",
+            //           fontSize: 14,
+            //           fontWeight: FontWeight.w400,
+            //           fontFamily: "Poppins",
+            //           color: primaryColors),
+            //       commonText(
+            //           data: "1",
+            //           fontSize: 14,
+            //           fontWeight: FontWeight.w400,
+            //           fontFamily: "Poppins",
+            //           color: primaryColors),
+            //       commonText(
+            //           data: "2",
+            //           fontSize: 14,
+            //           fontWeight: FontWeight.w400,
+            //           fontFamily: "Poppins",
+            //           color: primaryColors),
+            //       commonText(
+            //           data: "-",
+            //           fontSize: 14,
+            //           fontWeight: FontWeight.w400,
+            //           fontFamily: "Poppins",
+            //           color: primaryColors),
+            //       commonText(
+            //           data: "-",
+            //           fontSize: 14,
+            //           fontWeight: FontWeight.w400,
+            //           fontFamily: "Poppins",
+            //           color: primaryColors),
+            //       commonText(
+            //           data: "50.00",
+            //           fontSize: 14,
+            //           fontWeight: FontWeight.w400,
+            //           fontFamily: "Poppins",
+            //           color: primaryColors)
+            //     ],
+            //   ).pOnly(left: 10, right: 10, top: 8, bottom: 10),
+            // ).pOnly(left: 20, right: 20, top: 5),
+            // 1.h.heightBox,
+            // Container(
+            //   height: 35,
+            //   color: greyColor.withOpacity(0.4),
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: [
+            //       commonText(
+            //           data: "Name",
+            //           fontSize: 14,
+            //           fontWeight: FontWeight.w400,
+            //           fontFamily: "Poppins",
+            //           color: primaryColors),
+            //       commonText(
+            //           data: "1",
+            //           fontSize: 14,
+            //           fontWeight: FontWeight.w400,
+            //           fontFamily: "Poppins",
+            //           color: primaryColors),
+            //       commonText(
+            //           data: "2",
+            //           fontSize: 14,
+            //           fontWeight: FontWeight.w400,
+            //           fontFamily: "Poppins",
+            //           color: primaryColors),
+            //       commonText(
+            //           data: "-",
+            //           fontSize: 14,
+            //           fontWeight: FontWeight.w400,
+            //           fontFamily: "Poppins",
+            //           color: primaryColors),
+            //       commonText(
+            //           data: "-",
+            //           fontSize: 14,
+            //           fontWeight: FontWeight.w400,
+            //           fontFamily: "Poppins",
+            //           color: primaryColors),
+            //       commonText(
+            //           data: "50.00",
+            //           fontSize: 14,
+            //           fontWeight: FontWeight.w400,
+            //           fontFamily: "Poppins",
+            //           color: primaryColors)
+            //     ],
+            //   ).pOnly(left: 10, right: 10, top: 8, bottom: 10),
+            // ).pOnly(left: 20, right: 20, top: 5),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -253,7 +455,6 @@ class _LiveScoredDetailsState extends State<LiveScoredDetails> {
                     fontWeight: FontWeight.w700,
                     fontFamily: "Poppins",
                     color: black),
-
                 commonText(
                     data: "10",
                     fontSize: 14,
@@ -262,41 +463,38 @@ class _LiveScoredDetailsState extends State<LiveScoredDetails> {
                     color: black)
               ],
             ).pOnly(left: 30, right: 30, top: 10),
-
-
-
             Text(
               'Yet to Bat',
               style: TextStyle(
                   color: Colors.black,
                   fontSize: 14,
                   fontWeight: FontWeight.w700),
-            ).pOnly(left: 20 , top: 30),
+            ).pOnly(left: 20, top: 30),
             GridView.builder(
                 itemCount: 5,
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-                gridDelegate:
-                SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2, childAspectRatio: 2.5),
                 itemBuilder: (context, index) {
                   return Container(
                     margin: EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 226, 226, 226),
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(10)),
                     child: Row(
                       children: [
+                        2.w.widthBox,
                         CircleAvatar(
+                          backgroundColor: Color(0xff001548),
                           child: Image.asset(
-                            'assets/images/rohit.png',
+                            'assets/images/maskbat.png',
                             scale: 3,
                           ),
                         ),
                         3.w.widthBox,
                         Column(
-                          crossAxisAlignment:
-                          CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
@@ -314,7 +512,6 @@ class _LiveScoredDetailsState extends State<LiveScoredDetails> {
                                     fontWeight: FontWeight.w400,
                                     fontFamily: "Poppins",
                                     color: primaryColors),
-
                               ],
                             )
                           ],
@@ -322,10 +519,7 @@ class _LiveScoredDetailsState extends State<LiveScoredDetails> {
                       ],
                     ),
                   );
-                }).pOnly(left: 10 , right: 10),
-
-
-
+                }).pOnly(left: 10, right: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -337,7 +531,6 @@ class _LiveScoredDetailsState extends State<LiveScoredDetails> {
                     fontWeight: FontWeight.w400,
                     fontFamily: "Poppins",
                     color: primaryColors),
-
               ],
             ),
             1.h.heightBox,
@@ -435,7 +628,7 @@ class _LiveScoredDetailsState extends State<LiveScoredDetails> {
                     fontFamily: "Poppins",
                     color: black),
               ),
-            ).pOnly(left: 20, right: 20, top: 20 , bottom: 30),
+            ).pOnly(left: 20, right: 20, top: 20, bottom: 30),
           ],
         ),
       ),

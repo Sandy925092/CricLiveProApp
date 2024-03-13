@@ -18,6 +18,7 @@ class _HelpAndSupportState extends State<HelpAndSupport> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: bgColor,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(40.0),
         child: AppBar(
@@ -27,15 +28,15 @@ class _HelpAndSupportState extends State<HelpAndSupport> {
           leadingWidth: 30,
           centerTitle: false,
           title: commonText(
-              data: "Help and Support",
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-              fontFamily: "Poppins",
-              color: Colors.white)
+                  data: "Help and Support",
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: "Poppins",
+                  color: Colors.white)
               .p(10),
           leading: GestureDetector(
             onTap: () {
-                Navigator.pop(context);
+              Navigator.pop(context);
             },
             child: Padding(
               padding: const EdgeInsets.only(left: 10.0),
@@ -60,7 +61,7 @@ class _HelpAndSupportState extends State<HelpAndSupport> {
                   hintStyle: TextStyle(
                       color: primaryColors,
                       fontSize: 14,
-                      fontWeight: FontWeight.w300),
+                      fontWeight: FontWeight.w400),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8.0),
                     borderSide: const BorderSide(
@@ -68,23 +69,22 @@ class _HelpAndSupportState extends State<HelpAndSupport> {
                       width: 1.0,
                     ),
                   ),
-                  prefixIcon: Image.asset("assets/images/user.png" , scale: 4),
+                  prefixIcon: Image.asset("assets/images/user.png", scale: 4),
                   contentPadding:
-                  EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+                      EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
                 ),
                 onChanged: (value) {
                   setState(() {});
                 },
               ),
             ),
-
             Padding(
-              padding: const EdgeInsets.only(left : 20.0 , right: 20),
+              padding: const EdgeInsets.only(left: 20.0, right: 20),
               child: Container(
-                height: 134,
-                width: double.infinity,
+                // height: 134,
+                // width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: bgColor,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: TextFormField(
@@ -95,7 +95,7 @@ class _HelpAndSupportState extends State<HelpAndSupport> {
                     hintStyle: TextStyle(
                         color: primaryColors,
                         fontSize: 14,
-                        fontWeight: FontWeight.w300),
+                        fontWeight: FontWeight.w400),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
                       borderSide: const BorderSide(
@@ -104,7 +104,7 @@ class _HelpAndSupportState extends State<HelpAndSupport> {
                       ),
                     ),
                     contentPadding:
-                    EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+                        EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
                   ),
                   style: TextStyle(
                     fontFamily: "Poppins",
@@ -115,15 +115,12 @@ class _HelpAndSupportState extends State<HelpAndSupport> {
                 ),
               ),
             ),
-
             Container(
               height: 40,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                   color: greyColor,
-                  borderRadius: BorderRadius.all(Radius.circular(10))
-              ),
-
+                  borderRadius: BorderRadius.all(Radius.circular(10))),
               child: Center(
                 child: commonText(
                     data: "Submit",
@@ -132,7 +129,7 @@ class _HelpAndSupportState extends State<HelpAndSupport> {
                     fontFamily: "Poppins",
                     color: primaryColors),
               ),
-            ).pOnly(left: 20 , right: 20 , top: 20),
+            ).pOnly(left: 20, right: 20, top: 20),
           ],
         ),
       ),

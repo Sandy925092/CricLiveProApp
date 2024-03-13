@@ -15,6 +15,7 @@ class _LineUpAr2State extends State<LineUpAr2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: bgColor,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -91,17 +92,19 @@ class _LineUpAr2State extends State<LineUpAr2> {
                   return Container(
                     margin: EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 226, 226, 226),
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(10)),
                     child: Row(
                       children: [
+                        2.w.widthBox,
                         CircleAvatar(
+                          backgroundColor: Color(0xff001548),
                           child: Image.asset(
-                            'assets/images/rohit.png',
+                            'assets/images/maskbat.png',
                             scale: 3,
                           ),
                         ),
-                        3.w.widthBox,
+                        2.w.widthBox,
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,

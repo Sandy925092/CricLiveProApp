@@ -1,6 +1,7 @@
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:kisma_livescore/commonwidget.dart';
+import 'package:kisma_livescore/utils/colorfile.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -25,15 +26,16 @@ class _SeriesSquadScreenState extends State<SeriesSquadScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: bgColor,
       body: Column(
         children: [
           SizedBox(
             height: 8.h,
             child: AppBar(
-              backgroundColor: Colors.white,
+              backgroundColor: bgColor,
               bottom: ButtonsTabBar(
                 center: false,
-                contentPadding: EdgeInsets.symmetric(horizontal: 30),
+                contentPadding: EdgeInsets.symmetric(horizontal: 40),
                 radius: 10,
                 height: 7.h,
                 unselectedBackgroundColor:
@@ -86,15 +88,17 @@ class _SeriesSquadScreenState extends State<SeriesSquadScreen>
                                   crossAxisCount: 2, childAspectRatio: 2.5),
                           itemBuilder: (context, index) {
                             return Container(
+                              padding: EdgeInsets.only(left: 10),
                               margin: EdgeInsets.all(10),
                               decoration: BoxDecoration(
-                                  color: Color.fromARGB(255, 226, 226, 226),
+                                  color: Colors.white,
                                   borderRadius: BorderRadius.circular(10)),
                               child: Row(
                                 children: [
                                   CircleAvatar(
+                                    backgroundColor: Color(0xff001548),
                                     child: Image.asset(
-                                      'assets/images/rohit.png',
+                                      'assets/images/maskbat.png',
                                       scale: 3,
                                     ),
                                   ),
@@ -144,15 +148,17 @@ class _SeriesSquadScreenState extends State<SeriesSquadScreen>
                                   crossAxisCount: 2, childAspectRatio: 2.5),
                           itemBuilder: (context, index) {
                             return Container(
+                              padding: EdgeInsets.only(left: 10),
                               margin: EdgeInsets.all(10),
                               decoration: BoxDecoration(
-                                  color: Color.fromARGB(255, 226, 226, 226),
+                                  color: Colors.white,
                                   borderRadius: BorderRadius.circular(10)),
                               child: Row(
                                 children: [
                                   CircleAvatar(
+                                    backgroundColor: Color(0xff001548),
                                     child: Image.asset(
-                                      'assets/images/rohit.png',
+                                      'assets/images/maskbat.png',
                                       scale: 3,
                                     ),
                                   ),
@@ -202,15 +208,17 @@ class _SeriesSquadScreenState extends State<SeriesSquadScreen>
                                   crossAxisCount: 2, childAspectRatio: 2.5),
                           itemBuilder: (context, index) {
                             return Container(
+                              padding: EdgeInsets.only(left: 10),
                               margin: EdgeInsets.all(10),
                               decoration: BoxDecoration(
-                                  color: Color.fromARGB(255, 226, 226, 226),
+                                  color: Colors.white,
                                   borderRadius: BorderRadius.circular(10)),
                               child: Row(
                                 children: [
                                   CircleAvatar(
+                                    backgroundColor: Color(0xff001548),
                                     child: Image.asset(
-                                      'assets/images/rohit.png',
+                                      'assets/images/maskbat.png',
                                       scale: 3,
                                     ),
                                   ),
@@ -264,15 +272,17 @@ class _SeriesSquadScreenState extends State<SeriesSquadScreen>
                                   crossAxisCount: 2, childAspectRatio: 2.5),
                           itemBuilder: (context, index) {
                             return Container(
+                              padding: EdgeInsets.only(left: 10),
                               margin: EdgeInsets.all(10),
                               decoration: BoxDecoration(
-                                  color: Color.fromARGB(255, 226, 226, 226),
+                                  color: Colors.white,
                                   borderRadius: BorderRadius.circular(10)),
                               child: Row(
                                 children: [
                                   CircleAvatar(
+                                    backgroundColor: Color(0xff001548),
                                     child: Image.asset(
-                                      'assets/images/rohit.png',
+                                      'assets/images/maskbat.png',
                                       scale: 3,
                                     ),
                                   ),
@@ -322,15 +332,17 @@ class _SeriesSquadScreenState extends State<SeriesSquadScreen>
                                   crossAxisCount: 2, childAspectRatio: 2.5),
                           itemBuilder: (context, index) {
                             return Container(
+                              padding: EdgeInsets.only(left: 10),
                               margin: EdgeInsets.all(10),
                               decoration: BoxDecoration(
-                                  color: Color.fromARGB(255, 226, 226, 226),
+                                  color: Colors.white,
                                   borderRadius: BorderRadius.circular(10)),
                               child: Row(
                                 children: [
                                   CircleAvatar(
+                                    backgroundColor: Color(0xff001548),
                                     child: Image.asset(
-                                      'assets/images/rohit.png',
+                                      'assets/images/maskbat.png',
                                       scale: 3,
                                     ),
                                   ),
@@ -380,15 +392,17 @@ class _SeriesSquadScreenState extends State<SeriesSquadScreen>
                                   crossAxisCount: 2, childAspectRatio: 2.5),
                           itemBuilder: (context, index) {
                             return Container(
+                              padding: EdgeInsets.only(left: 10),
                               margin: EdgeInsets.all(10),
                               decoration: BoxDecoration(
-                                  color: Color.fromARGB(255, 226, 226, 226),
+                                  color: Colors.white,
                                   borderRadius: BorderRadius.circular(10)),
                               child: Row(
                                 children: [
                                   CircleAvatar(
+                                    backgroundColor: Color(0xff001548),
                                     child: Image.asset(
-                                      'assets/images/rohit.png',
+                                      'assets/images/maskbat.png',
                                       scale: 3,
                                     ),
                                   ),

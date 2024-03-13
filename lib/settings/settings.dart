@@ -20,6 +20,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: bgColor,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(40.0),
         child: AppBar(
@@ -29,11 +30,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
           leadingWidth: 30,
           centerTitle: false,
           title: commonText(
-              data: "Settings",
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-              fontFamily: "Poppins",
-              color: Colors.white)
+                  data: "Settings",
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: "Poppins",
+                  color: Colors.white)
               .p(10),
           // leading: GestureDetector(
           //   onTap: () {
@@ -60,7 +61,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           1.5.h.heightBox,
           Container(
             height: 50,
-            color: greyColor,
+            color: Colors.white,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -71,22 +72,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   fontFamily: "Poppins",
                   color: primaryColors1,
                 ).pOnly(left: 20),
-                Image.asset("assets/images/forward.png" , height: 23,).pOnly(right: 20)
-
+                Image.asset(
+                  "assets/images/forward.png",
+                  height: 23,
+                ).pOnly(right: 20)
               ],
             ),
-          ).pOnly(left: 20 , right: 20 , top: 20).onTap(() {
+          ).pOnly(left: 20, right: 20, top: 20).onTap(() {
             PersistentNavBarNavigator.pushNewScreen(
               context,
               screen: const HelpAndSupport(),
               withNavBar: false, // OPTIONAL VALUE. True by default.
-              pageTransitionAnimation:
-              PageTransitionAnimation.cupertino,
+              pageTransitionAnimation: PageTransitionAnimation.cupertino,
             );
           }),
           Container(
             height: 50,
-            color: greyColor,
+            color: Colors.white,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -97,22 +99,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   fontFamily: "Poppins",
                   color: primaryColors1,
                 ).pOnly(left: 20),
-                Image.asset("assets/images/forward.png" , height: 23,).pOnly(right: 20)
-
+                Image.asset(
+                  "assets/images/forward.png",
+                  height: 23,
+                ).pOnly(right: 20)
               ],
             ),
-          ).pOnly(left: 20 , right: 20 , top: 13).onTap(() {
+          ).pOnly(left: 20, right: 20, top: 13).onTap(() {
             PersistentNavBarNavigator.pushNewScreen(
               context,
               screen: const PrivacyPolicy(),
               withNavBar: false, // OPTIONAL VALUE. True by default.
-              pageTransitionAnimation:
-              PageTransitionAnimation.cupertino,
+              pageTransitionAnimation: PageTransitionAnimation.cupertino,
             );
           }),
           Container(
             height: 50,
-            color: greyColor,
+            color: Colors.white,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -123,17 +126,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   fontFamily: "Poppins",
                   color: primaryColors1,
                 ).pOnly(left: 20),
-                Image.asset("assets/images/forward.png" , height: 23,).pOnly(right: 20)
-
+                Image.asset(
+                  "assets/images/forward.png",
+                  height: 23,
+                ).pOnly(right: 20)
               ],
             ),
-          ).pOnly(left: 20 , right: 20 , top: 13).onTap(() {
+          ).pOnly(left: 20, right: 20, top: 13).onTap(() {
             PersistentNavBarNavigator.pushNewScreen(
               context,
               screen: const TermsAndCondition(),
               withNavBar: false, // OPTIONAL VALUE. True by default.
-              pageTransitionAnimation:
-              PageTransitionAnimation.cupertino,
+              pageTransitionAnimation: PageTransitionAnimation.cupertino,
             );
           }),
         ],

@@ -26,38 +26,47 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: white,
+      backgroundColor: disableColors,
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(60.0),
-        child: AppBar(
-          automaticallyImplyLeading: false,
-          backgroundColor: primaryColors,
-          elevation: 0.0,
-          leadingWidth: 130,
-          centerTitle: false,
-          actions: [
-            GestureDetector(
-              onTap: () {
-                PersistentNavBarNavigator.pushNewScreen(
-                  context,
-                  screen: const SearchScreen(),
-                  withNavBar: true, // OPTIONAL VALUE. True by default.
-                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(right: 18.0),
-                child: Icon(Icons.search, color: buttonColors),
+        preferredSize: const Size.fromHeight(57.0),
+        child: Column(
+          children: [
+            AppBar(
+              automaticallyImplyLeading: false,
+              backgroundColor: primaryColors,
+              elevation: 0.0,
+              leadingWidth: 130,
+              centerTitle: false,
+              actions: [
+                GestureDetector(
+                  onTap: () {
+                    PersistentNavBarNavigator.pushNewScreen(
+                      context,
+                      screen: const SearchScreen(),
+                      withNavBar: true, // OPTIONAL VALUE. True by default.
+                      pageTransitionAnimation:
+                          PageTransitionAnimation.cupertino,
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 18.0),
+                    child: Icon(Icons.search, color: buttonColors),
+                  ),
+                )
+              ],
+              leading: Padding(
+                padding: const EdgeInsets.only(left: 10.0),
+                child: Image.asset(
+                  "assets/images/appicon.png",
+                  height: 40,
+                ),
               ),
-            )
-          ],
-          leading: Padding(
-            padding: const EdgeInsets.only(left: 10.0),
-            child: Image.asset(
-              "assets/images/appicon.png",
-              height: 40,
             ),
-          ),
+            // Divider(
+            //   thickness: 1,
+            //   color: Colors.white,
+            // )
+          ],
         ),
       ),
       body: DefaultTabController(
@@ -69,6 +78,8 @@ class _HomeScreenState extends State<HomeScreen> {
               preferredSize:
                   const Size.fromHeight(.0), // Adjust the height here
               child: TabBar(
+                tabAlignment: TabAlignment.start,
+                isScrollable: true,
                 indicatorColor: buttonColors,
                 labelColor: buttonColors,
                 unselectedLabelColor: disableColors,
@@ -77,6 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 tabs: [
                   Tab(
                       child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       commonText(
                         data: "Live",
@@ -112,6 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   Tab(
                       child: commonText(
+                    overflow: TextOverflow.ellipsis,
                     data: "Upcoming",
                     fontSize: 14,
                     maxLines: 1,

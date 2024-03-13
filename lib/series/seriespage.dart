@@ -30,6 +30,7 @@ class _SeriesScreenState extends State<SeriesScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xff001548).withOpacity(0.7),
       body: SafeArea(
         child: Column(
           children: [
@@ -44,18 +45,16 @@ class _SeriesScreenState extends State<SeriesScreen>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
-                    height: 20.h,
+                    height: 15.h,
                     width: 100.w,
                     child: ListView.builder(
                         shrinkWrap: true,
                         itemCount: 4,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
-                          return Container(
-                            child: Image.asset(
-                              'assets/images/nzvsafg.png',
-                              scale: 3,
-                            ),
+                          return Image.asset(
+                            'assets/images/afgvsnzw.png',
+                            scale: 4,
                           );
                         }),
                   ),
@@ -178,9 +177,10 @@ class _SeriesScreenState extends State<SeriesScreen>
                       )
                     ],
                   ),
+                  1.h.heightBox
                 ],
               ).pSymmetric(h: 10),
-            ),
+            ).pOnly(bottom: 1),
             SizedBox(
               height: 50,
               child: AppBar(

@@ -32,33 +32,34 @@ class _MyEventSeriesDetailScreenState extends State<MyEventSeriesDetailScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: bgColor,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(40.0),
         child: AppBar(
-            automaticallyImplyLeading: false,
-            backgroundColor: primaryColors,
-            elevation: 0.0,
-            leadingWidth: 30,
-            centerTitle: false,
-            title: commonText(
-                    data: "Zim vs Bgd Series",
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: "Poppins",
-                    color: Colors.white)
-                .p(10),
-            leading: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: Image.asset(
-                  "assets/images/backicon.png",
-                  height: 0,
-                ),
+          automaticallyImplyLeading: false,
+          backgroundColor: primaryColors,
+          elevation: 0.0,
+          leadingWidth: 30,
+          centerTitle: false,
+          title: commonText(
+                  data: "Zim vs Bgd Series",
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: "Poppins",
+                  color: Colors.white)
+              .p(10),
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10.0),
+              child: Image.asset(
+                "assets/images/backicon.png",
+                height: 0,
               ),
             ),
+          ),
         ),
       ),
       body: Column(

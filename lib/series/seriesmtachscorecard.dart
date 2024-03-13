@@ -37,6 +37,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: bgColor,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(30.0),
         child: AppBar(
@@ -200,7 +201,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                         SizedBox(
                           height: 8.h,
                           child: AppBar(
-                            backgroundColor: Colors.white,
+                            backgroundColor: bgColor,
                             bottom: ButtonsTabBar(
                               center: false,
                               contentPadding:
@@ -249,7 +250,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                   },
                                   border: TableBorder(
                                       horizontalInside: BorderSide(
-                                          color: Colors.white, width: 10.0)),
+                                          color: bgColor, width: 10.0)),
                                   children: [
                                     //This table row is for the table header which is static
                                     TableRow(children: [
@@ -327,9 +328,9 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
 
                                     TableRow(
                                         decoration: BoxDecoration(
-                                            color: Color(0xffF6F6F8),
+                                            color: Colors.white,
                                             borderRadius:
-                                                BorderRadius.circular(10)),
+                                                BorderRadius.circular(15)),
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
@@ -419,9 +420,9 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                         ]),
                                     TableRow(
                                         decoration: BoxDecoration(
-                                            color: Color(0xffF6F6F8),
+                                            color: Colors.white,
                                             borderRadius:
-                                                BorderRadius.circular(10)),
+                                                BorderRadius.circular(15)),
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
@@ -511,9 +512,9 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                         ]),
                                     TableRow(
                                         decoration: BoxDecoration(
-                                            color: Color(0xffF6F6F8),
+                                            color: Colors.white,
                                             borderRadius:
-                                                BorderRadius.circular(10)),
+                                                BorderRadius.circular(15)),
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
@@ -578,9 +579,9 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                         ]),
                                     TableRow(
                                         decoration: BoxDecoration(
-                                            color: Color(0xffF6F6F8),
+                                            color: Colors.white,
                                             borderRadius:
-                                                BorderRadius.circular(10)),
+                                                BorderRadius.circular(15)),
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
@@ -645,6 +646,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                         ])
                                   ],
                                 ).pSymmetric(h: 10),
+                                2.h.heightBox,
                                 Row(
                                   children: [
                                     Text('Extras:',
@@ -667,7 +669,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                   },
                                   border: TableBorder(
                                       horizontalInside: BorderSide(
-                                          color: Colors.white, width: 10.0)),
+                                          color: bgColor, width: 10.0)),
                                   children: [
                                     //This table row is for the table header which is static
                                     TableRow(children: [
@@ -745,9 +747,9 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
 
                                     TableRow(
                                         decoration: BoxDecoration(
-                                            color: Color(0xffF6F6F8),
+                                            color: Colors.white,
                                             borderRadius:
-                                                BorderRadius.circular(10)),
+                                                BorderRadius.circular(15)),
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
@@ -812,9 +814,9 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                         ]),
                                     TableRow(
                                         decoration: BoxDecoration(
-                                            color: Color(0xffF6F6F8),
+                                            color: Colors.white,
                                             borderRadius:
-                                                BorderRadius.circular(10)),
+                                                BorderRadius.circular(15)),
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
@@ -879,9 +881,9 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                         ]),
                                     TableRow(
                                         decoration: BoxDecoration(
-                                            color: Color(0xffF6F6F8),
+                                            color: Colors.white,
                                             borderRadius:
-                                                BorderRadius.circular(10)),
+                                                BorderRadius.circular(15)),
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
@@ -946,9 +948,9 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                         ]),
                                     TableRow(
                                         decoration: BoxDecoration(
-                                            color: Color(0xffF6F6F8),
+                                            color: Colors.white,
                                             borderRadius:
-                                                BorderRadius.circular(10)),
+                                                BorderRadius.circular(15)),
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
@@ -1020,7 +1022,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                   },
                                   border: TableBorder(
                                       horizontalInside: BorderSide(
-                                          color: Colors.white, width: 10.0)),
+                                          color: bgColor, width: 10.0)),
                                   children: [
                                     //This table row is for the table header which is static
                                     TableRow(children: [
@@ -1062,9 +1064,9 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
 
                                     TableRow(
                                         decoration: BoxDecoration(
-                                            color: Color(0xffF6F6F8),
+                                            color: Colors.white,
                                             borderRadius:
-                                                BorderRadius.circular(10)),
+                                                BorderRadius.circular(15)),
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
@@ -1096,9 +1098,9 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                         ]),
                                     TableRow(
                                         decoration: BoxDecoration(
-                                            color: Color(0xffF6F6F8),
+                                            color: Colors.white,
                                             borderRadius:
-                                                BorderRadius.circular(10)),
+                                                BorderRadius.circular(15)),
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
@@ -1130,9 +1132,9 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                         ]),
                                     TableRow(
                                         decoration: BoxDecoration(
-                                            color: Color(0xffF6F6F8),
+                                            color: Colors.white,
                                             borderRadius:
-                                                BorderRadius.circular(10)),
+                                                BorderRadius.circular(15)),
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
@@ -1164,9 +1166,9 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                         ]),
                                     TableRow(
                                         decoration: BoxDecoration(
-                                            color: Color(0xffF6F6F8),
+                                            color: Colors.white,
                                             borderRadius:
-                                                BorderRadius.circular(10)),
+                                                BorderRadius.circular(15)),
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
@@ -1230,7 +1232,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                       return Container(
                                         margin: EdgeInsets.all(7),
                                         decoration: BoxDecoration(
-                                            color: Color(0xffF6F6F8),
+                                            color: Colors.white,
                                             borderRadius:
                                                 BorderRadius.circular(10)),
                                         child: Column(
@@ -1326,7 +1328,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                   },
                                   border: TableBorder(
                                       horizontalInside: BorderSide(
-                                          color: Colors.white, width: 10.0)),
+                                          color: bgColor, width: 10.0)),
                                   children: [
                                     //This table row is for the table header which is static
                                     TableRow(children: [
@@ -1404,9 +1406,9 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
 
                                     TableRow(
                                         decoration: BoxDecoration(
-                                            color: Color(0xffF6F6F8),
+                                            color: Colors.white,
                                             borderRadius:
-                                                BorderRadius.circular(10)),
+                                                BorderRadius.circular(15)),
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
@@ -1496,9 +1498,9 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                         ]),
                                     TableRow(
                                         decoration: BoxDecoration(
-                                            color: Color(0xffF6F6F8),
+                                            color: Colors.white,
                                             borderRadius:
-                                                BorderRadius.circular(10)),
+                                                BorderRadius.circular(15)),
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
@@ -1588,9 +1590,9 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                         ]),
                                     TableRow(
                                         decoration: BoxDecoration(
-                                            color: Color(0xffF6F6F8),
+                                            color: Colors.white,
                                             borderRadius:
-                                                BorderRadius.circular(10)),
+                                                BorderRadius.circular(15)),
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
@@ -1655,9 +1657,9 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                         ]),
                                     TableRow(
                                         decoration: BoxDecoration(
-                                            color: Color(0xffF6F6F8),
+                                            color: Colors.white,
                                             borderRadius:
-                                                BorderRadius.circular(10)),
+                                                BorderRadius.circular(15)),
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
@@ -1722,6 +1724,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                         ])
                                   ],
                                 ).pSymmetric(h: 10),
+                                2.h.heightBox,
                                 Row(
                                   children: [
                                     Text('Extras:',
@@ -1744,7 +1747,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                   },
                                   border: TableBorder(
                                       horizontalInside: BorderSide(
-                                          color: Colors.white, width: 10.0)),
+                                          color: bgColor, width: 10.0)),
                                   children: [
                                     //This table row is for the table header which is static
                                     TableRow(children: [
@@ -1822,9 +1825,9 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
 
                                     TableRow(
                                         decoration: BoxDecoration(
-                                            color: Color(0xffF6F6F8),
+                                            color: Colors.white,
                                             borderRadius:
-                                                BorderRadius.circular(10)),
+                                                BorderRadius.circular(15)),
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
@@ -1889,9 +1892,9 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                         ]),
                                     TableRow(
                                         decoration: BoxDecoration(
-                                            color: Color(0xffF6F6F8),
+                                            color: Colors.white,
                                             borderRadius:
-                                                BorderRadius.circular(10)),
+                                                BorderRadius.circular(15)),
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
@@ -1956,9 +1959,9 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                         ]),
                                     TableRow(
                                         decoration: BoxDecoration(
-                                            color: Color(0xffF6F6F8),
+                                            color: Colors.white,
                                             borderRadius:
-                                                BorderRadius.circular(10)),
+                                                BorderRadius.circular(15)),
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
@@ -2023,9 +2026,9 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                         ]),
                                     TableRow(
                                         decoration: BoxDecoration(
-                                            color: Color(0xffF6F6F8),
+                                            color: Colors.white,
                                             borderRadius:
-                                                BorderRadius.circular(10)),
+                                                BorderRadius.circular(15)),
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
@@ -2097,7 +2100,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                   },
                                   border: TableBorder(
                                       horizontalInside: BorderSide(
-                                          color: Colors.white, width: 10.0)),
+                                          color: bgColor, width: 10.0)),
                                   children: [
                                     //This table row is for the table header which is static
                                     TableRow(children: [
@@ -2139,9 +2142,9 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
 
                                     TableRow(
                                         decoration: BoxDecoration(
-                                            color: Color(0xffF6F6F8),
+                                            color: Colors.white,
                                             borderRadius:
-                                                BorderRadius.circular(10)),
+                                                BorderRadius.circular(15)),
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
@@ -2173,9 +2176,9 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                         ]),
                                     TableRow(
                                         decoration: BoxDecoration(
-                                            color: Color(0xffF6F6F8),
+                                            color: Colors.white,
                                             borderRadius:
-                                                BorderRadius.circular(10)),
+                                                BorderRadius.circular(15)),
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
@@ -2207,9 +2210,9 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                         ]),
                                     TableRow(
                                         decoration: BoxDecoration(
-                                            color: Color(0xffF6F6F8),
+                                            color: Colors.white,
                                             borderRadius:
-                                                BorderRadius.circular(10)),
+                                                BorderRadius.circular(15)),
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
@@ -2241,9 +2244,9 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                         ]),
                                     TableRow(
                                         decoration: BoxDecoration(
-                                            color: Color(0xffF6F6F8),
+                                            color: Colors.white,
                                             borderRadius:
-                                                BorderRadius.circular(10)),
+                                                BorderRadius.circular(15)),
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
@@ -2307,7 +2310,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                       return Container(
                                         margin: EdgeInsets.all(7),
                                         decoration: BoxDecoration(
-                                            color: Color(0xffF6F6F8),
+                                            color: Colors.white,
                                             borderRadius:
                                                 BorderRadius.circular(10)),
                                         child: Column(
@@ -2397,8 +2400,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                       ],
                     ),
                   ),
-                  LineUpDetails(),  
-                  
+                  LineUpDetails(),
                 ],
               ),
             ),

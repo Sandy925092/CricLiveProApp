@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,19 +25,17 @@ class _DashboardState extends State<Dashboard> {
     double width = MediaQuery.of(context).size.width;
 
     List<Widget> buildScreens() {
-      return [
-        HomeScreen(),
-        MyEventsScreen(),
-        SeriesScreen(),
-        SettingsScreen()
-      ];
+      return [HomeScreen(), MyEventsScreen(), SeriesScreen(), SettingsScreen()];
     }
 
     List<PersistentBottomNavBarItem> navBarsItems() {
       return [
         PersistentBottomNavBarItem(
           // icon:Icon(Icons.home),
-          icon: Icon(MyFlutterApp.home),
+          icon: Icon(
+            MyFlutterApp.home,
+            // size: 32,
+          ),
           title: ("Home"),
           textStyle: TextStyle(
             fontFamily: "Poppins",

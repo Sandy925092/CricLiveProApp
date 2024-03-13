@@ -15,6 +15,7 @@ class _LineAll16State extends State<LineAll16> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: bgColor,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -91,17 +92,19 @@ class _LineAll16State extends State<LineAll16> {
                   return Container(
                     margin: EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 226, 226, 226),
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(10)),
                     child: Row(
                       children: [
+                        2.w.widthBox,
                         CircleAvatar(
+                          backgroundColor: Color(0xff001548),
                           child: Image.asset(
-                            'assets/images/rohit.png',
+                            'assets/images/maskbat.png',
                             scale: 3,
                           ),
                         ),
-                        3.w.widthBox,
+                        2.w.widthBox,
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -128,7 +131,7 @@ class _LineAll16State extends State<LineAll16> {
                       ],
                     ),
                   );
-                }).pOnly(left: 10, right: 10),
+                }).pOnly(left: 10, right: 10, bottom: 10),
           ],
         ),
       ),

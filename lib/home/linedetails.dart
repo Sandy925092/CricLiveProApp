@@ -17,8 +17,8 @@ class LineUpDetails extends StatefulWidget {
   State<LineUpDetails> createState() => _LineUpDetailsState();
 }
 
-class _LineUpDetailsState extends State<LineUpDetails>  with TickerProviderStateMixin {
-
+class _LineUpDetailsState extends State<LineUpDetails>
+    with TickerProviderStateMixin {
   TabController? _controller;
   int _currentIndex = 0;
 
@@ -31,6 +31,7 @@ class _LineUpDetailsState extends State<LineUpDetails>  with TickerProviderState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: bgColor,
       body: Column(
         children: [
           Container(
@@ -92,7 +93,6 @@ class _LineUpDetailsState extends State<LineUpDetails>  with TickerProviderState
                           fontWeight: FontWeight.w500),
                     ),
                   ),
-
                   Tab(
                     // height: 20,
                     child: Text(
@@ -103,7 +103,6 @@ class _LineUpDetailsState extends State<LineUpDetails>  with TickerProviderState
                           fontWeight: FontWeight.w500),
                     ),
                   ),
-
                   Tab(
                     // height: 20,
                     child: Text(
@@ -118,7 +117,6 @@ class _LineUpDetailsState extends State<LineUpDetails>  with TickerProviderState
               ),
             ),
           ),
-
           Expanded(
             child: TabBarView(
               controller: _controller,
@@ -127,22 +125,11 @@ class _LineUpDetailsState extends State<LineUpDetails>  with TickerProviderState
                 LineBat8(),
                 LineUpBowl6(),
                 LineUpAr2(),
-
               ],
             ),
           ),
-
-
-
-
-
-
-
         ],
       ),
     );
   }
 }
-
-
-

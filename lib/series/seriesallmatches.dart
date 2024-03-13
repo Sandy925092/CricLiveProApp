@@ -16,6 +16,7 @@ class _SeriesAllMatchesScreenState extends State<SeriesAllMatchesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: bgColor,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(30.0),
         child: AppBar(
@@ -65,7 +66,7 @@ class _SeriesAllMatchesScreenState extends State<SeriesAllMatchesScreen> {
                       Container(
                         margin: EdgeInsets.only(bottom: 10),
                         decoration: BoxDecoration(
-                            color: Color(0xffF6F6F8),
+                            color: Colors.white,
                             borderRadius: BorderRadius.circular(7)),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,

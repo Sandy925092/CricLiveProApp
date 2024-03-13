@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kisma_livescore/commonwidget.dart';
+import 'package:kisma_livescore/utils/colorfile.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -14,6 +15,7 @@ class _SeriesMatchesScreenState extends State<SeriesMatchesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: bgColor,
       body: SingleChildScrollView(
         child: ListView.builder(
             itemCount: 14,
@@ -35,7 +37,7 @@ class _SeriesMatchesScreenState extends State<SeriesMatchesScreen> {
                   Container(
                     margin: EdgeInsets.only(bottom: 10),
                     decoration: BoxDecoration(
-                        color: Color(0xffF6F6F8),
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(7)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

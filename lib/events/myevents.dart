@@ -17,6 +17,7 @@ class _MyEventsScreenState extends State<MyEventsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xff001548),
       body: SafeArea(
         child: Column(
           children: [
@@ -24,7 +25,7 @@ class _MyEventsScreenState extends State<MyEventsScreen> {
               padding:
                   const EdgeInsets.only(left: 8, top: 8, bottom: 0, right: 8),
               decoration: BoxDecoration(
-                color: const Color(0xff263963),
+                color: Color(0xff001548),
                 // borderRadius: BorderRadius.circular(
                 //     6.0), // Customize border radius as desired
               ),

@@ -15,6 +15,7 @@ class _LiveMatchDetailsFirstState extends State<LiveMatchDetailsFirst> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: bgColor,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -229,187 +230,265 @@ class _LiveMatchDetailsFirstState extends State<LiveMatchDetailsFirst> {
               ),
             ).pOnly(left: 20, right: 20, top: 20),
             Container(
-              width: MediaQuery.of(context).size.width,
+              clipBehavior: Clip.hardEdge,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: disableColors),
-              ),
+                  border: Border.all(color: disableColors),
+                  borderRadius: BorderRadius.circular(10)),
               child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Table(
+                    columnWidths: {
+                      0: FlexColumnWidth(2),
+                    },
+                    border: TableBorder(
+                        horizontalInside:
+                            BorderSide(color: bgColor, width: 10.0)),
                     children: [
-                      commonText(
-                          data: "Batter",
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: "Poppins",
-                          color: Colors.black),
-                      commonText(
-                          data: "R",
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: "Poppins",
-                          color: Colors.black),
-                      commonText(
-                          data: "B",
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: "Poppins",
-                          color: Colors.black),
-                      commonText(
-                          data: "4s",
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: "Poppins",
-                          color: Colors.black),
-                      commonText(
-                          data: "6s",
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: "Poppins",
-                          color: Colors.black),
-                      commonText(
-                          data: "S/R",
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: "Poppins",
-                          color: Colors.black)
-                    ],
-                  ).pOnly(left: 10, right: 10, top: 5),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      commonText(
-                          data: "Name",
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: "Poppins",
-                          color: primaryColors),
-                      commonText(
-                          data: "1",
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: "Poppins",
-                          color: primaryColors),
-                      commonText(
-                          data: "2",
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: "Poppins",
-                          color: primaryColors),
-                      commonText(
-                          data: "-",
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: "Poppins",
-                          color: primaryColors),
-                      commonText(
-                          data: "-",
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: "Poppins",
-                          color: primaryColors),
-                      commonText(
-                          data: "50.00",
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: "Poppins",
-                          color: primaryColors)
-                    ],
-                  ).pOnly(left: 10, right: 10, top: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      commonText(
-                          data: "Name",
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: "Poppins",
-                          color: primaryColors),
+                      //This table row is for the table header which is static
+                      TableRow(children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Text(
+                            "Batter",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87),
+                          ),
+                        ),
+                        Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Text(
+                              "R",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black87),
+                            ),
+                          ),
+                        ),
+                        Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Text(
+                              "B",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black87),
+                            ),
+                          ),
+                        ),
+                        Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Text(
+                              "4s",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black87),
+                            ),
+                          ),
+                        ),
+                        Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Text(
+                              "6s",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black87),
+                            ),
+                          ),
+                        ),
+                        Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Text(
+                              "S/R",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black87),
+                            ),
+                          ),
+                        ),
+                      ]),
 
-                      // Image.asset("assets/images/bat.png" , height: 15, width: 15),
-
-                      commonText(
-                          data: "1",
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: "Poppins",
-                          color: primaryColors),
-                      commonText(
-                          data: "2",
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: "Poppins",
-                          color: primaryColors),
-                      commonText(
-                          data: "-",
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: "Poppins",
-                          color: primaryColors),
-                      commonText(
-                          data: "-",
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: "Poppins",
-                          color: primaryColors),
-                      commonText(
-                          data: "50.00",
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: "Poppins",
-                          color: primaryColors)
+                      TableRow(
+                          decoration: BoxDecoration(
+                              // color: Color(0xffF6F6F8),
+                              borderRadius: BorderRadius.circular(10)),
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 20, horizontal: 6),
+                              child: Text(
+                                'N.Name',
+                              ),
+                            ),
+                            Center(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 20),
+                                child: Text('1',
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w700)),
+                              ),
+                            ),
+                            Center(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 20),
+                                child: Text(
+                                  '2',
+                                ),
+                              ),
+                            ),
+                            Center(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 20),
+                                child: Text(
+                                  '-',
+                                ),
+                              ),
+                            ),
+                            Center(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 20),
+                                child: Text(
+                                  '-',
+                                ),
+                              ),
+                            ),
+                            Center(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 20),
+                                child: Text(
+                                  '50.00',
+                                ),
+                              ),
+                            ),
+                          ]),
+                      TableRow(
+                          decoration: BoxDecoration(
+                              // color: Color(0xffF6F6F8),
+                              borderRadius: BorderRadius.circular(10)),
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 20, horizontal: 6),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    'N.Name',
+                                  ),
+                                  3.w.widthBox,
+                                  Image.asset(
+                                    "assets/images/bat.png",
+                                    scale: 3,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Center(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 20),
+                                child: Text('1',
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w700)),
+                              ),
+                            ),
+                            Center(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 20),
+                                child: Text(
+                                  '2',
+                                ),
+                              ),
+                            ),
+                            Center(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 20),
+                                child: Text(
+                                  '-',
+                                ),
+                              ),
+                            ),
+                            Center(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 20),
+                                child: Text(
+                                  '-',
+                                ),
+                              ),
+                            ),
+                            Center(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 20),
+                                child: Text(
+                                  '50.00',
+                                ),
+                              ),
+                            ),
+                          ])
                     ],
-                  ).pOnly(left: 10, right: 10, top: 10),
+                  ).pSymmetric(h: 10),
                   Container(
-                    height: 35,
                     decoration: BoxDecoration(
                         color: greyColor,
                         borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(10.0),
-                            bottomRight: Radius.circular(10.0))),
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10))),
+                    height: 3.h,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
                           children: [
-                            3.w.widthBox,
+                            4.w.widthBox,
                             Image.asset(
-                              'assets/images/Partnership.png',
+                              'assets/images/partnership2.png',
                               scale: 3,
                             ),
                             2.w.widthBox,
                             commonText(
-                                data: "62(37)",
-                                fontSize: 14,
-                                fontWeight: FontWeight.w300,
-                                fontFamily: "Poppins",
-                                color: primaryColors),
+                                data: '62 (37)',
+                                fontSize: 10,
+                                fontWeight: FontWeight.w400)
                           ],
                         ),
                         Row(
                           children: [
                             Image.asset(
                               'assets/images/LastWicket.png',
-                              height: 20,
-                              width: 20,
+                              scale: 3,
                             ),
                             2.w.widthBox,
                             commonText(
-                                data: "N Name 39 (25)",
-                                fontSize: 11,
-                                fontWeight: FontWeight.w300,
-                                fontFamily: "Poppins",
-                                color: primaryColors),
-                            3.w.widthBox,
+                                data: 'N Name',
+                                fontSize: 10,
+                                fontWeight: FontWeight.w400),
+                            2.w.widthBox,
+                            commonText(
+                                data: '39 (25)',
+                                fontSize: 10,
+                                fontWeight: FontWeight.w400),
+                            4.w.widthBox,
                           ],
-                        ),
+                        )
                       ],
                     ),
-                  ).pOnly(
-                    top: 18,
-                  ),
+                  )
                 ],
               ),
             ).p(20),

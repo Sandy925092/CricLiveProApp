@@ -15,6 +15,7 @@ class _LineBat8State extends State<LineBat8> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: bgColor,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -38,11 +39,11 @@ class _LineBat8State extends State<LineBat8> {
                               fontFamily: "Poppins",
                               color: black),
                           commonText(
-                              data: "  146-2 (20.0)",
-                              fontSize: 10,
-                              fontWeight: FontWeight.w300,
-                              fontFamily: "Poppins",
-                              color: black)
+                                  data: "  146-2 (20.0)",
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w300,
+                                  fontFamily: "Poppins",
+                                  color: black)
                               .pOnly(top: 8),
                         ],
                       ).pOnly(left: 20),
@@ -67,11 +68,11 @@ class _LineBat8State extends State<LineBat8> {
                               fontFamily: "Poppins",
                               color: black),
                           commonText(
-                              data: "  000-0 (00.0)",
-                              fontSize: 10,
-                              fontWeight: FontWeight.w300,
-                              fontFamily: "Poppins",
-                              color: black)
+                                  data: "  000-0 (00.0)",
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w300,
+                                  fontFamily: "Poppins",
+                                  color: black)
                               .pOnly(top: 8),
                         ],
                       ).pOnly(left: 20),
@@ -91,17 +92,19 @@ class _LineBat8State extends State<LineBat8> {
                   return Container(
                     margin: EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 226, 226, 226),
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(10)),
                     child: Row(
                       children: [
+                        2.w.widthBox,
                         CircleAvatar(
+                          backgroundColor: Color(0xff001548),
                           child: Image.asset(
-                            'assets/images/rohit.png',
+                            'assets/images/maskbat.png',
                             scale: 3,
                           ),
                         ),
-                        3.w.widthBox,
+                        2.w.widthBox,
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,

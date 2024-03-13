@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kisma_livescore/commonwidget.dart';
+import 'package:kisma_livescore/utils/colorfile.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -14,10 +15,12 @@ class _MyAllEventsScreenState extends State<MyAllEventsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: bgColor,
       body: SingleChildScrollView(
         child: Column(
           children: [
             Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
@@ -29,6 +32,7 @@ class _MyAllEventsScreenState extends State<MyAllEventsScreen> {
                 ),
                 Column(
                   children: [
+                    2.h.heightBox,
                     Text(
                       '08/12',
                       style: TextStyle(
@@ -51,7 +55,8 @@ class _MyAllEventsScreenState extends State<MyAllEventsScreen> {
                   size: 30,
                 )
               ],
-            ),
+            ).pSymmetric(h: 3),
+            2.h.heightBox,
             ListView.builder(
                 itemCount: 14,
                 shrinkWrap: true,
@@ -216,7 +221,7 @@ class _MyAllEventsScreenState extends State<MyAllEventsScreen> {
                   );
                 })
           ],
-        ).pSymmetric(h: 10),
+        ).pSymmetric(h: 10, v: 6),
       ),
     );
   }
