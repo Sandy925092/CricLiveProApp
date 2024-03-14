@@ -125,8 +125,8 @@ class _LiveScoredDetailsState extends State<LiveScoredDetails> {
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: Text(
                       "Batter",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black87),
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, color: white),
                     ),
                   ),
                   Center(
@@ -135,7 +135,7 @@ class _LiveScoredDetailsState extends State<LiveScoredDetails> {
                       child: Text(
                         "R",
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.black87),
+                            fontWeight: FontWeight.bold, color: white),
                       ),
                     ),
                   ),
@@ -145,7 +145,7 @@ class _LiveScoredDetailsState extends State<LiveScoredDetails> {
                       child: Text(
                         "B",
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.black87),
+                            fontWeight: FontWeight.bold, color: white),
                       ),
                     ),
                   ),
@@ -155,7 +155,7 @@ class _LiveScoredDetailsState extends State<LiveScoredDetails> {
                       child: Text(
                         "4s",
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.black87),
+                            fontWeight: FontWeight.bold, color: white),
                       ),
                     ),
                   ),
@@ -165,7 +165,7 @@ class _LiveScoredDetailsState extends State<LiveScoredDetails> {
                       child: Text(
                         "6s",
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.black87),
+                            fontWeight: FontWeight.bold, color: white),
                       ),
                     ),
                   ),
@@ -175,7 +175,7 @@ class _LiveScoredDetailsState extends State<LiveScoredDetails> {
                       child: Text(
                         "S/R",
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.black87),
+                            fontWeight: FontWeight.bold, color: white),
                       ),
                     ),
                   ),
@@ -454,19 +454,19 @@ class _LiveScoredDetailsState extends State<LiveScoredDetails> {
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                     fontFamily: "Poppins",
-                    color: black),
+                    color: white),
                 commonText(
                     data: "10",
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                     fontFamily: "Poppins",
-                    color: black)
+                    color: white)
               ],
             ).pOnly(left: 30, right: 30, top: 10),
             Text(
               'Yet to Bat',
               style: TextStyle(
-                  color: Colors.black,
+                  color: Colors.white,
                   fontSize: 14,
                   fontWeight: FontWeight.w700),
             ).pOnly(left: 20, top: 30),
@@ -488,7 +488,7 @@ class _LiveScoredDetailsState extends State<LiveScoredDetails> {
                         CircleAvatar(
                           backgroundColor: Color(0xff001548),
                           child: Image.asset(
-                            'assets/images/maskbat.png',
+                            'assets/images/batternew.png',
                             scale: 3,
                           ),
                         ),
@@ -523,14 +523,19 @@ class _LiveScoredDetailsState extends State<LiveScoredDetails> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset("assets/images/Info.png", height: 13, width: 13),
+                Image.asset(
+                  "assets/images/Info.png",
+                  height: 13,
+                  width: 13,
+                  color: white,
+                ),
                 SizedBox(width: 10),
                 commonText(
                     data: "Realtime Win %",
                     fontSize: 13,
                     fontWeight: FontWeight.w400,
                     fontFamily: "Poppins",
-                    color: primaryColors),
+                    color: white),
               ],
             ),
             1.h.heightBox,
@@ -543,7 +548,7 @@ class _LiveScoredDetailsState extends State<LiveScoredDetails> {
                     height: 38,
                     decoration: BoxDecoration(
                       shape: BoxShape.rectangle,
-                      border: Border.all(color: primaryColors),
+                      // border: Border.all(color: primaryColors),
                       color: buttonColors,
                     ),
                     child: Row(
@@ -580,8 +585,8 @@ class _LiveScoredDetailsState extends State<LiveScoredDetails> {
                     margin: EdgeInsets.only(right: 20),
                     decoration: BoxDecoration(
                       shape: BoxShape.rectangle,
-                      border: Border.all(color: primaryColors),
-                      color: primaryColors,
+                      // border: Border.all(color: Color(0xff3A65F4)),
+                      color: Color(0xff3A65F4),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,

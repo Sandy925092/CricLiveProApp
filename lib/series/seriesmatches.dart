@@ -29,7 +29,7 @@ class _SeriesMatchesScreenState extends State<SeriesMatchesScreen> {
                   Text(
                     'Thursday, January 25',
                     style: TextStyle(
-                        color: Colors.black,
+                        color: white,
                         fontSize: 15,
                         fontWeight: FontWeight.w500),
                   ),
@@ -92,6 +92,7 @@ class _SeriesMatchesScreenState extends State<SeriesMatchesScreen> {
                       ],
                     ).pSymmetric(h: 10, v: 10),
                   ),
+                  2.h.heightBox,
                 ],
               );
             }).pSymmetric(h: 10),

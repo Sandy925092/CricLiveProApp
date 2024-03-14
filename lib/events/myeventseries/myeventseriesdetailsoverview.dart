@@ -29,9 +29,7 @@ class _MyEventSeriesDetailsOverviewScreenState
                 Text(
                   'Featured Matches',
                   style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700),
+                      color: white, fontSize: 16, fontWeight: FontWeight.w700),
                 ),
                 Text(
                   'All Matches >',
@@ -105,7 +103,7 @@ class _MyEventSeriesDetailsOverviewScreenState
                               scale: 3,
                             ),
                             1.h.heightBox,
-                            Text('India')
+                            Text('Australia')
                           ],
                         ),
                       ],

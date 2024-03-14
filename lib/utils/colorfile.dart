@@ -11,4 +11,4 @@ const overColor = Color(0xff878788);
 const white = Color(0xffFFFFFF);
 const matchTitleColor = Color(0xff96A0B7);
 const greyColor = Color(0xffE4E5E9);
-const bgColor = Color(0xffEDF1F9);
+const bgColor = Color(0xff263963);

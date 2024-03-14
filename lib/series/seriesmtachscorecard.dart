@@ -261,7 +261,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                           "Batter",
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              color: Colors.black87),
+                                              color: white),
                                         ),
                                       ),
                                       Center(
@@ -272,7 +272,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                             "R",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.black87),
+                                                color: white),
                                           ),
                                         ),
                                       ),
@@ -284,7 +284,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                             "B",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.black87),
+                                                color: white),
                                           ),
                                         ),
                                       ),
@@ -296,7 +296,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                             "4s",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.black87),
+                                                color: white),
                                           ),
                                         ),
                                       ),
@@ -308,7 +308,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                             "6s",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.black87),
+                                                color: white),
                                           ),
                                         ),
                                       ),
@@ -320,7 +320,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                             "S/R",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.black87),
+                                                color: white),
                                           ),
                                         ),
                                       ),
@@ -651,13 +651,13 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                   children: [
                                     Text('Extras:',
                                         style: TextStyle(
-                                            color: Colors.black,
+                                            color: white,
                                             fontSize: 14,
                                             fontWeight: FontWeight.w700)),
                                     Spacer(),
                                     Text('5(b 4, lb 1, w 0, nb 0, p 0)',
                                         style: TextStyle(
-                                            color: Colors.black,
+                                            color: white,
                                             fontSize: 14,
                                             fontWeight: FontWeight.w700))
                                   ],
@@ -680,7 +680,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                           "Bowling",
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              color: Colors.black87),
+                                              color: white),
                                         ),
                                       ),
                                       Center(
@@ -691,7 +691,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                             "O",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.black87),
+                                                color: white),
                                           ),
                                         ),
                                       ),
@@ -703,7 +703,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                             "M",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.black87),
+                                                color: white),
                                           ),
                                         ),
                                       ),
@@ -715,7 +715,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                             "R",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.black87),
+                                                color: white),
                                           ),
                                         ),
                                       ),
@@ -727,7 +727,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                             "W",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.black87),
+                                                color: white),
                                           ),
                                         ),
                                       ),
@@ -739,7 +739,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                             "E/R",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.black87),
+                                                color: white),
                                           ),
                                         ),
                                       ),
@@ -1033,7 +1033,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                           "Fall Of Wickets",
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              color: Colors.black87),
+                                              color: white),
                                         ),
                                       ),
                                       Center(
@@ -1044,7 +1044,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                             "Score",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.black87),
+                                                color: white),
                                           ),
                                         ),
                                       ),
@@ -1056,7 +1056,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                             "Over",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.black87),
+                                                color: white),
                                           ),
                                         ),
                                       ),
@@ -1203,7 +1203,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                 3.h.heightBox,
                                 Text('Partnership',
                                         style: TextStyle(
-                                            color: Colors.black,
+                                            color: white,
                                             fontSize: 14,
                                             fontWeight: FontWeight.w700))
                                     .pSymmetric(h: 10),
@@ -1339,7 +1339,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                           "Batter",
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              color: Colors.black87),
+                                              color: white),
                                         ),
                                       ),
                                       Center(
@@ -1350,7 +1350,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                             "R",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.black87),
+                                                color: white),
                                           ),
                                         ),
                                       ),
@@ -1362,7 +1362,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                             "B",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.black87),
+                                                color: white),
                                           ),
                                         ),
                                       ),
@@ -1374,7 +1374,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                             "4s",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.black87),
+                                                color: white),
                                           ),
                                         ),
                                       ),
@@ -1386,7 +1386,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                             "6s",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.black87),
+                                                color: white),
                                           ),
                                         ),
                                       ),
@@ -1398,7 +1398,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                             "S/R",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.black87),
+                                                color: white),
                                           ),
                                         ),
                                       ),
@@ -1729,13 +1729,13 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                   children: [
                                     Text('Extras:',
                                         style: TextStyle(
-                                            color: Colors.black,
+                                            color: white,
                                             fontSize: 14,
                                             fontWeight: FontWeight.w700)),
                                     Spacer(),
                                     Text('5(b 4, lb 1, w 0, nb 0, p 0)',
                                         style: TextStyle(
-                                            color: Colors.black,
+                                            color: white,
                                             fontSize: 14,
                                             fontWeight: FontWeight.w700))
                                   ],
@@ -1758,7 +1758,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                           "Bowling",
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              color: Colors.black87),
+                                              color: white),
                                         ),
                                       ),
                                       Center(
@@ -1769,7 +1769,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                             "O",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.black87),
+                                                color: white),
                                           ),
                                         ),
                                       ),
@@ -1781,7 +1781,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                             "M",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.black87),
+                                                color: white),
                                           ),
                                         ),
                                       ),
@@ -1793,7 +1793,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                             "R",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.black87),
+                                                color: white),
                                           ),
                                         ),
                                       ),
@@ -1805,7 +1805,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                             "W",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.black87),
+                                                color: white),
                                           ),
                                         ),
                                       ),
@@ -1817,7 +1817,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                             "E/R",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.black87),
+                                                color: white),
                                           ),
                                         ),
                                       ),
@@ -2111,7 +2111,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                           "Fall Of Wickets",
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              color: Colors.black87),
+                                              color: white),
                                         ),
                                       ),
                                       Center(
@@ -2122,7 +2122,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                             "Score",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.black87),
+                                                color: white),
                                           ),
                                         ),
                                       ),
@@ -2134,7 +2134,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                             "Over",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.black87),
+                                                color: white),
                                           ),
                                         ),
                                       ),
@@ -2281,7 +2281,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                 3.h.heightBox,
                                 Text('Partnership',
                                         style: TextStyle(
-                                            color: Colors.black,
+                                            color: white,
                                             fontSize: 14,
                                             fontWeight: FontWeight.w700))
                                     .pSymmetric(h: 10),

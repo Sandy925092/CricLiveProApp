@@ -53,7 +53,7 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
                     fontFamily: "Poppins",
-                    color: disableColors)
+                    color: white)
                 .p(20),
           ],
         ),

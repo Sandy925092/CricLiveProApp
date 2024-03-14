@@ -100,7 +100,7 @@ class _LineAll16State extends State<LineAll16> {
                         CircleAvatar(
                           backgroundColor: Color(0xff001548),
                           child: Image.asset(
-                            'assets/images/maskbat.png',
+                            'assets/images/batternew.png',
                             scale: 3,
                           ),
                         ),

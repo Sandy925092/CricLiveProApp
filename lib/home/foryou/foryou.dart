@@ -75,7 +75,7 @@ class _ForYouState extends State<ForYou> {
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
                               fontFamily: "Poppins",
-                              color: black,
+                              color: white,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis),
                         ),
@@ -355,7 +355,7 @@ class _ForYouState extends State<ForYou> {
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
                               fontFamily: "Poppins",
-                              color: black,
+                              color: white,
                             ),
                           ],
                         ),
@@ -566,7 +566,7 @@ class _ForYouState extends State<ForYou> {
                                     Container(
                                       margin: EdgeInsets.all(0),
                                       decoration: BoxDecoration(
-                                          color: Colors.grey.withOpacity(0.1),
+                                          color: Colors.grey.withOpacity(0.4),
                                           border:
                                               Border.all(color: disableColors),
                                           borderRadius:
@@ -745,7 +745,7 @@ class _ForYouState extends State<ForYou> {
                 },
               ),
               Container(
-                color: disableColors.withOpacity(0.4),
+                color: white,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -770,7 +770,7 @@ class _ForYouState extends State<ForYou> {
                               children: [
                                 Column(children: [
                                   Image.asset(
-                                    'assets/images/nzvsafg.png',
+                                    'assets/images/afgvsnzw.png',
                                     fit: BoxFit.contain,
                                     height: 100,
                                     width: 100,

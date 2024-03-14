@@ -59,9 +59,7 @@ class _HelpAndSupportState extends State<HelpAndSupport> {
                 decoration: InputDecoration(
                   hintText: 'Email Address',
                   hintStyle: TextStyle(
-                      color: primaryColors,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400),
+                      color: white, fontSize: 14, fontWeight: FontWeight.w400),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8.0),
                     borderSide: const BorderSide(
@@ -69,7 +67,11 @@ class _HelpAndSupportState extends State<HelpAndSupport> {
                       width: 1.0,
                     ),
                   ),
-                  prefixIcon: Image.asset("assets/images/user.png", scale: 4),
+                  prefixIcon: Image.asset(
+                    "assets/images/user.png",
+                    scale: 4,
+                    color: white,
+                  ),
                   contentPadding:
                       EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
                 ),
@@ -93,7 +95,7 @@ class _HelpAndSupportState extends State<HelpAndSupport> {
                   decoration: InputDecoration(
                     hintText: 'Your Querry',
                     hintStyle: TextStyle(
-                        color: primaryColors,
+                        color: white,
                         fontSize: 14,
                         fontWeight: FontWeight.w400),
                     border: OutlineInputBorder(

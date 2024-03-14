@@ -28,7 +28,7 @@ class _SeriesOverviewScreenState extends State<SeriesOverviewScreen> {
                 Text(
                   'Featured Matches',
                   style: TextStyle(
-                      color: Colors.black,
+                      color: Colors.white,
                       fontSize: 16,
                       fontWeight: FontWeight.w700),
                 ),
@@ -115,7 +115,8 @@ class _SeriesOverviewScreenState extends State<SeriesOverviewScreen> {
                               const SeriesMatchScorecardScreen()),
                     );
                   });
-                })
+                }),
+            2.h.heightBox
           ],
         ).pSymmetric(h: 10),
       ),

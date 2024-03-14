@@ -55,6 +55,8 @@ class _SearchScreenState extends State<SearchScreen> {
               child: TextField(
                 controller: _controller,
                 decoration: InputDecoration(
+                  fillColor: white,
+                  filled: true,
                   hintText: 'Search here...',
                   hintStyle: TextStyle(
                       color: primaryColors,
@@ -95,7 +97,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         fontSize: 17,
                         fontWeight: FontWeight.w700,
                         fontFamily: "Poppins",
-                        color: primaryColors,
+                        color: white,
                       ).pOnly(left: 20.0, right: 16.0),
                       Padding(
                         padding: const EdgeInsets.only(

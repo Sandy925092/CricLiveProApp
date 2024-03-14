@@ -58,7 +58,7 @@ class _SeriesAllMatchesScreenState extends State<SeriesAllMatchesScreen> {
                       Text(
                         'Thursday, January 25',
                         style: TextStyle(
-                            color: Colors.black,
+                            color: white,
                             fontSize: 15,
                             fontWeight: FontWeight.w500),
                       ),
@@ -115,7 +115,7 @@ class _SeriesAllMatchesScreenState extends State<SeriesAllMatchesScreen> {
                                   scale: 3,
                                 ),
                                 1.h.heightBox,
-                                Text('India')
+                                Text('Australia')
                               ],
                             ),
                           ],

@@ -98,7 +98,7 @@ class _SeriesSquadScreenState extends State<SeriesSquadScreen>
                                   CircleAvatar(
                                     backgroundColor: Color(0xff001548),
                                     child: Image.asset(
-                                      'assets/images/maskbat.png',
+                                      'assets/images/batternew.png',
                                       scale: 3,
                                     ),
                                   ),
@@ -135,7 +135,7 @@ class _SeriesSquadScreenState extends State<SeriesSquadScreen>
                       Text(
                         'Bench',
                         style: TextStyle(
-                            color: Colors.black,
+                            color: white,
                             fontSize: 14,
                             fontWeight: FontWeight.w700),
                       ).pOnly(left: 10),
@@ -158,7 +158,7 @@ class _SeriesSquadScreenState extends State<SeriesSquadScreen>
                                   CircleAvatar(
                                     backgroundColor: Color(0xff001548),
                                     child: Image.asset(
-                                      'assets/images/maskbat.png',
+                                      'assets/images/batternew.png',
                                       scale: 3,
                                     ),
                                   ),
@@ -195,7 +195,7 @@ class _SeriesSquadScreenState extends State<SeriesSquadScreen>
                       Text(
                         'Support Staff',
                         style: TextStyle(
-                            color: Colors.black,
+                            color: white,
                             fontSize: 14,
                             fontWeight: FontWeight.w700),
                       ).pOnly(left: 10),
@@ -218,7 +218,7 @@ class _SeriesSquadScreenState extends State<SeriesSquadScreen>
                                   CircleAvatar(
                                     backgroundColor: Color(0xff001548),
                                     child: Image.asset(
-                                      'assets/images/maskbat.png',
+                                      'assets/images/batternew.png',
                                       scale: 3,
                                     ),
                                   ),
@@ -282,7 +282,7 @@ class _SeriesSquadScreenState extends State<SeriesSquadScreen>
                                   CircleAvatar(
                                     backgroundColor: Color(0xff001548),
                                     child: Image.asset(
-                                      'assets/images/maskbat.png',
+                                      'assets/images/batternew.png',
                                       scale: 3,
                                     ),
                                   ),
@@ -319,7 +319,7 @@ class _SeriesSquadScreenState extends State<SeriesSquadScreen>
                       Text(
                         'Bench',
                         style: TextStyle(
-                            color: Colors.black,
+                            color: white,
                             fontSize: 14,
                             fontWeight: FontWeight.w700),
                       ).pOnly(left: 10),
@@ -342,7 +342,7 @@ class _SeriesSquadScreenState extends State<SeriesSquadScreen>
                                   CircleAvatar(
                                     backgroundColor: Color(0xff001548),
                                     child: Image.asset(
-                                      'assets/images/maskbat.png',
+                                      'assets/images/batternew.png',
                                       scale: 3,
                                     ),
                                   ),
@@ -379,7 +379,7 @@ class _SeriesSquadScreenState extends State<SeriesSquadScreen>
                       Text(
                         'Support Staff',
                         style: TextStyle(
-                            color: Colors.black,
+                            color: white,
                             fontSize: 14,
                             fontWeight: FontWeight.w700),
                       ).pOnly(left: 10),
@@ -402,7 +402,7 @@ class _SeriesSquadScreenState extends State<SeriesSquadScreen>
                                   CircleAvatar(
                                     backgroundColor: Color(0xff001548),
                                     child: Image.asset(
-                                      'assets/images/maskbat.png',
+                                      'assets/images/batternew.png',
                                       scale: 3,
                                     ),
                                   ),

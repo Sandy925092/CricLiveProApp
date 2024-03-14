@@ -105,7 +105,7 @@ class _LiveMatchDetailsFirstState extends State<LiveMatchDetailsFirst> {
                     fontSize: 13,
                     fontWeight: FontWeight.w400,
                     fontFamily: "Poppins",
-                    color: primaryColors,
+                    color: white,
                   ).pSymmetric(h: 20, v: 2),
                 ).p(15),
               ],
@@ -113,14 +113,19 @@ class _LiveMatchDetailsFirstState extends State<LiveMatchDetailsFirst> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset("assets/images/Info.png", height: 13, width: 13),
+                Image.asset(
+                  "assets/images/Info.png",
+                  height: 13,
+                  width: 13,
+                  color: white,
+                ),
                 SizedBox(width: 10),
                 commonText(
                     data: "Realtime Win %",
                     fontSize: 13,
                     fontWeight: FontWeight.w400,
                     fontFamily: "Poppins",
-                    color: primaryColors),
+                    color: white),
               ],
             ),
             Row(
@@ -132,7 +137,7 @@ class _LiveMatchDetailsFirstState extends State<LiveMatchDetailsFirst> {
                     height: 38,
                     decoration: BoxDecoration(
                       shape: BoxShape.rectangle,
-                      border: Border.all(color: primaryColors),
+                      // border: Border.all(color: primaryColors),
                       color: buttonColors,
                     ),
                     child: Row(
@@ -169,8 +174,8 @@ class _LiveMatchDetailsFirstState extends State<LiveMatchDetailsFirst> {
                     margin: EdgeInsets.only(right: 20),
                     decoration: BoxDecoration(
                       shape: BoxShape.rectangle,
-                      border: Border.all(color: primaryColors),
-                      color: primaryColors,
+                      // border: Border.all(color: primaryColors),
+                      color: Color(0xff3A65F4),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -232,6 +237,7 @@ class _LiveMatchDetailsFirstState extends State<LiveMatchDetailsFirst> {
             Container(
               clipBehavior: Clip.hardEdge,
               decoration: BoxDecoration(
+                  color: white,
                   border: Border.all(color: disableColors),
                   borderRadius: BorderRadius.circular(10)),
               child: Column(
@@ -242,78 +248,86 @@ class _LiveMatchDetailsFirstState extends State<LiveMatchDetailsFirst> {
                     },
                     border: TableBorder(
                         horizontalInside:
-                            BorderSide(color: bgColor, width: 10.0)),
+                            BorderSide(color: white, width: 10.0)),
                     children: [
                       //This table row is for the table header which is static
-                      TableRow(children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Text(
-                            "Batter",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black87),
-                          ),
-                        ),
-                        Center(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Text(
-                              "R",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87),
+                      TableRow(
+                          decoration: BoxDecoration(color: white),
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: Text(
+                                "Batter",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87),
+                              ),
                             ),
-                          ),
-                        ),
-                        Center(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Text(
-                              "B",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87),
+                            Center(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                child: Text(
+                                  "R",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black87),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        Center(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Text(
-                              "4s",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87),
+                            Center(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                child: Text(
+                                  "B",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black87),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        Center(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Text(
-                              "6s",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87),
+                            Center(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                child: Text(
+                                  "4s",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black87),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        Center(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Text(
-                              "S/R",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87),
+                            Center(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                child: Text(
+                                  "6s",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black87),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      ]),
+                            Center(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                child: Text(
+                                  "S/R",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black87),
+                                ),
+                              ),
+                            ),
+                          ]),
 
                       TableRow(
                           decoration: BoxDecoration(
+                              color: white,
                               // color: Color(0xffF6F6F8),
                               borderRadius: BorderRadius.circular(10)),
                           children: [
@@ -374,6 +388,7 @@ class _LiveMatchDetailsFirstState extends State<LiveMatchDetailsFirst> {
                           ]),
                       TableRow(
                           decoration: BoxDecoration(
+                              color: white,
                               // color: Color(0xffF6F6F8),
                               borderRadius: BorderRadius.circular(10)),
                           children: [
@@ -495,6 +510,7 @@ class _LiveMatchDetailsFirstState extends State<LiveMatchDetailsFirst> {
             Container(
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
+                color: white,
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: disableColors),
               ),
@@ -651,6 +667,7 @@ class _LiveMatchDetailsFirstState extends State<LiveMatchDetailsFirst> {
                 ],
               ).pSymmetric(h: 10, v: 10),
             ).pOnly(left: 20, right: 20),
+            2.h.heightBox
           ],
         ),
       ),

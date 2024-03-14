@@ -100,7 +100,7 @@ class _LineBat8State extends State<LineBat8> {
                         CircleAvatar(
                           backgroundColor: Color(0xff001548),
                           child: Image.asset(
-                            'assets/images/maskbat.png',
+                            'assets/images/batternew.png',
                             scale: 3,
                           ),
                         ),

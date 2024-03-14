@@ -69,7 +69,7 @@ class _UpcomingMatchScreenState extends State<UpcomingMatchScreen> {
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
                               fontFamily: "Poppins",
-                              color: black,
+                              color: white,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis),
                         ),
@@ -121,7 +121,7 @@ class _UpcomingMatchScreenState extends State<UpcomingMatchScreen> {
                           Container(
                             margin: EdgeInsets.all(0),
                             decoration: BoxDecoration(
-                                color: Colors.grey.withOpacity(0.1),
+                                color: Colors.grey.withOpacity(0.4),
                                 border: Border.all(color: disableColors),
                                 borderRadius: BorderRadius.circular(7)),
                             child: Padding(
@@ -303,7 +303,7 @@ class _UpcomingMatchScreenState extends State<UpcomingMatchScreen> {
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
                               fontFamily: "Poppins",
-                              color: black,
+                              color: white,
                             ),
                           ],
                         ),
@@ -340,7 +340,7 @@ class _UpcomingMatchScreenState extends State<UpcomingMatchScreen> {
                                   Container(
                                     margin: EdgeInsets.all(0),
                                     decoration: BoxDecoration(
-                                        color: Colors.grey.withOpacity(0.1),
+                                        color: Colors.grey.withOpacity(0.4),
                                         border:
                                             Border.all(color: disableColors),
                                         borderRadius: BorderRadius.circular(7)),
@@ -503,7 +503,9 @@ class _UpcomingMatchScreenState extends State<UpcomingMatchScreen> {
                                     Container(
                                       margin: EdgeInsets.all(0),
                                       decoration: BoxDecoration(
-                                          color: Colors.grey.withOpacity(0.1),
+                                          borderRadius:
+                                              BorderRadius.circular(7),
+                                          color: Colors.grey.withOpacity(0.4),
                                           border:
                                               Border.all(color: disableColors)),
                                       child: Padding(

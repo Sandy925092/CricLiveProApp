@@ -26,9 +26,7 @@ class _MyAllEventsScreenState extends State<MyAllEventsScreen> {
                 Text(
                   'Today',
                   style: TextStyle(
-                      color: darkBlue,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700),
+                      color: white, fontSize: 16, fontWeight: FontWeight.w700),
                 ),
                 Column(
                   children: [
@@ -36,14 +34,14 @@ class _MyAllEventsScreenState extends State<MyAllEventsScreen> {
                     Text(
                       '08/12',
                       style: TextStyle(
-                          color: darkBlue,
+                          color: white,
                           fontSize: 14,
                           fontWeight: FontWeight.w700),
                     ),
                     Text(
                       '16:02',
                       style: TextStyle(
-                          color: darkBlue,
+                          color: white,
                           fontSize: 14,
                           fontWeight: FontWeight.w700),
                     ),
@@ -51,7 +49,7 @@ class _MyAllEventsScreenState extends State<MyAllEventsScreen> {
                 ),
                 Icon(
                   MyFlutterApp.calendar,
-                  color: Color(0xff96A0B7),
+                  color: white,
                   size: 30,
                 )
               ],
