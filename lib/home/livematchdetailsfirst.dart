@@ -128,6 +128,7 @@ class _LiveMatchDetailsFirstState extends State<LiveMatchDetailsFirst> {
                     color: white),
               ],
             ),
+            1.h.heightBox,
             Row(
               children: [
                 Expanded(
@@ -137,6 +138,9 @@ class _LiveMatchDetailsFirstState extends State<LiveMatchDetailsFirst> {
                     height: 38,
                     decoration: BoxDecoration(
                       shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(5),
+                          bottomLeft: Radius.circular(5)),
                       // border: Border.all(color: primaryColors),
                       color: buttonColors,
                     ),
@@ -174,6 +178,9 @@ class _LiveMatchDetailsFirstState extends State<LiveMatchDetailsFirst> {
                     margin: EdgeInsets.only(right: 20),
                     decoration: BoxDecoration(
                       shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.only(
+                          bottomRight: Radius.circular(5),
+                          topRight: Radius.circular(5)),
                       // border: Border.all(color: primaryColors),
                       color: Color(0xff3A65F4),
                     ),
@@ -216,7 +223,7 @@ class _LiveMatchDetailsFirstState extends State<LiveMatchDetailsFirst> {
                     fontSize: 12,
                     fontWeight: FontWeight.w400,
                     fontFamily: "Poppins",
-                    color: primaryColors),
+                    color: white),
               ],
             ).pOnly(right: 18),
             Container(

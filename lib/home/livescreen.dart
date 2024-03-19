@@ -20,6 +20,12 @@ class LiveScreen extends StatefulWidget {
 
 class _LiveScreenState extends State<LiveScreen> {
   late ExpandedTileController _controller;
+  ExpandedTileController _controller2 =
+      ExpandedTileController(isExpanded: false);
+  ExpandedTileController controller3 =
+      ExpandedTileController(isExpanded: false);
+  bool isTrue2 = false;
+  bool isTrue3 = false;
   bool? isTrue;
   List<bool> isTrueList = [false, false];
 
@@ -39,20 +45,23 @@ class _LiveScreenState extends State<LiveScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            1.h.heightBox,
+            2.h.heightBox,
             Image.asset(
-              "assets/images/banner2.png",
+              "assets/images/banner3.png",
               scale: 3.8,
             ),
-            1.h.heightBox,
+            2.h.heightBox,
             ExpandedTile(
               trailing: Icon(
                 Icons.arrow_forward_ios_outlined,
                 // size: 40,
                 color: Color(0xff96A0B7),
               ).rotate90(),
+              contentseparator: 3.0,
               trailingRotation: 180,
               theme: const ExpandedTileThemeData(
+                headerPadding: EdgeInsets.symmetric(horizontal: 10),
+                contentPadding: EdgeInsets.symmetric(horizontal: 20),
                 headerColor: bgColor,
                 headerSplashColor: transparent,
                 contentBackgroundColor: bgColor,
@@ -64,7 +73,7 @@ class _LiveScreenState extends State<LiveScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      isTrue!
+                      _controller.isExpanded
                           ? Image.asset(
                               "assets/images/doticon.png",
                               height: 25,
@@ -114,7 +123,6 @@ class _LiveScreenState extends State<LiveScreen> {
                   itemCount: 1,
                   physics: NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
-                    log(_controller.isExpanded.toString());
                     return GestureDetector(
                       onTap: () {
                         PersistentNavBarNavigator.pushNewScreen(
@@ -126,9 +134,7 @@ class _LiveScreenState extends State<LiveScreen> {
                         );
                       },
                       child: Container(
-                        padding: EdgeInsets.all(8),
                         clipBehavior: Clip.hardEdge,
-                        // margin: EdgeInsets.all(5),
                         decoration: BoxDecoration(
                             color: Colors.white,
                             border: Border.all(color: disableColors),
@@ -136,11 +142,10 @@ class _LiveScreenState extends State<LiveScreen> {
                         child: Padding(
                           padding: const EdgeInsets.all(0),
                           child: Row(
-                            // mainAxisAlignment: MainAxisAlignmen,
                             children: [
                               Container(
-                                // height: 21.4.h,
-                                // width: 3.w,
+                                height: 14.h,
+                                width: 2.w,
                                 decoration: BoxDecoration(
                                     color: neonColor,
                                     borderRadius: BorderRadius.only(
@@ -151,92 +156,58 @@ class _LiveScreenState extends State<LiveScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    // Add your card title here
-
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        commonText(
-                                          data: "",
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500,
-                                          fontFamily: "Poppins",
-                                          color: matchTitleColor,
-                                        ),
-                                        commonText(
-                                          data: "International T20 Matches",
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w400,
-                                          fontFamily: "Poppins",
-                                          color: disableColors,
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(),
-                                          child: Image.asset(
-                                            "assets/images/notification.png",
-                                            height: 15,
-                                            width: 15,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-
+                                    1.h.heightBox,
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Image.asset(
-                                            "assets/images/team2.png",
-                                            scale: 4,
-                                          ),
-                                          Image.asset(
-                                            "assets/images/team1.png",
-                                            scale: 4,
-                                          )
-                                        ],
-                                      ),
-                                    ),
-
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 0.0, left: 8.0, right: 8.0),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          commonText(
-                                            data: "Zimbabwe",
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: "Poppins",
-                                            color: teamColor,
+                                          Row(
+                                            children: [
+                                              Image.asset(
+                                                "assets/images/team2.png",
+                                                scale: 4,
+                                              ),
+                                              3.w.widthBox,
+                                              commonText(
+                                                data: "Zimbabwe",
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400,
+                                                fontFamily: "Poppins",
+                                                color: teamColor,
+                                              ),
+                                            ],
                                           ),
                                           commonText(
-                                            data: "* Live",
+                                            data: "• Live",
                                             fontSize: 12,
                                             fontWeight: FontWeight.w700,
                                             fontFamily: "Poppins",
-                                            color: black,
+                                            color: Colors.red,
                                           ),
-                                          commonText(
-                                            data: "Bangladesh",
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: "Poppins",
-                                            color: teamColor,
+                                          Row(
+                                            children: [
+                                              Image.asset(
+                                                "assets/images/team1.png",
+                                                scale: 4,
+                                              ),
+                                              3.w.widthBox,
+                                              commonText(
+                                                data: "Bangladesh",
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400,
+                                                fontFamily: "Poppins",
+                                                color: teamColor,
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       ),
                                     ),
-
                                     Padding(
                                       padding: const EdgeInsets.only(
-                                          top: 5.0, left: 8.0, right: 8.0),
+                                          top: 10.0, left: 20.0, right: 8.0),
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
@@ -280,6 +251,7 @@ class _LiveScreenState extends State<LiveScreen> {
                                         ],
                                       ),
                                     ),
+                                    2.h.heightBox
                                   ],
                                 ),
                               ),
@@ -305,186 +277,150 @@ class _LiveScreenState extends State<LiveScreen> {
                 debugPrint("long tapped!!");
               },
             ),
-
-            ExpandedTileList.builder(
-              itemCount: 2,
-              maxOpened: 2,
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              reverse: true,
-              itemBuilder: (context, index, controller) {
-                return ExpandedTile(
-                  trailing: Icon(
-                    Icons.arrow_forward_ios_outlined,
-                    // size: 40,
-                    color: Color(0xff96A0B7),
-                  ).rotate90(),
-                  trailingRotation: 180,
-                  theme: const ExpandedTileThemeData(
-                    headerColor: bgColor,
-                    headerSplashColor: transparent,
-                    contentBackgroundColor: bgColor,
-                  ),
-                  controller: index == 2
-                      ? controller.copyWith(isExpanded: true)
-                      : controller,
-                  title: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+            2.h.heightBox,
+            ExpandedTile(
+              trailing: Icon(
+                Icons.arrow_forward_ios_outlined,
+                // size: 40,
+                color: Color(0xff96A0B7),
+              ).rotate90(),
+              contentseparator: 3.0,
+              trailingRotation: 180,
+              theme: const ExpandedTileThemeData(
+                headerPadding: EdgeInsets.symmetric(horizontal: 10),
+                contentPadding: EdgeInsets.symmetric(horizontal: 20),
+                headerColor: bgColor,
+                headerSplashColor: transparent,
+                contentBackgroundColor: bgColor,
+              ),
+              controller: _controller2,
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          index == 1
-                              ? isTrueList.first
-                                  ? Image.asset(
-                                      "assets/images/doticon.png",
-                                      height: 25,
-                                      width: 25,
-                                    )
-                                  : SizedBox()
-                              : isTrueList.last
-                                  ? Image.asset(
-                                      "assets/images/doticon.png",
-                                      height: 25,
-                                      width: 25,
-                                    )
-                                  : SizedBox(),
-                          2.w.widthBox,
-                          commonText(
-                            data: index == 1
-                                ? "The Hundred"
-                                : "The Hundred - Womens ",
+                      isTrue2!
+                          ? Image.asset(
+                              "assets/images/doticon.png",
+                              height: 25,
+                              width: 25,
+                            )
+                          : SizedBox(),
+                      2.w.widthBox,
+                      Flexible(
+                        flex: 20,
+                        child: commonText(
+                            data: "The Hundred",
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
                             fontFamily: "Poppins",
                             color: white,
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 12.0, right: 12.0),
-                        child: Divider(
-                          thickness: 1.0,
-                          color: buttonColors,
-                        ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis),
                       ),
                     ],
                   ),
-                  content: index == 1
-                      ? ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: 1,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, i) {
-                            return GestureDetector(
-                              onTap: () {
-                                // PersistentNavBarNavigator.pushNewScreen(
-                                //   context,
-                                //   screen: const ForYouMatchDetails(),
-                                //   withNavBar:
-                                //       true, // OPTIONAL VALUE. True by default.
-                                //   pageTransitionAnimation:
-                                //       PageTransitionAnimation.cupertino,
-                                // );
-                              },
-                              child: Container(
-                                padding: EdgeInsets.all(8),
-                                // margin: EdgeInsets.all(5),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 12.0, right: 12.0),
+                    child: Divider(
+                      thickness: 1.0,
+                      color: buttonColors,
+                    ),
+                  ),
+                ],
+              ),
+              content: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: 1,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        PersistentNavBarNavigator.pushNewScreen(
+                          context,
+                          screen: const LiveMatchDetails(),
+                          withNavBar: true, // OPTIONAL VALUE. True by default.
+                          pageTransitionAnimation:
+                              PageTransitionAnimation.cupertino,
+                        );
+                      },
+                      child: Container(
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: disableColors),
+                            borderRadius: BorderRadius.circular(7)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(0),
+                          child: Row(
+                            children: [
+                              Container(
+                                height: 14.h,
+                                width: 2.w,
                                 decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    border: Border.all(color: disableColors),
-                                    borderRadius: BorderRadius.circular(7)),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(1.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      // Add your card title here
-
-                                      Row(
+                                    color: neonColor,
+                                    borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.circular(7),
+                                        topLeft: Radius.circular(7))),
+                              ),
+                              Flexible(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    1.h.heightBox,
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          commonText(
-                                            data: "",
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w500,
-                                            fontFamily: "Poppins",
-                                            color: matchTitleColor,
+                                          Row(
+                                            children: [
+                                              Image.asset(
+                                                "assets/images/team2.png",
+                                                scale: 4,
+                                              ),
+                                              3.w.widthBox,
+                                              commonText(
+                                                data: "Zimbabwe",
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400,
+                                                fontFamily: "Poppins",
+                                                color: teamColor,
+                                              ),
+                                            ],
                                           ),
                                           commonText(
-                                            data: "International T20 Matches",
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w400,
+                                            data: "• Live",
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w700,
                                             fontFamily: "Poppins",
-                                            color: disableColors,
+                                            color: Colors.red,
                                           ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 4.0, top: 4.0),
-                                            child: Image.asset(
-                                              "assets/images/notification.png",
-                                              height: 15,
-                                              width: 15,
-                                            ),
+                                          Row(
+                                            children: [
+                                              Image.asset(
+                                                "assets/images/team1.png",
+                                                scale: 4,
+                                              ),
+                                              3.w.widthBox,
+                                              commonText(
+                                                data: "Bangladesh",
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400,
+                                                fontFamily: "Poppins",
+                                                color: teamColor,
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       ),
-
-                                      Padding(
-                                        padding: const EdgeInsets.all(12.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Image.asset(
-                                              "assets/images/team2.png",
-                                              scale: 4,
-                                            ),
-                                            Image.asset(
-                                              "assets/images/team1.png",
-                                              scale: 4,
-                                            )
-                                          ],
-                                        ),
-                                      ),
-
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 0.0, left: 8.0, right: 8.0),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            commonText(
-                                              data: "Zimbabwe",
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w400,
-                                              fontFamily: "Poppins",
-                                              color: teamColor,
-                                            ),
-                                            commonText(
-                                              data: "* Live",
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w700,
-                                              fontFamily: "Poppins",
-                                              color: black,
-                                            ),
-                                            commonText(
-                                              data: "Bangladesh",
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w400,
-                                              fontFamily: "Poppins",
-                                              color: teamColor,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-
-                                      Row(
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 10.0, left: 20.0, right: 8.0),
+                                      child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
@@ -500,7 +436,7 @@ class _LiveScreenState extends State<LiveScreen> {
                                                     BorderRadius.circular(30)),
                                             child: commonText(
                                               data: "146/2",
-                                              fontSize: 17,
+                                              fontSize: 14,
                                               fontWeight: FontWeight.w700,
                                               fontFamily: "Poppins",
                                               color: black,
@@ -518,7 +454,7 @@ class _LiveScreenState extends State<LiveScreen> {
                                                 right: 18.0),
                                             child: commonText(
                                               data: "175",
-                                              fontSize: 16,
+                                              fontSize: 15,
                                               fontWeight: FontWeight.w700,
                                               fontFamily: "Poppins",
                                               color: black,
@@ -526,227 +462,231 @@ class _LiveScreenState extends State<LiveScreen> {
                                           ),
                                         ],
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                    2.h.heightBox
+                                  ],
                                 ),
                               ),
-                            );
-                          })
-                      : ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: 1,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, i) {
-                            return GestureDetector(
-                              onTap: () {
-                                // PersistentNavBarNavigator.pushNewScreen(
-                                //   context,
-                                //   screen: const ForYouMatchDetails(),
-                                //   withNavBar:
-                                //       true, // OPTIONAL VALUE. True by default.
-                                //   pageTransitionAnimation:
-                                //       PageTransitionAnimation.cupertino,
-                                // );
-                              },
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      commonText(
-                                        data: "Coming soon",
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.grey.withOpacity(0.6),
-                                      ),
-                                    ],
-                                  ),
-                                  2.h.heightBox,
-                                  Container(
-                                    margin: EdgeInsets.all(0),
-                                    decoration: BoxDecoration(
-                                        color: Colors.grey.withOpacity(0.1),
-                                        border:
-                                            Border.all(color: disableColors),
-                                        borderRadius: BorderRadius.circular(7)),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(1.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
+              onTap: () {
+                if (_controller2.isExpanded == true) {
+                  setState(() {
+                    isTrue2 = _controller2.isExpanded;
+                  });
+                } else {
+                  setState(() {
+                    isTrue2 = false;
+                  });
+                }
+                debugPrint("tapped!!");
+              },
+              onLongTap: () {
+                debugPrint("long tapped!!");
+              },
+            ),
+            2.h.heightBox,
+            ExpandedTile(
+                trailing: Icon(
+                  Icons.arrow_forward_ios_outlined,
+                  // size: 40,
+                  color: Color(0xff96A0B7),
+                ).rotate90(),
+                trailingRotation: 180,
+                theme: const ExpandedTileThemeData(
+                  headerColor: bgColor,
+                  headerSplashColor: transparent,
+                  contentBackgroundColor: bgColor,
+                  headerPadding: EdgeInsets.symmetric(horizontal: 10),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 20),
+                ),
+                controller: controller3,
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        isTrue3
+                            ? Image.asset(
+                                "assets/images/doticon.png",
+                                height: 25,
+                                width: 25,
+                              )
+                            : SizedBox(),
+                        2.w.widthBox,
+                        commonText(
+                          data: "The Hundred - Womens ",
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          fontFamily: "Poppins",
+                          color: white,
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12.0, right: 12.0),
+                      child: Divider(
+                        thickness: 1.0,
+                        color: buttonColors,
+                      ),
+                    ),
+                  ],
+                ),
+                content: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: 1,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, i) {
+                      return GestureDetector(
+                        onTap: () {},
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                commonText(
+                                  data: "Coming soon",
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.grey.withOpacity(0.6),
+                                ),
+                              ],
+                            ),
+                            2.h.heightBox,
+                            Container(
+                              margin: EdgeInsets.all(0),
+                              decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.2),
+                                  border: Border.all(color: disableColors),
+                                  borderRadius: BorderRadius.circular(7)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(1.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    0.5.h.heightBox,
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        commonText(
+                                          data: "",
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                          fontFamily: "Poppins",
+                                          color: matchTitleColor,
+                                        ),
+                                        commonText(
+                                          data: "International T20 Matches",
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
+                                          fontFamily: "Poppins",
+                                          color: Colors.grey.withOpacity(0.3),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              right: 4.0, top: 4.0),
+                                          child: Image.asset(
+                                            "assets/images/notification.png",
+                                            height: 15,
+                                            width: 15,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(12.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                          // Add your card title here
-                                          0.5.h.heightBox,
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              commonText(
-                                                data: "",
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w500,
+                                          Image.asset(
+                                            "assets/images/team2.png",
+                                            height: 40,
+                                            width: 40,
+                                          ),
+                                          Container(
+                                            padding: EdgeInsets.only(
+                                                left: 10,
+                                                right: 10,
+                                                top: 3,
+                                                bottom: 3),
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(20.0)),
+                                                color: buttonColors),
+                                            child: Center(
+                                              child: commonText(
+                                                alignment: TextAlign.center,
+                                                data: "Starting \n in 26’",
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w700,
                                                 fontFamily: "Poppins",
-                                                color: matchTitleColor,
+                                                color: black,
                                               ),
-                                              commonText(
-                                                data:
-                                                    "International T20 Matches",
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w400,
-                                                fontFamily: "Poppins",
-                                                color: Colors.grey
-                                                    .withOpacity(0.3),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    right: 4.0, top: 4.0),
-                                                child: Image.asset(
-                                                  "assets/images/notification.png",
-                                                  height: 15,
-                                                  width: 15,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-
-                                          Padding(
-                                            padding: const EdgeInsets.all(12.0),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Image.asset(
-                                                  "assets/images/team2.png",
-                                                  height: 40,
-                                                  width: 40,
-                                                ),
-                                                Container(
-                                                  padding: EdgeInsets.only(
-                                                      left: 10,
-                                                      right: 10,
-                                                      top: 3,
-                                                      bottom: 3),
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  20.0)),
-                                                      color: buttonColors),
-                                                  child: Center(
-                                                    child: commonText(
-                                                      alignment:
-                                                          TextAlign.center,
-                                                      data:
-                                                          "Starting \n in 26’",
-                                                      fontSize: 10,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontFamily: "Poppins",
-                                                      color: black,
-                                                    ),
-                                                  ),
-                                                ).pOnly(left: 32, right: 32),
-                                                Image.asset(
-                                                  "assets/images/team1.png",
-                                                  height: 40,
-                                                  width: 40,
-                                                )
-                                              ],
                                             ),
-                                          ),
-
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: 0.0,
-                                                left: 8.0,
-                                                right: 8.0),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                commonText(
-                                                  data: "Zimbabwe",
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w400,
-                                                  fontFamily: "Poppins",
-                                                  color: Colors.grey
-                                                      .withOpacity(0.6),
-                                                ),
-                                                commonText(
-                                                  data: "Bangladesh",
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w400,
-                                                  fontFamily: "Poppins",
-                                                  color: Colors.grey
-                                                      .withOpacity(0.6),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-
-                                          SizedBox(height: 20)
+                                          ).pOnly(left: 32, right: 32),
+                                          Image.asset(
+                                            "assets/images/team1.png",
+                                            height: 40,
+                                            width: 40,
+                                          )
                                         ],
                                       ),
                                     ),
-                                  ),
-                                ],
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 0.0, left: 8.0, right: 8.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          commonText(
+                                            data: "Zimbabwe",
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: "Poppins",
+                                            color: Colors.grey.withOpacity(0.6),
+                                          ),
+                                          commonText(
+                                            data: "Bangladesh",
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: "Poppins",
+                                            color: Colors.grey.withOpacity(0.6),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            );
-                          }),
-                  onTap: () {
-                    log(index.toString());
-                    log(controller.isExpanded.toString());
-                    if (index == 1) {
-                      if (controller.isExpanded) {
-                        setState(() {
-                          isTrueList.first = true;
-                        });
-                      } else {
-                        setState(() {
-                          isTrueList.first = false;
-                        });
-                      }
-                    } else {
-                      setState(() {
-                        isTrueList.first = false;
-                      });
-                    }
-                    log(isTrueList.first.toString() + "this is is true");
-
-                    if (index == 0) {
-                      if (controller.isExpanded) {
-                        setState(() {
-                          isTrueList.last = true;
-                        });
-                      } else {
-                        setState(() {
-                          isTrueList.last = false;
-                        });
-                      }
-                    } else {
-                      setState(() {
-                        isTrueList.last = false;
-                      });
-                    }
-                    log(isTrueList.last.toString() + "this is is true last");
-                    debugPrint("tapped!!");
-                  },
-                  onLongTap: () {
-                    debugPrint("looooooooooong tapped!!");
-                  },
-                );
-              },
-            ),
-
-            // Padding(
-            //   padding: const EdgeInsets.only(left: 18.0, right: 18.0),
-            //   child: Divider(
-            //     thickness: 1.0,
-            //     color: buttonColors,
-            //   ),
-            // ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }),
+                onTap: () {
+                  if (controller3.isExpanded == true) {
+                    setState(() {
+                      isTrue3 = controller3.isExpanded;
+                    });
+                  } else {
+                    setState(() {
+                      isTrue3 = false;
+                    });
+                  }
+                  debugPrint("tapped!!");
+                },
+                onLongTap: () {
+                  debugPrint("long tapped!!");
+                }),
+            3.h.heightBox
           ],
         ),
       ),

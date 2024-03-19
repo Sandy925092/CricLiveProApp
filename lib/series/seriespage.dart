@@ -176,7 +176,7 @@ class _SeriesScreenState extends State<SeriesScreen>
                         ],
                       )
                     ],
-                  ),
+                  ).pSymmetric(h: 15),
                   1.h.heightBox
                 ],
               ).pSymmetric(h: 10),

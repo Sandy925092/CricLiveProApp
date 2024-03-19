@@ -127,7 +127,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                         ],
                       )
                     ],
-                  ),
+                  ).pSymmetric(h: 20),
                 ],
               ).pSymmetric(h: 10),
             ),

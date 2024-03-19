@@ -548,6 +548,9 @@ class _LiveScoredDetailsState extends State<LiveScoredDetails> {
                     height: 38,
                     decoration: BoxDecoration(
                       shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(5),
+                          bottomLeft: Radius.circular(5)),
                       // border: Border.all(color: primaryColors),
                       color: buttonColors,
                     ),
@@ -585,7 +588,10 @@ class _LiveScoredDetailsState extends State<LiveScoredDetails> {
                     margin: EdgeInsets.only(right: 20),
                     decoration: BoxDecoration(
                       shape: BoxShape.rectangle,
-                      // border: Border.all(color: Color(0xff3A65F4)),
+                      borderRadius: BorderRadius.only(
+                          bottomRight: Radius.circular(5),
+                          topRight: Radius.circular(5)),
+                      // border: Border.all(color: primaryColors),
                       color: Color(0xff3A65F4),
                     ),
                     child: Row(
@@ -618,6 +624,18 @@ class _LiveScoredDetailsState extends State<LiveScoredDetails> {
                 ),
               ],
             ),
+            SizedBox(height: 2),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                commonText(
+                    data: "Total Votes: 20K",
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: "Poppins",
+                    color: white),
+              ],
+            ).pOnly(right: 18),
             SizedBox(height: 2),
             Container(
               height: 40,
