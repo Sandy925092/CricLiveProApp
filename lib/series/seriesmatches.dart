@@ -90,7 +90,7 @@ class _SeriesMatchesScreenState extends State<SeriesMatchesScreen> {
                           ],
                         ),
                       ],
-                    ).pSymmetric(h: 10, v: 10),
+                    ).pSymmetric(h: 30, v: 10),
                   ),
                   2.h.heightBox,
                 ],
