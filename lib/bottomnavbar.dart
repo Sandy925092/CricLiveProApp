@@ -2,11 +2,11 @@ import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:kisma_livescore/home/homeScreen.dart';
+import 'package:kisma_livescore/screens/home/homeScreen.dart';
 import 'package:kisma_livescore/commonwidget.dart';
-import 'package:kisma_livescore/events/myevents.dart';
-import 'package:kisma_livescore/series/seriespage.dart';
-import 'package:kisma_livescore/settings/settings.dart';
+import 'package:kisma_livescore/screens/events/myevents.dart';
+import 'package:kisma_livescore/screens/series/seriespage.dart';
+import 'package:kisma_livescore/screens/settings/settings.dart';
 
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
