@@ -5,6 +5,7 @@ import 'package:kisma_livescore/cubit/livescore_cubit.dart';
 import 'package:kisma_livescore/repository/livescore_repository.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
+//test
 void main() {
   runApp(const MyApp());
 }
