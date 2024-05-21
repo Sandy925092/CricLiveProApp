@@ -195,7 +195,7 @@ class HomeTeam {
         partnershipScore = json['PartnershipScore'] as dynamic,
         partnershipBalls = json['PartnershipBalls'] as dynamic,
         requiredRunRate = json['RequiredRunRate'],
-        target = json['Target'],
+        target = json['Target'] as dynamic,
         adjusted = json['Adjusted'] as bool?,
         overs = json['Overs'] as dynamic,
         balls = json['Balls'] as dynamic,
@@ -410,7 +410,7 @@ class AwayTeam {
   final dynamic requiredRuns;
   final dynamic projectedScore;
   final bool? declared;
-  final List<dynamic>? fOW;
+  final List<FOW>? fOW;
   final dynamic legByes;
   final dynamic byes;
   final dynamic noBalls;
@@ -459,7 +459,7 @@ class AwayTeam {
         requiredRuns = json['RequiredRuns'],
         projectedScore = json['ProjectedScore'],
         declared = json['Declared'] as bool?,
-        fOW = json['FOW'] as List?,
+        fOW = (json['FOW'] as List?)?.map((dynamic e) => FOW.fromJson(e as Map<String,dynamic>)).toList(),
         legByes = json['LegByes'] as dynamic,
         byes = json['Byes'] as dynamic,
         noBalls = json['NoBalls'] as dynamic,
@@ -483,7 +483,7 @@ class AwayTeam {
     'RequiredRuns' : requiredRuns,
     'ProjectedScore' : projectedScore,
     'Declared' : declared,
-    'FOW' : fOW,
+    'FOW' : fOW?.map((e) => e.toJson()).toList(),
     'LegByes' : legByes,
     'Byes' : byes,
     'NoBalls' : noBalls,

@@ -8,24 +8,25 @@ import 'package:kisma_livescore/cubit/livescore_cubit.dart';
 import 'package:kisma_livescore/customwidget/commonwidget.dart';
 import 'package:kisma_livescore/responses/live_score_response.dart';
 import 'package:kisma_livescore/responses/live_score_response.dart' as dfr;
-import 'package:kisma_livescore/screens/home/linedetails.dart';
-import 'package:kisma_livescore/screens/home/livematchdetailsfirst.dart';
-import 'package:kisma_livescore/screens/home/livescoreddetails.dart';
+import 'package:kisma_livescore/screens/home/live/live_details_tab.dart';
+import 'package:kisma_livescore/screens/home/live/live_lineup_tab.dart';
+import 'package:kisma_livescore/screens/home/live/live_scorecard_tab.dart';
 import 'package:kisma_livescore/utils/colorfile.dart';
 import 'package:kisma_livescore/utils/custom_widgets.dart';
 import 'package:kisma_livescore/utils/ui_helper.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-class LiveMatchDetails extends StatefulWidget {
-  const LiveMatchDetails({Key? key}) : super(key: key);
+class LiveDashboard extends StatefulWidget {
+  const LiveDashboard({super.key});
 
   @override
-  State<LiveMatchDetails> createState() => _LiveMatchDetailsState();
+  State<LiveDashboard> createState() => _LiveDashboardState();
 }
 
-class _LiveMatchDetailsState extends State<LiveMatchDetails> with TickerProviderStateMixin {
-  bool homeTeamBatting = false;
+
+class _LiveDashboardState extends State<LiveDashboard> with TickerProviderStateMixin {
+  bool isHomeTeamBatting = false;
   LiveScoreResponse liveScoreResponse = LiveScoreResponse();
   List<dfr.Data>? tmpLiveScoreList=[];
 
@@ -39,6 +40,9 @@ class _LiveMatchDetailsState extends State<LiveMatchDetails> with TickerProvider
   }
 
   Future<void> _getLiveScoreApi() async {
+    BlocProvider.of<LiveScoreCubit>(context).getLiveScoreCall();
+  }
+  Future<void> _getLiveScoreApi1() async {
     BlocProvider.of<LiveScoreCubit>(context).getLiveScoreCall();
   }
   TabController? _controller;
@@ -64,7 +68,19 @@ class _LiveMatchDetailsState extends State<LiveMatchDetails> with TickerProvider
           if(state.status == LiveScoreStatus.liveScoreSuccess){
             Loader.hide();
             liveScoreResponse = state.responseData?.response as LiveScoreResponse;
-            homeTeamBatting = liveScoreResponse.data?.homeTeam?.isBattingTeam??false;
+            isHomeTeamBatting = liveScoreResponse.data?.homeTeam?.isBattingTeam??false;
+            setState(() {
+              tmpLiveScoreList!.clear();
+              tmpLiveScoreList?.addAll(liveScoreResponse.data != null ? [liveScoreResponse.data!] : []);
+
+              tmpLiveScoreResponse = liveScoreResponse;
+            });
+
+          }
+          if(state.status == LiveScoreStatus.liveScoreSuccess1){
+            Loader.hide();
+            liveScoreResponse = state.responseData?.response as LiveScoreResponse;
+            isHomeTeamBatting = liveScoreResponse.data?.homeTeam?.isBattingTeam??false;
             setState(() {
               tmpLiveScoreList!.clear();
               tmpLiveScoreList?.addAll(liveScoreResponse.data != null ? [liveScoreResponse.data!] : []);
@@ -167,7 +183,7 @@ class _LiveMatchDetailsState extends State<LiveMatchDetails> with TickerProvider
                             ],
                           ),
                           1.h.heightBox,
-                          mediumText14(context, homeTeamBatting?liveScoreResponse.data?.homeTeam?.name??'':liveScoreResponse.data?.awayTeam?.name??'',textColor: const Color(0xffE4E5E9),maxLines: 2,overflow:  TextOverflow.ellipsis),
+                          mediumText14(context, isHomeTeamBatting?liveScoreResponse.data?.homeTeam?.name??'':liveScoreResponse.data?.awayTeam?.name??'',textColor: const Color(0xffE4E5E9),maxLines: 2,overflow:  TextOverflow.ellipsis),
                         ],
                       ),
                     ),
@@ -179,12 +195,13 @@ class _LiveMatchDetailsState extends State<LiveMatchDetails> with TickerProvider
                             children: [
                               Container(
                                 decoration: BoxDecoration(color: neonColor, borderRadius: BorderRadius.circular(14)),
-                                child:mediumText14(context, homeTeamBatting?"${liveScoreResponse.data?.homeTeam?.score.toString()}/${liveScoreResponse.data?.homeTeam?.wickets.toString()}":
+                                child:mediumText14(context, isHomeTeamBatting?"${liveScoreResponse.data?.homeTeam?.score.toString()}/${liveScoreResponse.data?.homeTeam?.wickets.toString()}":
                                 "${liveScoreResponse.data?.awayTeam?.score.toString()}/${liveScoreResponse.data?.awayTeam?.wickets.toString()}",textColor: const Color(0xff001648), fontWeight: FontWeight.w700).pOnly(left: 12, right: 12, top: 3, bottom: 3),
-                                ),
+                              ),
                               3.w.widthBox,
-                            //  mediumText14(context, "${liveScoreResponse.data?.currentOver?.overNumber.toString()??''}.${liveScoreResponse.data?.currentOver?.ballByBall?.length.toString()??''}",textColor: const Color(0xffE4E5E9),fontWeight: FontWeight.w700 ),
-                              mediumText14(context, "${liveScoreResponse.data?.currentBall?.over.toString()??''}.${liveScoreResponse.data?.currentBall?.ballNumber.toString()??''}",textColor: const Color(0xffE4E5E9),fontWeight: FontWeight.w700 ),
+                              //  mediumText14(context, "${liveScoreResponse.data?.currentOver?.overNumber.toString()??''}.${liveScoreResponse.data?.currentOver?.ballByBall?.length.toString()??''}",textColor: const Color(0xffE4E5E9),fontWeight: FontWeight.w700 ),
+                              mediumText14(context, isHomeTeamBatting?"${liveScoreResponse.data?.homeTeam?.overs.toString()??''}.${liveScoreResponse.data?.homeTeam?.balls.toString()??''}":
+                              "${liveScoreResponse.data?.awayTeam?.overs.toString()??''}.${liveScoreResponse.data?.awayTeam?.balls.toString()??''}",textColor: const Color(0xffE4E5E9),fontWeight: FontWeight.w700 ),
                             ],
                           ),
                           1.h.heightBox,
@@ -264,9 +281,9 @@ class _LiveMatchDetailsState extends State<LiveMatchDetails> with TickerProvider
                 child: TabBarView(
                   controller: _controller,
                   children:  [
-                    LiveMatchDetailsFirst(tmpLiveScoreResponse:tmpLiveScoreResponse),
-                    const LiveScoredDetails(),
-                    const LineUpDetails(),
+                    LiveDetailsTab(tmpLiveScoreResponse:tmpLiveScoreResponse),
+                    LiveScoreCardTab(tmpLiveScoreResponse:tmpLiveScoreResponse),
+                    LiveLineUpTab(tmpLiveScoreResponse:tmpLiveScoreResponse),
                   ],
                 ),
               ),

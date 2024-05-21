@@ -26,6 +26,10 @@ enum LiveScoreStatus {
   liveScoreSuccess1,
   liveScoreError1,
 
+  liveScoreLoading2,
+  liveScoreSuccess2,
+  liveScoreError2,
+
 
 
 }

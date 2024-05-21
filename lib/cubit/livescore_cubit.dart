@@ -72,8 +72,11 @@ class LiveScoreCubit extends Cubit<LiveScoreState> {
       emit(state.copyWith(status: LiveScoreStatus.liveScoreError, error: e.toString(), errorData: null));
     }
   }
+
+
+
   Future<void> getLiveScoreCall1() async {
-    emit(state.copyWith(status: LiveScoreStatus.liveScoreLoading1));
+   // emit(state.copyWith(status: LiveScoreStatus.liveScoreLoading1));
     try {
       ResponseData response = await repository.getLiveScore();
       emit(state.copyWith(status: LiveScoreStatus.liveScoreSuccess1, responseData: response));
@@ -83,6 +86,20 @@ class LiveScoreCubit extends Cubit<LiveScoreState> {
     }
     catch (e) {
       emit(state.copyWith(status: LiveScoreStatus.liveScoreError1, error: e.toString(), errorData: null));
+    }
+  }
+
+  Future<void> getLiveScoreCall2() async {
+   // emit(state.copyWith(status: LiveScoreStatus.liveScoreLoading2));
+    try {
+      ResponseData response = await repository.getLiveScore();
+      emit(state.copyWith(status: LiveScoreStatus.liveScoreSuccess2, responseData: response));
+    }
+    on ErrorData catch (errorData) {
+      emit(state.copyWith(status: LiveScoreStatus.liveScoreError2, errorData: errorData, error: null));
+    }
+    catch (e) {
+      emit(state.copyWith(status: LiveScoreStatus.liveScoreError2, error: e.toString(), errorData: null));
     }
   }
 

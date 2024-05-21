@@ -25,7 +25,7 @@ class _DashboardState extends State<Dashboard> {
     double width = MediaQuery.of(context).size.width;
 
     List<Widget> buildScreens() {
-      return [HomeScreen(), MyEventsScreen(), SeriesScreen(), SettingsScreen()];
+      return [const HomeScreen(), MyEventsScreen(), SeriesScreen(), SettingsScreen()];
     }
 
     List<PersistentBottomNavBarItem> navBarsItems() {

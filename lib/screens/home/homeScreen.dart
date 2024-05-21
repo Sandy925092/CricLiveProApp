@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:kisma_livescore/customwidget/commonwidget.dart';
 import 'package:kisma_livescore/screens/home/finished/finishscreen.dart';
 import 'package:kisma_livescore/screens/home/foryou/foryou.dart';
-import 'package:kisma_livescore/screens/home/livescreen.dart';
+import 'package:kisma_livescore/screens/home/live/livescreen.dart';
 import 'package:kisma_livescore/screens/home/searchscreen.dart';
 import 'package:kisma_livescore/screens/home/upcoming/upcomingmatchesscreen.dart';
 import 'package:kisma_livescore/utils/colorfile.dart';

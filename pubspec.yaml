@@ -53,6 +53,7 @@ dependencies:
   google_fonts: ^6.2.1
   flutter_widget_from_html: ^0.15.0
   connectivity_plus: ^6.0.3
+  web_socket_channel: ^3.0.0
 
 
 dev_dependencies:

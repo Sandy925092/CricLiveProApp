@@ -2,26 +2,32 @@ import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:kisma_livescore/commonwidget.dart';
 import 'package:kisma_livescore/customwidget/commonwidget.dart';
+import 'package:kisma_livescore/responses/live_score_response.dart';
 import 'package:kisma_livescore/screens/home/lineall16.dart';
 import 'package:kisma_livescore/screens/home/linebat8.dart';
 import 'package:kisma_livescore/screens/home/lineupar2.dart';
 import 'package:kisma_livescore/screens/home/lineupbowl6.dart';
 import 'package:kisma_livescore/utils/colorfile.dart';
+import 'package:kisma_livescore/utils/custom_widgets.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:velocity_x/velocity_x.dart';
-
-class LineUpDetails extends StatefulWidget {
-  const LineUpDetails({Key? key}) : super(key: key);
+class LiveLineUpTab extends StatefulWidget {
+  final LiveScoreResponse tmpLiveScoreResponse;
+  const LiveLineUpTab({Key? key,required this.tmpLiveScoreResponse}) : super(key: key);
 
   @override
-  State<LineUpDetails> createState() => _LineUpDetailsState();
+  State<LiveLineUpTab> createState() => _LiveLineUpTabState();
 }
 
-class _LineUpDetailsState extends State<LineUpDetails>
-    with TickerProviderStateMixin {
-  TabController? _controller;
-  int _currentIndex = 0;
 
+
+class _LiveLineUpTabState extends State<LiveLineUpTab> with TickerProviderStateMixin {
+  bool isHomeTeamBatting = false;
+  LiveScoreResponse liveScoreResponse = LiveScoreResponse();
+  TabController? _controller;
+ // int _currentIndex = 0;
+
+  @override
   void initState() {
     _controller = TabController(length: 4, vsync: this);
     // TODO: implement initState
@@ -30,6 +36,8 @@ class _LineUpDetailsState extends State<LineUpDetails>
 
   @override
   Widget build(BuildContext context) {
+    final data = widget.tmpLiveScoreResponse.data;
+    isHomeTeamBatting = data?.homeTeam?.isBattingTeam ?? false ;
     return Scaffold(
       backgroundColor: bgColor,
       body: Column(
@@ -38,22 +46,25 @@ class _LineUpDetailsState extends State<LineUpDetails>
             height: 35,
             color: greyColor,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: data?.currentInning==1?MainAxisAlignment.center:MainAxisAlignment.spaceEvenly,
               children: [
                 commonText(
-                    data: "CRR: 9.04",
+                    data: isHomeTeamBatting?"CRR: ${data?.homeTeam?.runRate.toStringAsFixed(2)??'0.0'}":"CRR: ${data?.awayTeam?.runRate.toStringAsFixed(2)??'0.0'}",
                     fontSize: 11,
                     fontWeight: FontWeight.w300,
                     fontFamily: "Poppins",
                     color: primaryColors),
+                data?.currentInning==1?const SizedBox():
                 commonText(
-                    data: "RRR: 7.57",
+                    data: "RRR:${isHomeTeamBatting?data?.homeTeam?.requiredRunRate==null?'0.0':data?.homeTeam?.requiredRunRate.toStringAsFixed(2)??'':data?.awayTeam?.requiredRunRate==null?'0.0':data?.awayTeam?.requiredRunRate.toStringAsFixed(2)??''}",
                     fontSize: 11,
                     fontWeight: FontWeight.w300,
                     fontFamily: "Poppins",
                     color: primaryColors),
+                data?.currentInning==1?const SizedBox():
                 commonText(
-                    data: "TN1 needs 00 run in 00 balls to win",
+                  //   data: "TN1 needs 00 run in 00 balls to win",
+                    data: "${getInitials(isHomeTeamBatting?data?.homeTeam?.name??'':data?.awayTeam?.name??'')} needs ${isHomeTeamBatting?data?.homeTeam?.requiredRuns.toString()??'':data?.awayTeam?.requiredRuns.toString()} run in ${data?.remainingBalls}",
                     fontSize: 11,
                     fontWeight: FontWeight.w300,
                     fontFamily: "Poppins",
@@ -61,22 +72,23 @@ class _LineUpDetailsState extends State<LineUpDetails>
               ],
             ),
           ),
+          1.h.heightBox,
           SizedBox(
             height: 40,
             child: AppBar(
-              backgroundColor: Color(0xff001548).withOpacity(0.7),
+              backgroundColor: const Color(0xff001548).withOpacity(0.7),
               bottom: ButtonsTabBar(
-                contentPadding: EdgeInsets.symmetric(horizontal: 30),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 27),
                 radius: 30,
                 height: 35,
                 unselectedBackgroundColor: Colors.white,
                 decoration: BoxDecoration(color: neonColor),
                 controller: _controller,
-                tabs: [
+                tabs: const [
                   Tab(
                     // height: 20,
                     child: Text(
-                      'All 16',
+                      'All',
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 14,
@@ -120,11 +132,11 @@ class _LineUpDetailsState extends State<LineUpDetails>
           Expanded(
             child: TabBarView(
               controller: _controller,
-              children: const [
-                LineAll16(),
-                LineBat8(),
-                LineUpBowl6(),
-                LineUpAr2(),
+              children:  [
+                LineAll16(tmpLiveScoreResponse: widget.tmpLiveScoreResponse,),
+                const LineBat8(),
+                const LineUpBowl6(),
+                const LineUpAr2(),
               ],
             ),
           ),

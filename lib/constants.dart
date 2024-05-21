@@ -10,5 +10,18 @@ const String emailPattern =
 
 class AppConstants {
   static const String fontFamily = "Poppins";
+
+
+  static const String bowled = "0";
+  static const String caught = "1";
+  static const String lBW = "2";
+  static const String runOut = "3";
+  static const String stumped = "4";
+  static const String hitWicket = "5";
+  static const String handlingTheBall = "6";
+  static const String hittingTheBallTwice = "7";
+  static const String obstructingTheField = "8";
+
+
 }
 

@@ -2,7 +2,8 @@ import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:kisma_livescore/commonwidget.dart';
 import 'package:kisma_livescore/customwidget/commonwidget.dart';
-import 'package:kisma_livescore/screens/home/linedetails.dart';
+import 'package:kisma_livescore/responses/live_score_response.dart';
+import 'package:kisma_livescore/screens/home/live/live_lineup_tab.dart';
 import 'package:kisma_livescore/utils/colorfile.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -17,6 +18,7 @@ class SeriesMatchScorecardScreen extends StatefulWidget {
 
 class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
     with TickerProviderStateMixin {
+  LiveScoreResponse liveScoreResponse = LiveScoreResponse();
   TabController? _controller;
   TabController? _controller2;
   int _currentIndex = 0;
@@ -2400,7 +2402,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                       ],
                     ),
                   ),
-                  LineUpDetails(),
+                  LiveLineUpTab(tmpLiveScoreResponse: liveScoreResponse,),
                 ],
               ),
             ),

@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:kisma_livescore/commonwidget.dart';
 import 'package:kisma_livescore/customwidget/commonwidget.dart';
-import 'package:kisma_livescore/screens/home/livematchdetails.dart';
+import 'package:kisma_livescore/screens/home/live/live_dashboard.dart';
+import 'package:kisma_livescore/screens/home/live/live_details_tab.dart';
 import 'package:kisma_livescore/utils/colorfile.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -122,7 +123,7 @@ class _ForYouState extends State<ForYou> {
                         onTap: () {
                           PersistentNavBarNavigator.pushNewScreen(
                             context,
-                            screen: const LiveMatchDetails(),
+                            screen: const LiveDashboard(),
                             withNavBar:
                                 true, // OPTIONAL VALUE. True by default.
                             pageTransitionAnimation:
@@ -337,7 +338,7 @@ class _ForYouState extends State<ForYou> {
                         onTap: () {
                           PersistentNavBarNavigator.pushNewScreen(
                             context,
-                            screen: const LiveMatchDetails(),
+                            screen: const LiveDashboard(),
                             withNavBar:
                                 true, // OPTIONAL VALUE. True by default.
                             pageTransitionAnimation:

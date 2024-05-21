@@ -111,6 +111,20 @@ class MyInkWell extends StatelessWidget {
 }
 
 
+String getInitials(String teamName) {
+  String initials = "";
+
+  List<String> words = teamName.split(" ");
+  words.forEach((word) {
+    if (word.isNotEmpty) {
+      initials += word[0];
+    }
+  });
+
+  return initials;
+}
+
+
 Widget commonButton({
   required BuildContext context,
   required String labelText,
