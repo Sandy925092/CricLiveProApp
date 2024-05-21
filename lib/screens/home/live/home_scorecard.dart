@@ -118,13 +118,9 @@ class _HomeScorecardState extends State<HomeScorecard> {
 
 
     final actualHomePlayerOrderList = data?.homeTeam?.players;
-    final actualAwayPlayerOrderList = data?.awayTeam?.players;
-    final bowlingHomePlayerList = data?.homeTeam?.players;
     final bowlingAwayPlayerList = data?.awayTeam?.players;
 
     actualHomePlayerOrderList?.sort((a, b) => a.actBatOrder.compareTo(b.actBatOrder));
-    actualAwayPlayerOrderList?.sort((a, b) => a.actBatOrder.compareTo(b.actBatOrder));
-    bowlingHomePlayerList?.sort((a, b) => a.bowlOrder.compareTo(b.bowlOrder));
     bowlingAwayPlayerList?.sort((a, b) => a.bowlOrder.compareTo(b.bowlOrder));
 
 
@@ -186,10 +182,10 @@ class _HomeScorecardState extends State<HomeScorecard> {
                           int bowlerID =actualHomePlayerOrderList[index].bowled??0;
                           int catcherID =actualHomePlayerOrderList[index].caught??0;
                           print('bowlerID:$bowlerID');
-                          var bowlerPlayers = data?.homeTeam?.players?.firstWhere(
+                          var bowlerPlayers = data?.awayTeam?.players?.firstWhere(
                                 (player) => player.csdId == bowlerID,
                             orElse: () => defaultPlayer,);
-                          var catchPlayers = data?.homeTeam?.players?.firstWhere(
+                          var catchPlayers = data?.awayTeam?.players?.firstWhere(
                                 (player) => player.csdId == catcherID,
                             orElse: () => defaultPlayer,);
                           bowlerName = bowlerPlayers?.shortName ?? 'Unknown';
@@ -198,7 +194,7 @@ class _HomeScorecardState extends State<HomeScorecard> {
                         print('bowlerName:$bowlerName');
                         print('catcherName:$catcherName');
 
-                        Widget wicketWidget=  _wicketWidget(data?.awayTeam?.players![index].howOut.toString()??'',bowlerName,catcherName);
+                        Widget wicketWidget=  _wicketWidget(data?.homeTeam?.players![index].howOut.toString()??'',bowlerName,catcherName);
 
                         return  actualHomePlayerOrderList[index].actBatOrder==0?const SizedBox():Column(
                           crossAxisAlignment: CrossAxisAlignment.center,

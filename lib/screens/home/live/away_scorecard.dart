@@ -119,10 +119,8 @@ class _AwayScorecardState extends State<AwayScorecard> {
   @override
   Widget build(BuildContext context) {
     final data = widget.tmpLiveScoreResponse.data;
-    final awayPlayerList = widget.tmpLiveScoreResponse.data?.awayTeam;
     isHomeTeamBatting = data?.homeTeam?.isBattingTeam ?? false ;
 
-    final expAwayPlayerOrderList = data?.awayTeam?.players;
     final actualAwayPlayerOrderList = data?.awayTeam?.players;
     final bowlingHomePlayerList = data?.homeTeam?.players;
 

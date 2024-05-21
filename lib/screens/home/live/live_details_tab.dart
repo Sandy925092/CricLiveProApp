@@ -71,8 +71,8 @@ class _LiveDetailsTabState extends State<LiveDetailsTab> {
     expHomePlayerOrderList?.sort((a, b) => a.expBatOrder.compareTo(b.expBatOrder));
    /* actualHomePlayerOrderList?.sort((a, b) => a.actBatOrder.compareTo(b.actBatOrder));
     actualAwayPlayerOrderList?.sort((a, b) => a.actBatOrder.compareTo(b.actBatOrder));*/
-    expAwayPlayerOrderList?.skip(9).toList();
-    expHomePlayerOrderList?.skip(3).toList();
+  //  expAwayPlayerOrderList?.skip(9).toList();
+   // expHomePlayerOrderList?.skip(3).toList();
 
     int? yetToPlayerCount = 0;
     int hidePlayerCount = 0;

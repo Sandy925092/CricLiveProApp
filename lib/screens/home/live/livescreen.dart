@@ -19,6 +19,7 @@ import 'package:kisma_livescore/screens/socket/socketdummy2.dart';
 import 'package:kisma_livescore/screens/socket/textjfjkd.dart';
 import 'package:kisma_livescore/utils/colorfile.dart';
 import 'package:kisma_livescore/utils/custom_widgets.dart';
+import 'package:kisma_livescore/utils/shortform.dart';
 import 'package:kisma_livescore/utils/ui_helper.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -290,7 +291,7 @@ class _LiveScreenState extends State<LiveScreen> {
                                                       ),
                                                       3.w.widthBox,
                                                       Flexible(
-                                                        child: mediumText14(context, liveScoreResponse.data?.homeTeam?.name??'', maxLines: 1,overflow:TextOverflow.ellipsis),
+                                                        child: mediumText14(context, CountryUtils.getShortForm(liveScoreResponse.data?.homeTeam?.name??''), maxLines: 1,overflow:TextOverflow.ellipsis),
                                                       ),
                                                     ],
                                                   ),
@@ -313,7 +314,7 @@ class _LiveScreenState extends State<LiveScreen> {
                                                       ),
                                                       3.w.widthBox,
                                                       Flexible(
-                                                        child:mediumText14(context, liveScoreResponse.data?.awayTeam?.name??'', maxLines: 1,overflow:TextOverflow.ellipsis),),
+                                                        child:mediumText14(context, CountryUtils.getShortForm(liveScoreResponse.data?.awayTeam?.name??''), maxLines: 1,overflow:TextOverflow.ellipsis),),
                                                     ],
                                                   ),
                                                 ),
