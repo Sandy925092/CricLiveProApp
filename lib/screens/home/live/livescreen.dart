@@ -7,10 +7,13 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kisma_livescore/commonwidget.dart';
+import 'package:kisma_livescore/constants.dart';
 import 'package:kisma_livescore/cubit/livescore_cubit.dart';
 import 'package:kisma_livescore/customwidget/commonwidget.dart';
 import 'package:kisma_livescore/customwidget/custom_navigator.dart';
+import 'package:kisma_livescore/responses/get_country_code_abd_flag_response.dart';
 import 'package:kisma_livescore/responses/live_score_response.dart';
 import 'package:kisma_livescore/screens/home/live/live_dashboard.dart';
 import 'package:kisma_livescore/screens/home/live/live_details_tab.dart';
@@ -35,7 +38,7 @@ class LiveScreen extends StatefulWidget {
 class _LiveScreenState extends State<LiveScreen> {
 
   LiveScoreResponse liveScoreResponse = LiveScoreResponse();
-
+  GetCountryCodeAndFlagResponse getCountryCodeAndFlagResponse = GetCountryCodeAndFlagResponse();
   @override
   void initState() {
     // initialize controller
@@ -64,7 +67,7 @@ class _LiveScreenState extends State<LiveScreen> {
   }
 
   Future<void> _getLiveScoreApi2() async {
-    await BlocProvider.of<LiveScoreCubit>(context).getLiveScoreCall2();
+    await BlocProvider.of<LiveScoreCubit>(context).getLiveScoreCall1();
   }
 
   late ExpandedTileController _controller;
@@ -88,20 +91,31 @@ class _LiveScreenState extends State<LiveScreen> {
           if(state.status == LiveScoreStatus.liveScoreSuccess){
             Loader.hide();
             liveScoreResponse = state.responseData?.response as LiveScoreResponse;
+            BlocProvider.of<LiveScoreCubit>(context).getCountryCodeAndFlagCall();
+          }
+          if(state.status == LiveScoreStatus.liveScoreSuccess1){
+            // Loader.hide();
+            liveScoreResponse = state.responseData?.response as LiveScoreResponse;
+          }
+          if(state.status == LiveScoreStatus.getCountryCodeAndFlagSuccess){
+            getCountryCodeAndFlagResponse = state.responseData?.response as GetCountryCodeAndFlagResponse;
+         //   countryUtils.teamShortFormList.clear();
+            teamShortFormList.clear();
+            if(getCountryCodeAndFlagResponse.data!=null && getCountryCodeAndFlagResponse.data!.isNotEmpty){
+          //    countryUtils.teamShortFormList.addAll(getCountryCodeAndFlagResponse.data!);
+              teamShortFormList.addAll(getCountryCodeAndFlagResponse.data!);
+            }
           }
           if(state.status == LiveScoreStatus.liveScoreError){
             Loader.hide();
             String message = state.errorData?.message ?? state.error ?? '';
             UiHelper.toastMessage( message);
           }
-          if(state.status == LiveScoreStatus.liveScoreSuccess2){
-            // Loader.hide();
-            liveScoreResponse = state.responseData?.response as LiveScoreResponse;
-          }
-          if(state.status == LiveScoreStatus.liveScoreError2){
-            print("error in timer liveScoreApi");
-            // Loader.hide();
-            // liveScoreResponse = state.responseData?.response as LiveScoreResponse;
+
+          if(state.status == LiveScoreStatus.liveScoreError1){
+            Loader.hide();
+            String message = state.errorData?.message ?? state.error ?? '';
+            UiHelper.toastMessage( message);
           }
         },
         builder: (context,state){
@@ -280,23 +294,19 @@ class _LiveScreenState extends State<LiveScreen> {
                                           children: [
                                             1.h.heightBox,
                                             Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                           //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
                                                 Flexible(
                                                   child: Row(
                                                     children: [
-                                                      Image.asset(
-                                                        "assets/images/team1.png",
-                                                        scale: 4,
-                                                      ),
+                                                      SvgCustomWidget(imageUrl: getCountryFlag(liveScoreResponse.data?.homeTeam?.name??''),),
                                                       3.w.widthBox,
                                                       Flexible(
-                                                        child: mediumText14(context, CountryUtils.getShortForm(liveScoreResponse.data?.homeTeam?.name??''), maxLines: 1,overflow:TextOverflow.ellipsis),
+                                                        child: mediumText14(context, shortFormCountryCode(liveScoreResponse.data?.homeTeam?.name??''), maxLines: 1,overflow:TextOverflow.ellipsis),
                                                       ),
                                                     ],
-                                                  ),
+                                                  ).pOnly(left: 15),
                                                 ),
-                                                3.w.widthBox,
                                                 commonText(
                                                   data: "• Live",
                                                   fontSize: 14,
@@ -304,19 +314,16 @@ class _LiveScreenState extends State<LiveScreen> {
                                                   fontFamily: "Poppins",
                                                   color: Colors.red,
                                                 ),
-                                                3.w.widthBox,
                                                 Flexible(
                                                   child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.end,
                                                     children: [
-                                                      Image.asset(
-                                                        "assets/images/team2.png",
-                                                        scale: 4,
-                                                      ),
+                                                      SvgCustomWidget(imageUrl: getCountryFlag(liveScoreResponse.data?.awayTeam?.name??''),),
                                                       3.w.widthBox,
                                                       Flexible(
-                                                        child:mediumText14(context, CountryUtils.getShortForm(liveScoreResponse.data?.awayTeam?.name??''), maxLines: 1,overflow:TextOverflow.ellipsis),),
+                                                        child:mediumText14(context,shortFormCountryCode(liveScoreResponse.data?.awayTeam?.name??''), maxLines: 1,overflow:TextOverflow.ellipsis),),
                                                     ],
-                                                  ),
+                                                  ).pOnly(right: 15),
                                                 ),
                                               ],
                                             ),
@@ -338,10 +345,7 @@ class _LiveScreenState extends State<LiveScreen> {
                                                       color: black,
                                                     ),
                                                   ):
-                                                  Padding(
-                                                    padding: const EdgeInsets.only(left:20),
-                                                    child: mediumText14(context, "not yet"),
-                                                  ),
+                                                  mediumText14(context, "not yet"),
                                                   liveScoreResponse.data?.currentBall==null?
                                                   commonText(data:"Not Started",
                                                     fontSize: 12,
@@ -366,10 +370,7 @@ class _LiveScreenState extends State<LiveScreen> {
                                                       fontWeight: FontWeight.w700,
                                                       fontFamily: "Poppins",
                                                       color: black,
-                                                    ): Padding(
-                                                      padding: const EdgeInsets.only(left:20),
-                                                      child: mediumText14(context, "not yet"),
-                                                    ),
+                                                    ): mediumText14(context, "not yet"),
                                                   ),
                                                 ],
                                               ),

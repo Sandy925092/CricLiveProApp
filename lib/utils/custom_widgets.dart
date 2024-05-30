@@ -1,8 +1,10 @@
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kisma_livescore/constants.dart';
@@ -10,7 +12,7 @@ import 'package:kisma_livescore/customwidget/commonwidget.dart';
 import 'package:kisma_livescore/utils/colorfile.dart';
 import 'package:kisma_livescore/utils/ui_helper.dart';
 import 'package:velocity_x/velocity_x.dart';
-
+import 'package:http/http.dart' as http;
 
 
 
@@ -111,7 +113,7 @@ class MyInkWell extends StatelessWidget {
 }
 
 
-String getInitials(String teamName) {
+String getInitials1(String teamName) {
   String initials = "";
 
   List<String> words = teamName.split(" ");
@@ -123,6 +125,85 @@ String getInitials(String teamName) {
 
   return initials;
 }
+String getInitials(String teamName) {
+  String initials = "";
+  List<String> words = teamName.split(RegExp(r'[\s\(\)]+')); // Split by spaces and parentheses
+  words.forEach((word) {
+    if (word.isNotEmpty && !word.contains('Women')) {
+      initials += word[0];
+    } else if (word.contains('Women') || word.contains('women')) {
+      initials += "($word)"; // Add the whole word within parentheses
+    }
+  });
+
+  return initials.toUpperCase();
+}
+
+
+
+
+class SvgCustomWidget extends StatefulWidget {
+  final String imageUrl;
+  final double? height;
+  final double? width;
+
+  const SvgCustomWidget({super.key,
+    required this.imageUrl,
+    this.height = 20,
+    this.width = 31,
+  });
+
+  @override
+  State<SvgCustomWidget> createState() => _SvgCustomWidgetState();
+}
+
+class _SvgCustomWidgetState extends State<SvgCustomWidget> {
+  Future<bool> _checkSvgUrl(String url) async {
+    try {
+      final response = await http.get(Uri.parse(url));
+      return response.statusCode == 200;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<bool>(
+      future: _checkSvgUrl(widget.imageUrl),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const SizedBox(
+            height: 21,width: 31,
+            child: Center(
+              child: CupertinoActivityIndicator(
+                color: Color(0xffFF0134),),
+            ),
+          );
+        } else if (snapshot.hasError || !snapshot.data!) {
+          return Image.asset(
+            "assets/images/noImage.png",
+            height: widget.height,width: widget.width,
+          );
+        } else {
+          return SvgPicture.network(
+            widget.imageUrl,
+            height: widget.height,width: widget.width,
+            placeholderBuilder: (BuildContext context) => const SizedBox(
+              height: 21,width: 31,
+              child: Center(
+                child: CupertinoActivityIndicator(
+                  color: Color(0xffFF0134),),
+              ),
+            ),
+          );
+        }
+      },
+    );
+  }
+}
+
+
 
 
 Widget commonButton({

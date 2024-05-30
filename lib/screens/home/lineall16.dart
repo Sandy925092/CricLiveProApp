@@ -5,6 +5,7 @@ import 'package:kisma_livescore/customwidget/commonwidget.dart';
 import 'package:kisma_livescore/responses/live_score_response.dart';
 import 'package:kisma_livescore/utils/colorfile.dart';
 import 'package:kisma_livescore/utils/custom_widgets.dart';
+import 'package:kisma_livescore/utils/shortform.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -41,6 +42,7 @@ class _LineAll16State extends State<LineAll16> {
                       children: [
                         Container(
                           height: 40,
+                          padding: const EdgeInsets.only(left: 8,right: 8),
                           width: MediaQuery.of(context).size.width,
                           decoration: const BoxDecoration(
                               color: buttonColors,
@@ -49,12 +51,14 @@ class _LineAll16State extends State<LineAll16> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                commonText(
-                                    data: getInitials(data?.homeTeam?.name??''),
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w700,
-                                    fontFamily: "Poppins",
-                                    color: black),
+                                Flexible(
+                                  child: commonText(
+                                      data: shortFormCountryCode(data?.homeTeam?.name??'')??'',
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700,
+                                      fontFamily: "Poppins",
+                                      color: black,maxLines: 1,overflow: TextOverflow.ellipsis),
+                                ),
                                 commonText(
                                         data: "  ${data?.homeTeam?.score.toString()}-${data?.homeTeam?.wickets.toString()} (${data?.homeTeam?.overs.toString()}.${data?.homeTeam?.balls.toString()})",
                                         fontSize: 10,
@@ -67,6 +71,11 @@ class _LineAll16State extends State<LineAll16> {
                           ),
                         ),
                         2.h.heightBox,
+                        expHomePlayerOrderList?.length==0?
+                        Padding(
+                          padding: const EdgeInsets.only(top:60),
+                          child: mediumText14(context, 'Not announced',textColor:white,fontSize: 16),
+                        ):
                         ListView.builder(
                             shrinkWrap: true,
                             itemCount: expHomePlayerOrderList?.length,
@@ -146,6 +155,7 @@ class _LineAll16State extends State<LineAll16> {
                       children: [
                         Container(
                           height: 40,
+                          padding: const EdgeInsets.only(left: 8,right: 8),
                           width: MediaQuery.of(context).size.width,
                           decoration: const BoxDecoration(
                               color: greyColor,
@@ -154,12 +164,14 @@ class _LineAll16State extends State<LineAll16> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                commonText(
-                                    data: getInitials(data?.awayTeam?.name??''),
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w700,
-                                    fontFamily: "Poppins",
-                                    color: black),
+                                Flexible(
+                                  child: commonText(
+                                      data: shortFormCountryCode(data?.awayTeam?.name??'')??'',
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700,
+                                      fontFamily: "Poppins",
+                                      color: black,maxLines: 1,overflow: TextOverflow.ellipsis),
+                                ),
                                 commonText(
                                     data: "  ${data?.awayTeam?.score.toString()}-${data?.awayTeam?.wickets.toString()} (${data?.awayTeam?.overs.toString()}.${data?.awayTeam?.balls.toString()})",
                                         fontSize: 10,
@@ -172,7 +184,11 @@ class _LineAll16State extends State<LineAll16> {
                           ),
                         ),
                         2.h.heightBox,
-                        ListView.builder(
+                        expAwayPlayerOrderList?.length==0?
+                        Padding(
+                          padding: const EdgeInsets.only(top:60),
+                          child: mediumText14(context, 'Not announced',textColor:white,fontSize: 16),
+                        ):ListView.builder(
                             shrinkWrap: true,
                             itemCount: expAwayPlayerOrderList?.length,
                             physics: const NeverScrollableScrollPhysics(),

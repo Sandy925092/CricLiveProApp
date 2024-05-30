@@ -9,6 +9,7 @@ import 'package:kisma_livescore/screens/home/lineupar2.dart';
 import 'package:kisma_livescore/screens/home/lineupbowl6.dart';
 import 'package:kisma_livescore/utils/colorfile.dart';
 import 'package:kisma_livescore/utils/custom_widgets.dart';
+import 'package:kisma_livescore/utils/shortform.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:velocity_x/velocity_x.dart';
 class LiveLineUpTab extends StatefulWidget {
@@ -42,6 +43,28 @@ class _LiveLineUpTabState extends State<LiveLineUpTab> with TickerProviderStateM
       backgroundColor: bgColor,
       body: Column(
         children: [
+          data?.status==null?
+          Container(
+            height: 35,
+            color: greyColor,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                mediumText14(context,
+                    data?.tossWinner?.csdId==data?.homeTeam?.csdId?"${shortFormCountryCode(data?.homeTeam?.name??'')} Choose to ${data?.tossWinner?.decision??''}":
+                    "${shortFormCountryCode(data?.awayTeam?.name??'')} Choose to ${data?.tossWinner?.decision??''}",
+                    fontSize: 11,
+                    fontWeight: FontWeight.w300,
+                    textColor: primaryColors),
+                mediumText14(context,
+                    data?.tossWinner?.csdId==data?.homeTeam?.csdId?"${shortFormCountryCode(data?.homeTeam?.name??'')} Won the toss":
+                    "${shortFormCountryCode(data?.awayTeam?.name??'')} Won the toss",
+                    fontSize: 11,
+                    fontWeight: FontWeight.w300,
+                    textColor: primaryColors),
+              ],
+            ).pOnly(left: 16,right: 16),
+          ):
           Container(
             height: 35,
             color: greyColor,
@@ -64,7 +87,7 @@ class _LiveLineUpTabState extends State<LiveLineUpTab> with TickerProviderStateM
                 data?.currentInning==1?const SizedBox():
                 commonText(
                   //   data: "TN1 needs 00 run in 00 balls to win",
-                    data: "${getInitials(isHomeTeamBatting?data?.homeTeam?.name??'':data?.awayTeam?.name??'')} needs ${isHomeTeamBatting?data?.homeTeam?.requiredRuns.toString()??'':data?.awayTeam?.requiredRuns.toString()} run in ${data?.remainingBalls}",
+                    data: "${shortFormCountryCode(isHomeTeamBatting?data?.homeTeam?.name??'':data?.awayTeam?.name??'')} needs ${isHomeTeamBatting?data?.homeTeam?.requiredRuns.toString()??'':data?.awayTeam?.requiredRuns.toString()} run in ${data?.remainingBalls}",
                     fontSize: 11,
                     fontWeight: FontWeight.w300,
                     fontFamily: "Poppins",

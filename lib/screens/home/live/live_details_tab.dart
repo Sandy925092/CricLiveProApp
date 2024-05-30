@@ -3,12 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:kisma_livescore/cubit/livescore_cubit.dart';
 import 'package:kisma_livescore/customwidget/commonwidget.dart';
 import 'package:kisma_livescore/utils/colorfile.dart';
 import 'package:kisma_livescore/utils/custom_widgets.dart';
-import 'package:kisma_livescore/utils/ui_helper.dart';
+import 'package:kisma_livescore/utils/shortform.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:kisma_livescore/responses/live_score_response.dart';
@@ -30,6 +29,7 @@ class LiveDetailsTab extends StatefulWidget {
 class _LiveDetailsTabState extends State<LiveDetailsTab> {
   bool isHomeTeamBatting = false;
   LiveScoreResponse liveScoreResponse = LiveScoreResponse();
+  int tossWinnerTeamId = 0;
 
   @override
   void initState() {
@@ -37,8 +37,8 @@ class _LiveDetailsTabState extends State<LiveDetailsTab> {
     super.initState();
   }
 
-  Future<void> _getLiveScoreApi1() async {
-    BlocProvider.of<LiveScoreCubit>(context).getLiveScoreCall1();
+  Future<void> _getLiveScoreDashboardApi1() async {
+    BlocProvider.of<LiveScoreCubit>(context).getLiveScoreDashboardCall1();
   }
 
   String _getShortcutOfRunType(String value) {
@@ -63,26 +63,22 @@ class _LiveDetailsTabState extends State<LiveDetailsTab> {
     double screenHeight = MediaQuery.of(context).size.height;
     final data = widget.tmpLiveScoreResponse.data;
     isHomeTeamBatting = data?.homeTeam?.isBattingTeam ?? false ;
+    tossWinnerTeamId = data?.tossWinner?.csdId ?? 0;
     final expHomePlayerOrderList = data?.homeTeam?.players;
     final expAwayPlayerOrderList = data?.awayTeam?.players;
-    final actualHomePlayerOrderList = data?.homeTeam?.players;
-    final actualAwayPlayerOrderList = data?.awayTeam?.players;
     expAwayPlayerOrderList?.sort((a, b) => a.expBatOrder.compareTo(b.expBatOrder));
     expHomePlayerOrderList?.sort((a, b) => a.expBatOrder.compareTo(b.expBatOrder));
-   /* actualHomePlayerOrderList?.sort((a, b) => a.actBatOrder.compareTo(b.actBatOrder));
-    actualAwayPlayerOrderList?.sort((a, b) => a.actBatOrder.compareTo(b.actBatOrder));*/
-  //  expAwayPlayerOrderList?.skip(9).toList();
-   // expHomePlayerOrderList?.skip(3).toList();
+
 
     int? yetToPlayerCount = 0;
-    int hidePlayerCount = 0;
+
 
     if (isHomeTeamBatting) {
       yetToPlayerCount = (9 - (data?.homeTeam?.wickets ?? 0)) as int?;
-      hidePlayerCount = 11 - yetToPlayerCount!;
+
     } else {
       yetToPlayerCount = (9 - (data?.awayTeam?.wickets ?? 0)) as int?;
-      hidePlayerCount = 11 - yetToPlayerCount!;
+
     }
     print('isHomeTeamBatting:$isHomeTeamBatting');
     print('yetToPlayerCount:$yetToPlayerCount');
@@ -91,8 +87,31 @@ class _LiveDetailsTabState extends State<LiveDetailsTab> {
         body: RefreshIndicator(
           onRefresh: _onRefreshPage,
           child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
             child: Column(
               children: [
+                data?.status==null?
+                Container(
+                  height: 35,
+                  color: greyColor,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      mediumText14(context,
+                           data?.tossWinner?.csdId==data?.homeTeam?.csdId?"${shortFormCountryCode(data?.homeTeam?.name??'')} Choose to ${data?.tossWinner?.decision??''}":
+                           "${shortFormCountryCode(data?.awayTeam?.name??'')} Choose to ${data?.tossWinner?.decision??''}",
+                          fontSize: 11,
+                          fontWeight: FontWeight.w300,
+                          textColor: primaryColors),
+                      mediumText14(context,
+                          data?.tossWinner?.csdId==data?.homeTeam?.csdId?"${shortFormCountryCode(data?.homeTeam?.name??'')} Won the toss":
+                          "${shortFormCountryCode(data?.awayTeam?.name??'')} Won the toss",
+                          fontSize: 11,
+                          fontWeight: FontWeight.w300,
+                          textColor: primaryColors),
+                    ],
+                  ).pOnly(left: 16,right: 16),
+                ):
                 Container(
                   height: 35,
                   color: greyColor,
@@ -115,7 +134,7 @@ class _LiveDetailsTabState extends State<LiveDetailsTab> {
                       data?.currentInning==1?const SizedBox():
                       commonText(
                         //   data: "TN1 needs 00 run in 00 balls to win",
-                          data: "${getInitials(isHomeTeamBatting?data?.homeTeam?.name??'':data?.awayTeam?.name??'')} needs ${isHomeTeamBatting?data?.homeTeam?.requiredRuns.toString()??'':data?.awayTeam?.requiredRuns.toString()} run in ${data?.remainingBalls}",
+                          data: "${shortFormCountryCode(isHomeTeamBatting?data?.homeTeam?.name??'':data?.awayTeam?.name??'')} needs ${isHomeTeamBatting?data?.homeTeam?.requiredRuns.toString()??'':data?.awayTeam?.requiredRuns.toString()} run in ${data?.remainingBalls}",
                           fontSize: 11,
                           fontWeight: FontWeight.w300,
                           fontFamily: "Poppins",
@@ -826,12 +845,8 @@ class _LiveDetailsTabState extends State<LiveDetailsTab> {
                             children: [
                               Row(
                                 children: [
-                                  3.w.widthBox,
-                                  Image.asset(
-                                    'assets/images/indiaflag.png',
-                                    scale: 3,
-                                  ),
-                                  2.w.widthBox,
+                                  SvgCustomWidget(imageUrl: getCountryFlag(data?.homeTeam?.name??''),),
+                                  const SizedBox(width: 12,),
                                   isHomeTeamBatting?Image.asset(
                                     'assets/images/bat.png',
                                     scale: 3,
@@ -840,8 +855,6 @@ class _LiveDetailsTabState extends State<LiveDetailsTab> {
                               ),
                               1.h.heightBox,
                               commonText(
-                                /*   data: isHomeTeamBatting?"${data?.homeTeam?.score.toString()??''}-${data?.homeTeam?.wickets.toString()??''}":
-                                "Not yet",*/
                                   data: isHomeTeamBatting||data?.currentInning==2?"${data?.homeTeam?.score.toString()??''}-${data?.homeTeam?.wickets.toString()??''}":
                                   "Not yet",
                                   fontSize: 14,
@@ -854,8 +867,6 @@ class _LiveDetailsTabState extends State<LiveDetailsTab> {
                             children: [
                               1.h.heightBox,
                               commonText(
-                                //data: "at 00.0 Overs",
-                                //  data: "${data?.currentBall?.over.toString()??''}.${data?.currentBall?.ballNumber.toString()??''}",
                                   data: isHomeTeamBatting?"${data?.homeTeam?.overs.toString()??''}.${data?.homeTeam?.balls.toString()??''}":
                                   "${data?.awayTeam?.overs.toString()??''}.${data?.awayTeam?.balls.toString()??''}",
                                   fontSize: 10,
@@ -874,11 +885,7 @@ class _LiveDetailsTabState extends State<LiveDetailsTab> {
                                     scale: 3,
                                   ):const SizedBox(),
                                   3.w.widthBox,
-                                  Image.asset(
-                                    'assets/images/ausflag.png',
-                                    scale: 3,
-                                  ),
-
+                                  SvgCustomWidget(imageUrl: getCountryFlag(data?.awayTeam?.name??'')),
                                 ],
                               ),
                               1.h.heightBox,
@@ -905,6 +912,6 @@ class _LiveDetailsTabState extends State<LiveDetailsTab> {
     );
   }
   Future<void> _onRefreshPage() async{
-    await _getLiveScoreApi1();
+    await _getLiveScoreDashboardApi1();
   }
 }

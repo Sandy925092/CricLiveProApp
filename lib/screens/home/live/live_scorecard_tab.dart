@@ -7,6 +7,7 @@ import 'package:kisma_livescore/screens/home/live/away_scorecard.dart';
 import 'package:kisma_livescore/screens/home/live/home_scorecard.dart';
 import 'package:kisma_livescore/utils/colorfile.dart';
 import 'package:kisma_livescore/utils/custom_widgets.dart';
+import 'package:kisma_livescore/utils/shortform.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:velocity_x/velocity_x.dart';
 class LiveScoreCardTab extends StatefulWidget {
@@ -119,7 +120,28 @@ class _LiveScoreCardTabState extends State<LiveScoreCardTab> with TickerProvider
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          data?.status==null?
           Container(
+            height: 35,
+            color: greyColor,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                mediumText14(context,
+                    data?.tossWinner?.csdId==data?.homeTeam?.csdId?"${shortFormCountryCode(data?.homeTeam?.name??'')} Choose to ${data?.tossWinner?.decision??''}":
+                    "${shortFormCountryCode(data?.awayTeam?.name??'')} Choose to ${data?.tossWinner?.decision??''}",
+                    fontSize: 11,
+                    fontWeight: FontWeight.w300,
+                    textColor: primaryColors),
+                mediumText14(context,
+                    data?.tossWinner?.csdId==data?.homeTeam?.csdId?"${shortFormCountryCode(data?.homeTeam?.name??'')} Won the toss":
+                    "${shortFormCountryCode(data?.awayTeam?.name??'')} Won the toss",
+                    fontSize: 11,
+                    fontWeight: FontWeight.w300,
+                    textColor: primaryColors),
+              ],
+            ).pOnly(left: 16,right: 16),
+          ):Container(
             height: 35,
             color: greyColor,
             child: Row(
@@ -141,7 +163,7 @@ class _LiveScoreCardTabState extends State<LiveScoreCardTab> with TickerProvider
                 data?.currentInning==1?const SizedBox():
                 commonText(
                   //   data: "TN1 needs 00 run in 00 balls to win",
-                    data: "${getInitials(isHomeTeamBatting?data?.homeTeam?.name??'':data?.awayTeam?.name??'')} needs ${isHomeTeamBatting?data?.homeTeam?.requiredRuns.toString()??'':data?.awayTeam?.requiredRuns.toString()} run in ${data?.remainingBalls}",
+                    data: "${shortFormCountryCode(isHomeTeamBatting?data?.homeTeam?.name??'':data?.awayTeam?.name??'')} needs ${isHomeTeamBatting?data?.homeTeam?.requiredRuns.toString()??'':data?.awayTeam?.requiredRuns.toString()} run in ${data?.remainingBalls}",
                     fontSize: 11,
                     fontWeight: FontWeight.w300,
                     fontFamily: "Poppins",
@@ -155,7 +177,7 @@ class _LiveScoreCardTabState extends State<LiveScoreCardTab> with TickerProvider
             child: AppBar(
               backgroundColor: const Color(0xff001548).withOpacity(0.7),
               bottom: ButtonsTabBar(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 45),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 18),
                 radius: 6,
                 height: 45,
                 unselectedBackgroundColor: Colors.white,
@@ -167,7 +189,7 @@ class _LiveScoreCardTabState extends State<LiveScoreCardTab> with TickerProvider
                       child: Row(
                         children: [
                           commonText(
-                              data: getInitials(data?.homeTeam?.name??''),
+                              data: shortFormCountryCode(data?.homeTeam?.name??'')??'',
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
                               fontFamily: "Poppins",
@@ -180,7 +202,7 @@ class _LiveScoreCardTabState extends State<LiveScoreCardTab> with TickerProvider
                               color: black)
                               .pOnly(top: 8),
                         ],
-                      ).pOnly(left: 20),
+                      ).pOnly(left: 10),
                     ),
                   ),
                   Tab(
@@ -188,7 +210,7 @@ class _LiveScoreCardTabState extends State<LiveScoreCardTab> with TickerProvider
                       child: Row(
                         children: [
                           commonText(
-                              data: getInitials(data?.awayTeam?.name??''),
+                              data: shortFormCountryCode(data?.awayTeam?.name??'')??'',
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
                               fontFamily: "Poppins",
@@ -208,7 +230,7 @@ class _LiveScoreCardTabState extends State<LiveScoreCardTab> with TickerProvider
                 ],
               ),
             ),
-          ),
+          ).pOnly(left: 4),
           Expanded(
             child: TabBarView(
               controller: _controller,

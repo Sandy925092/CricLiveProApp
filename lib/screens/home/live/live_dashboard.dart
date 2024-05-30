@@ -13,6 +13,7 @@ import 'package:kisma_livescore/screens/home/live/live_lineup_tab.dart';
 import 'package:kisma_livescore/screens/home/live/live_scorecard_tab.dart';
 import 'package:kisma_livescore/utils/colorfile.dart';
 import 'package:kisma_livescore/utils/custom_widgets.dart';
+import 'package:kisma_livescore/utils/shortform.dart';
 import 'package:kisma_livescore/utils/ui_helper.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -40,10 +41,7 @@ class _LiveDashboardState extends State<LiveDashboard> with TickerProviderStateM
   }
 
   Future<void> _getLiveScoreApi() async {
-    BlocProvider.of<LiveScoreCubit>(context).getLiveScoreCall();
-  }
-  Future<void> _getLiveScoreApi1() async {
-    BlocProvider.of<LiveScoreCubit>(context).getLiveScoreCall();
+    BlocProvider.of<LiveScoreCubit>(context).getLiveScoreDashboardCall();
   }
   TabController? _controller;
   int _currentIndex = 0;
@@ -65,7 +63,7 @@ class _LiveDashboardState extends State<LiveDashboard> with TickerProviderStateM
       body: BlocConsumer<LiveScoreCubit,LiveScoreState>(
         listener: (context,state){
           print("sate.status:${state.status}");
-          if(state.status == LiveScoreStatus.liveScoreSuccess){
+          if(state.status == LiveScoreStatus.liveScoreDashboardSuccess){
             Loader.hide();
             liveScoreResponse = state.responseData?.response as LiveScoreResponse;
             isHomeTeamBatting = liveScoreResponse.data?.homeTeam?.isBattingTeam??false;
@@ -77,7 +75,7 @@ class _LiveDashboardState extends State<LiveDashboard> with TickerProviderStateM
             });
 
           }
-          if(state.status == LiveScoreStatus.liveScoreSuccess1){
+          if(state.status == LiveScoreStatus.liveScoreDashboardSuccess1){
             Loader.hide();
             liveScoreResponse = state.responseData?.response as LiveScoreResponse;
             isHomeTeamBatting = liveScoreResponse.data?.homeTeam?.isBattingTeam??false;
@@ -89,19 +87,19 @@ class _LiveDashboardState extends State<LiveDashboard> with TickerProviderStateM
             });
 
           }
-          if(state.status == LiveScoreStatus.liveScoreError){
+          if(state.status == LiveScoreStatus.liveScoreDashboardError){
             Loader.hide();
             String message = state.errorData?.message ?? state.error ?? '';
             UiHelper.toastMessage( message);
           }
         },
         builder: (context,state){
-          if (state.status == LiveScoreStatus.liveScoreLoading) {
+          if (state.status == LiveScoreStatus.liveScoreDashboardLoading) {
             return const Center(
               child: CircularProgressIndicator(color: Color(0xFF0DA9AF)),
             );
           }
-          if (state.status == LiveScoreStatus.liveScoreError) {
+          if (state.status == LiveScoreStatus.liveScoreDashboardError) {
             int statusCode = state.errorData?.code ?? 0;
             String? error = state.errorData?.message ?? state.error;
             print('error:$error');
@@ -170,10 +168,7 @@ class _LiveDashboardState extends State<LiveDashboard> with TickerProviderStateM
                         children: [
                           Row(
                             children: [
-                              Image.asset(
-                                'assets/images/indiaflag.png',
-                                scale: 3,
-                              ),
+                              SvgCustomWidget(imageUrl: getCountryFlag(isHomeTeamBatting?liveScoreResponse.data?.homeTeam?.name??'':liveScoreResponse.data?.awayTeam?.name??''),),
                               5.w.widthBox,
                               Image.asset(
                                 'assets/images/bat.png',
@@ -277,6 +272,7 @@ class _LiveDashboardState extends State<LiveDashboard> with TickerProviderStateM
                   ),
                 ),
               ),
+
               Expanded(
                 child: TabBarView(
                   controller: _controller,

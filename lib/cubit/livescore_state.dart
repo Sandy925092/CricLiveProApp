@@ -18,6 +18,14 @@ enum LiveScoreStatus {
   helpAndSupportSuccess,
   helpAndSupportError,
 
+  liveScoreDashboardLoading,
+  liveScoreDashboardSuccess,
+  liveScoreDashboardError,
+
+  liveScoreDashboardLoading1,
+  liveScoreDashboardSuccess1,
+  liveScoreDashboardError1,
+
   liveScoreLoading,
   liveScoreSuccess,
   liveScoreError,
@@ -26,9 +34,9 @@ enum LiveScoreStatus {
   liveScoreSuccess1,
   liveScoreError1,
 
-  liveScoreLoading2,
-  liveScoreSuccess2,
-  liveScoreError2,
+  getCountryCodeAndFlagLoading,
+  getCountryCodeAndFlagSuccess,
+  getCountryCodeAndFlagError,
 
 
 

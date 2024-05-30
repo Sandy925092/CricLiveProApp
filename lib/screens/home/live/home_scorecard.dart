@@ -685,6 +685,11 @@ class _HomeScorecardState extends State<HomeScorecard> {
                           itemCount: data?.homeTeam?.fOW?.length,
                           physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
+                            int playerId = data?.homeTeam?.fOW![index].bat;
+                            print('playerId:$playerId');
+                            var playerName = data?.homeTeam?.players?.firstWhere(
+                                  (player) => player.csdId == playerId,);
+                            String shortName = playerName?.shortName ?? 'Unknown';
                             return  Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
@@ -704,7 +709,7 @@ class _HomeScorecardState extends State<HomeScorecard> {
                                         flex: 10,
                                         fit: FlexFit.tight,
                                         child: mediumText14(context,
-                                          data?.homeTeam?.fOW![index].bat.toString()??'',
+                                          shortName,
                                           fontSize: 14,
                                           fontWeight: FontWeight.w400,
                                           textColor: Colors.black,
@@ -732,7 +737,6 @@ class _HomeScorecardState extends State<HomeScorecard> {
                                         ), //Container
                                       ),
                                       //Flexible
-
                                     ],
                                   ),
                                 ),

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:kisma_livescore/constants.dart';
 import 'package:kisma_livescore/repository/api_service.dart';
+import 'package:kisma_livescore/responses/get_country_code_abd_flag_response.dart';
 import 'package:kisma_livescore/responses/live_score_response.dart';
 import 'package:kisma_livescore/responses/privacy_policy_response.dart';
 import 'package:kisma_livescore/responses/terms_and_conditions_response.dart';
@@ -79,6 +80,22 @@ class LiveScoreRepository {
       return ResponseData(
           statusCode: response.statusCode,
           response: LiveScoreResponse.fromJson(response.data));
+    } on DioException catch (e) {
+      throw ErrorData(
+          message: e.response!.data['message'], code: e.response!.statusCode);
+    } on Exception catch (_) {
+      rethrow;
+    }
+  }
+
+
+  // get Country Code and Flag
+  Future<ResponseData> getCountryCodeAndFlag() async {
+    try {
+      final response = await ApiService().sendRequest.get("/api/flags/get");
+      return ResponseData(
+          statusCode: response.statusCode,
+          response: GetCountryCodeAndFlagResponse.fromJson(response.data));
     } on DioException catch (e) {
       throw ErrorData(
           message: e.response!.data['message'], code: e.response!.statusCode);
