@@ -212,9 +212,10 @@ Widget commonButton({
   VoidCallback? onTap,
   double height = 40.0,
   double? width = double.infinity,
-  double fontSize = 16,
-  FontWeight fontWeight = FontWeight.w700, //FontWeight.w400
+  double fontSize = 18,
+  FontWeight fontWeight = FontWeight.w600, //FontWeight.w400
   Color textColor = primaryColors,
+  Color buttonColor = buttonColors,
   bool isLoading = false,
 }) {
   return MyInkWell(
@@ -224,21 +225,27 @@ Widget commonButton({
     child: Container(
       height: height,
       width: width,
-      decoration: const BoxDecoration(
-        color: greyColor,
+      decoration:  BoxDecoration(
+      //  color: greyColor,
+        color: buttonColor,
         borderRadius: BorderRadius.all(Radius.circular(6)),
       ),
       child: Center(
         child: isLoading
             ? const SizedBox(width: 24, height: 24,
           child: CircularProgressIndicator(color:loaderColor,strokeWidth: 3.5,),)
-            : largeText16(context, labelText,
+            :Text(labelText,style: GoogleFonts.inter(
+          fontSize: fontSize,
+          fontWeight: fontWeight,
+          color: textColor,
+        ),)
+           /* : largeText16(context, labelText,
             fontSize: fontSize,
             fontWeight: fontWeight,
             maxLines: 1,
             textColor: textColor,
 
-        ),
+        ),*/
       ),
     ),
   );
@@ -456,12 +463,13 @@ Widget dashboardTextField({
   bool readOnly = false,
   double hintFontSize = 12,
   FontWeight hintFontWeight = FontWeight.w400,//FontWeight.normal
-  Color hintFontColor = const Color(0xff000000),
+  Color hintFontColor = const Color(0xffA8A8A8),
   Color boxShadowColor = const Color(0xFFFF0235),
   double textFontSize = 12,
+  double borderRadiusValue = 5,
   FontWeight textFontWeight = FontWeight.w400,//FontWeight.normal
   Color textFontColor = const Color(0xff000000),
-  EdgeInsets? contentPadding,
+  EdgeInsets? contentPadding=const EdgeInsets.only(left:8,right: 12),
   TextAlign textAlign = TextAlign.start, // Add this parameter
   TextInputAction? textInputAction,
   VoidCallback? onTap,
@@ -472,14 +480,14 @@ Widget dashboardTextField({
   VoidCallback? onEditingComplete, // Add this parameter
   FocusNode? focusNode, // Add this parameter
 }) => Container(
-  height: height ?? 60,
+  height: height ?? 45,
   decoration: BoxDecoration(
     color: Colors.white,
     border: Border.all(
         color: Colors.grey.withOpacity(0.3), width: 0.1,
         style: BorderStyle.solid), //Border.all
-    borderRadius: const BorderRadius.all(Radius.circular(30)),
-    boxShadow: [
+    borderRadius:  BorderRadius.all(Radius.circular(borderRadiusValue)),
+   /* boxShadow: [
       BoxShadow(
         // color: const Color(0xFFFF0235).withOpacity(0.25), // Specify color and opacity
         color:  boxShadowColor.withOpacity(0.25), // Specify color and opacity
@@ -487,7 +495,7 @@ Widget dashboardTextField({
         blurRadius: 4,
         offset: const Offset(0, 2.5), // Offset for bottom shadow
       ),
-    ],
+    ],*/
   ),
   child: TextFormField(
     controller: controller,
@@ -497,16 +505,28 @@ Widget dashboardTextField({
     inputFormatters: inputFormatters, // Pass inputFormatters here
     keyboardType: keyboardType,
     textCapitalization: textCapitalization,
-    cursorColor: Colors.pink,
+    cursorColor: Colors.blue,
     style: GoogleFonts.inter(
       fontWeight: textFontWeight, fontSize: textFontSize,
       color: textFontColor,),
     onTap: onTap,
     onChanged:onChanged,
     enabled: isEnabled,
+
     decoration: InputDecoration(
-      prefixIcon: prefixIcon,
+      prefixIcon: Padding(
+        padding: const EdgeInsets.only(left: 12,right: 14),
+        child: prefixIcon,
+      ),
       suffixIcon: suffixIcon,
+      prefixIconConstraints: const BoxConstraints(
+        minWidth: 25,
+        minHeight: 25,
+      ),
+      suffixIconConstraints: const BoxConstraints(
+        minWidth: 25,
+        minHeight: 25,
+      ),
       contentPadding: contentPadding,
       hintText: hintText,
       hintStyle: GoogleFonts.inter(
@@ -515,6 +535,7 @@ Widget dashboardTextField({
       border: const OutlineInputBorder(
         borderSide: BorderSide.none,
       ),
+      counterText: "",
     ),
     textAlign: textAlign, // Set the text alignment
     textInputAction: textInputAction,
@@ -524,4 +545,14 @@ Widget dashboardTextField({
 );
 
 
+void snackBarMessage(BuildContext context, String msg, {TextAlign textAlign = TextAlign.left}) {
+  // Remove any currently displayed SnackBar to prevent stacking
+  ScaffoldMessenger.of(context).removeCurrentSnackBar();
 
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    content: Text(
+      msg,
+      textAlign: textAlign,
+    ),
+  ));
+}

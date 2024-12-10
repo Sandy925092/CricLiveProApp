@@ -10,9 +10,15 @@ const String notConnected = 'Please Check Your Internet Connection';
 const String emailPattern =
     r'^(([^<>()[\]\\.,;:@\"]+(\.[^<>()[\]\\.,;:@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
 
+const String passwordPattern =
+    r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{6,}$';
 
-
-
+const PASSWORD_LENGTH_VALIDATION =
+    'Password should be Between 8-16 characters long.And it should contain Atleast One Number, One Special Character, One Uppercase and One Lowercase.';
+const EMPTY_CONFIRM_PASSWORD_VALIDATION = 'Please Enter Confirm Password';
+const EMPTY_NEW_PASSWORD_VALIDATION = 'Please Enter New Password';
+const EMPTY_PASSWORD_VALIDATION = 'Please Enter Password';
+const MATCHING_PASSWORD_VALIDATION = 'Password And Confirm Password Should Match';
 
 class AppConstants {
   static const String fontFamily = "Poppins";

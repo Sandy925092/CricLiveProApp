@@ -37,6 +37,15 @@ class UiHelper {
       fontSize: 16.0,
     );
   }
+  static Widget verticalSpace({double height = 16}) =>
+      SizedBox(
+        height: height,
+      );
+
+  static Widget horizontalSpace({double width = 8}) =>
+      SizedBox(
+        width: width,
+      );
 
 
 

@@ -121,6 +121,7 @@ class _HelpAndSupportState extends State<HelpAndSupport> {
                   commonButton(
                     context: context,
                     labelText: 'Submit',fontSize: 16,fontWeight: FontWeight.w700,height: 45,
+                    buttonColor: greyColor,
                     isLoading: state.status == LiveScoreStatus.helpAndSupportLoading,
                     onTap: () {
                       RegExp emailRegExp = RegExp(emailPattern.trim());

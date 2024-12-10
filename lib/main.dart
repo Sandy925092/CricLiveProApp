@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kisma_livescore/bottomnavbar.dart';
 import 'package:kisma_livescore/cubit/livescore_cubit.dart';
 import 'package:kisma_livescore/repository/livescore_repository.dart';
+import 'package:kisma_livescore/screens/auth/signup.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 //test
@@ -34,7 +35,8 @@ class _MyAppState extends State<MyApp> {
             colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff001548)),
             useMaterial3: true,
           ),
-          home: Dashboard(menuScreenContext: context),
+         home: Dashboard(menuScreenContext: context),
+       //   home: SignUp(),
         );
       }),
     );

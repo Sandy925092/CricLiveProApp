@@ -7,7 +7,7 @@ import 'package:kisma_livescore/customwidget/commonwidget.dart';
 import 'package:kisma_livescore/screens/home/live/live_dashboard.dart';
 import 'package:kisma_livescore/screens/home/live/live_details_tab.dart';
 import 'package:kisma_livescore/utils/colorfile.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:velocity_x/velocity_x.dart';
 
