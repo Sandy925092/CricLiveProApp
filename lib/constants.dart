@@ -4,6 +4,8 @@ import 'package:kisma_livescore/responses/get_country_code_abd_flag_response.dar
 const BASEURL = 'http://34.238.14.72:8086';
 
 const TOKEN = 'token';
+const EMAIL_ID = 'emailId';
+const USER_ID = 'userId';
 
 const String notConnected = 'Please Check Your Internet Connection';
 

@@ -30,7 +30,7 @@ class _LiveLineUpTabState extends State<LiveLineUpTab> with TickerProviderStateM
 
   @override
   void initState() {
-    _controller = TabController(length: 4, vsync: this);
+    _controller = TabController(length: 1, vsync: this);
     // TODO: implement initState
     super.initState();
   }
@@ -118,7 +118,7 @@ class _LiveLineUpTabState extends State<LiveLineUpTab> with TickerProviderStateM
                           fontWeight: FontWeight.w500),
                     ),
                   ),
-                  Tab(
+                /*  Tab(
                     // height: 20,
                     child: Text(
                       'Bat 8',
@@ -147,7 +147,7 @@ class _LiveLineUpTabState extends State<LiveLineUpTab> with TickerProviderStateM
                           fontSize: 14,
                           fontWeight: FontWeight.w500),
                     ),
-                  ),
+                  ),*/
                 ],
               ),
             ),
@@ -157,9 +157,9 @@ class _LiveLineUpTabState extends State<LiveLineUpTab> with TickerProviderStateM
               controller: _controller,
               children:  [
                 LineAll16(tmpLiveScoreResponse: widget.tmpLiveScoreResponse,),
-                const LineBat8(),
+              /*  const LineBat8(),
                 const LineUpBowl6(),
-                const LineUpAr2(),
+                const LineUpAr2(),*/
               ],
             ),
           ),

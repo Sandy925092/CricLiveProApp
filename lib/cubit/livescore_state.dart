@@ -38,6 +38,30 @@ enum LiveScoreStatus {
   getCountryCodeAndFlagSuccess,
   getCountryCodeAndFlagError,
 
+  signUpLoading,
+  signUpSuccess,
+  signUpError,
+
+  verifyOtpLoading,
+  verifyOtpSuccess,
+  verifyOtpError,
+
+  forgotPasswordLoading,
+  forgotPasswordSuccess,
+  forgotPasswordError,
+
+  resendOtpLoading,
+  resendOtpSuccess,
+  resendOtpError,
+
+  resetPasswordLoading,
+  resetPasswordSuccess,
+  resetPasswordError,
+
+  loginLoading,
+  loginSuccess,
+  loginError,
+
 
 
 }

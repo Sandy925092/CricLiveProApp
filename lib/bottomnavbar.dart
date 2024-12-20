@@ -26,7 +26,8 @@ class _DashboardState extends State<Dashboard> {
     double width = MediaQuery.of(context).size.width;
 
     List<Widget> buildScreens() {
-      return [const HomeScreen(), MyEventsScreen(), SeriesScreen(), SettingsScreen()];
+    //  return [const HomeScreen(), MyEventsScreen(), SeriesScreen(), SettingsScreen()];
+      return [const HomeScreen(), SettingsScreen()];
     }
 
     List<PersistentBottomNavBarItem> navBarsItems() {
@@ -48,7 +49,7 @@ class _DashboardState extends State<Dashboard> {
           inactiveColorPrimary: Color(0xff96A0B7),
           contentPadding: 0, // Remove internal padding
         ),
-        PersistentBottomNavBarItem(
+      /*  PersistentBottomNavBarItem(
           icon: const Icon(MyFlutterApp.calendar),
           title: ("My Events"),
           textStyle: TextStyle(
@@ -75,7 +76,7 @@ class _DashboardState extends State<Dashboard> {
           activeColorPrimary: const Color(0xFF001548),
           inactiveColorPrimary: Color(0xff96A0B7),
           contentPadding: 0, // Remove internal padding
-        ),
+        ),*/
         PersistentBottomNavBarItem(
           icon: const Icon(
             MyFlutterApp.setting,

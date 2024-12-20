@@ -19,7 +19,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List tabList = ["Live,For You,Upcoming, Finished"];
   String selectedTab = "Live";
 
   @override
@@ -37,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
               leadingWidth: 130,
               centerTitle: false,
               actions: [
-                GestureDetector(
+               /* GestureDetector(
                   onTap: () {
                     PersistentNavBarNavigator.pushNewScreen(
                       context,
@@ -51,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: const EdgeInsets.only(right: 18.0),
                     child: Icon(Icons.search, color: buttonColors),
                   ),
-                )
+                )*/
               ],
               leading: Padding(
                 padding: const EdgeInsets.only(left: 10.0),
@@ -69,7 +68,8 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       body: DefaultTabController(
-        length: 4, // Number of tabs
+     //   length: 4, // Number of tabs
+        length: 1, // Number of tabs
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: primaryColors,
@@ -95,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         fontWeight: FontWeight.w500,
                         fontFamily: "Poppins",
                       ),
-                      1.w.widthBox,
+                   /*   1.w.widthBox,
                       Container(
                         width: 5.w,
                         decoration: BoxDecoration(
@@ -109,11 +109,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             color: black,
                           ),
                         ),
-                      ).p(2)
+                      ).p(2)*/
                     ],
                   )), // Changed from icon to text
 
-                  Tab(
+                 /* Tab(
                       child: commonText(
                     data: "For You",
                     fontSize: 14,
@@ -138,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     maxLines: 1,
                     fontWeight: FontWeight.w500,
                     fontFamily: "Poppins",
-                  )),
+                  )),*/
                 ],
               ),
             ),
@@ -146,9 +146,9 @@ class _HomeScreenState extends State<HomeScreen> {
           body: const TabBarView(
             children: [
               LiveScreen(),
-              ForYou(),
+             /* ForYou(),
               UpcomingMatchScreen(),
-              FinishedScreen()
+              FinishedScreen()*/
             ],
           ),
         ),

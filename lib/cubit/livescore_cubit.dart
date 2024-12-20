@@ -130,6 +130,89 @@ class LiveScoreCubit extends Cubit<LiveScoreState> {
       emit(state.copyWith(status: LiveScoreStatus.getCountryCodeAndFlagError, error: e.toString(), errorData: null));
     }
   }
+  Future<void> signUpCall(Map<String,dynamic> signUpDetails) async{
+    emit(state.copyWith(status: LiveScoreStatus.signUpLoading));
+    try{
+      ResponseData responseData = await repository.signUp(signUpDetails);
+      emit(state.copyWith(status: LiveScoreStatus.signUpSuccess,responseData: responseData));
+    }
+    on ErrorData catch (errorData){
+      emit(state.copyWith(status: LiveScoreStatus.signUpError,errorData: errorData,error: null));
+    }
+    catch(e){
+      emit(state.copyWith(status: LiveScoreStatus.signUpError,error: e.toString(),errorData: null));
+    }
+  }
+
+  Future<void> verifyOtpCall(String email, String otp) async{
+    emit(state.copyWith(status: LiveScoreStatus.verifyOtpLoading));
+    try{
+      ResponseData responseData = await repository.verifyOtp(email, otp);
+      emit(state.copyWith(status: LiveScoreStatus.verifyOtpSuccess,responseData: responseData));
+    }
+    on ErrorData catch (errorData){
+      emit(state.copyWith(status: LiveScoreStatus.verifyOtpError,errorData: errorData,error: null));
+    }
+    catch(e){
+      emit(state.copyWith(status: LiveScoreStatus.verifyOtpError,error: e.toString(),errorData: null));
+    }
+  }
+
+  Future<void> forgotPasswordCall(String email) async{
+    emit(state.copyWith(status: LiveScoreStatus.forgotPasswordLoading));
+    try{
+      ResponseData responseData = await repository.forgotPassword(email);
+      emit(state.copyWith(status: LiveScoreStatus.forgotPasswordSuccess,responseData: responseData));
+    }
+    on ErrorData catch (errorData){
+      emit(state.copyWith(status: LiveScoreStatus.forgotPasswordError,errorData: errorData,error: null));
+    }
+    catch(e){
+      emit(state.copyWith(status: LiveScoreStatus.forgotPasswordError,error: e.toString(),errorData: null));
+    }
+  }
+
+  Future<void> resendOtpCall(String email) async{
+    emit(state.copyWith(status: LiveScoreStatus.resendOtpLoading));
+    try{
+      ResponseData responseData = await repository.forgotPassword(email);
+      emit(state.copyWith(status: LiveScoreStatus.resendOtpSuccess,responseData: responseData));
+    }
+    on ErrorData catch (errorData){
+      emit(state.copyWith(status: LiveScoreStatus.resendOtpError,errorData: errorData,error: null));
+    }
+    catch(e){
+      emit(state.copyWith(status: LiveScoreStatus.resendOtpError,error: e.toString(),errorData: null));
+    }
+  }
+
+  Future<void> resetPasswordCall(String email, String newPassword, String confirmNewPassword) async {
+    emit(state.copyWith(status: LiveScoreStatus.resetPasswordLoading));
+    try{
+      ResponseData responseData = await repository.resetPassword(email, newPassword, confirmNewPassword);
+      emit(state.copyWith(status: LiveScoreStatus.resetPasswordSuccess,responseData: responseData));
+    }
+    on ErrorData catch (errorData){
+      emit(state.copyWith(status: LiveScoreStatus.resetPasswordError,errorData: errorData,error: null));
+    }
+    catch(e){
+      emit(state.copyWith(status: LiveScoreStatus.resetPasswordError,error: e.toString(),errorData: null));
+    }
+  }
+
+  Future<void> loginCall(String email, String password) async {
+    emit(state.copyWith(status: LiveScoreStatus.loginLoading));
+    try{
+      ResponseData responseData = await repository.login(email, password);
+      emit(state.copyWith(status: LiveScoreStatus.loginSuccess,responseData: responseData));
+    }
+    on ErrorData catch (errorData){
+      emit(state.copyWith(status: LiveScoreStatus.loginError,errorData: errorData,error: null));
+    }
+    catch(e){
+      emit(state.copyWith(status: LiveScoreStatus.loginError,error: e.toString(),errorData: null));
+    }
+  }
 
 
 }

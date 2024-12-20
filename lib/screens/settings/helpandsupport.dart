@@ -5,6 +5,7 @@ import 'package:kisma_livescore/cubit/livescore_cubit.dart';
 import 'package:kisma_livescore/customwidget/commonwidget.dart';
 import 'package:kisma_livescore/utils/colorfile.dart';
 import 'package:kisma_livescore/utils/custom_widgets.dart';
+import 'package:kisma_livescore/utils/shared_preference.dart';
 import 'package:kisma_livescore/utils/ui_helper.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -19,6 +20,21 @@ class HelpAndSupport extends StatefulWidget {
 class _HelpAndSupportState extends State<HelpAndSupport> {
   TextEditingController emailController = TextEditingController();
   TextEditingController queryController = TextEditingController();
+ // String supportEmail = "kismaSupport@yopmail.com";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    getStoredValue();
+    super.initState();
+  }
+
+  Future<void> getStoredValue() async {
+    var emailID = PreferenceManager.getStringValue(key: EMAIL_ID) ?? '';
+    emailController.text = emailID;
+    print('emailIDMain:$emailID');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +66,7 @@ class _HelpAndSupportState extends State<HelpAndSupport> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   TextField(
+                    readOnly: true,
                     controller: emailController,
                     style: const TextStyle(
                       fontFamily: "Poppins",
@@ -68,6 +85,7 @@ class _HelpAndSupportState extends State<HelpAndSupport> {
                           width: 1.0,
                         ),
                       ),
+
                       prefixIcon: Image.asset(
                         "assets/images/user.png",
                         scale: 4,

@@ -747,7 +747,7 @@ class _HomeScorecardState extends State<HomeScorecard> {
                     ],
                   ),
                   const SizedBox(height: 18,),
-                  mediumText14(context, "Partnership", fontSize: 14, fontWeight: FontWeight.w700, textColor: white).pOnly(left: 12, right: 12),
+                /*  mediumText14(context, "Partnership", fontSize: 14, fontWeight: FontWeight.w700, textColor: white).pOnly(left: 12, right: 12),
                   const SizedBox(height: 18,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -888,7 +888,7 @@ class _HomeScorecardState extends State<HomeScorecard> {
                           fontFamily: "Poppins",
                           color: black),
                     ),
-                  ).pOnly(left: 20, right: 20, top: 20, bottom: 30),
+                  ).pOnly(left: 20, right: 20, top: 20, bottom: 30),*/
                 ],
               ),
 

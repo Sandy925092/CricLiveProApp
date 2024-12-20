@@ -249,7 +249,7 @@ class _LiveDetailsTabState extends State<LiveDetailsTab> {
                     ),
                   ],
                 ),
-                Row(
+              /*  Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(
@@ -379,7 +379,7 @@ class _LiveDetailsTabState extends State<LiveDetailsTab> {
                         fontFamily: "Poppins",
                         color: black),
                   ),
-                ).pOnly(left: 20, right: 20, top: 20),
+                ).pOnly(left: 20, right: 20, top: 20),*/
 
                 data?.status==null?Center(child: largeText16(context, 'Match not started yet',textColor: white,fontSize: 18)).pOnly(top: 100):
                 Column(
@@ -845,14 +845,15 @@ class _LiveDetailsTabState extends State<LiveDetailsTab> {
                             children: [
                               Row(
                                 children: [
-                                  SvgCustomWidget(imageUrl: getCountryFlag(data?.homeTeam?.name??''),),
+                               //   SvgCustomWidget(imageUrl: getCountryFlag(data?.homeTeam?.name??''),),
+                                  mediumText14(context, data?.homeTeam?.name??'',fontWeight: FontWeight.w600),
                                   const SizedBox(width: 12,),
                                   isHomeTeamBatting?Image.asset(
                                     'assets/images/bat.png',
                                     scale: 3,
                                   ):const SizedBox(),
                                 ],
-                              ),
+                              ).pOnly(left: 12),
                               1.h.heightBox,
                               commonText(
                                   data: isHomeTeamBatting||data?.currentInning==2?"${data?.homeTeam?.score.toString()??''}-${data?.homeTeam?.wickets.toString()??''}":
@@ -885,7 +886,8 @@ class _LiveDetailsTabState extends State<LiveDetailsTab> {
                                     scale: 3,
                                   ):const SizedBox(),
                                   3.w.widthBox,
-                                  SvgCustomWidget(imageUrl: getCountryFlag(data?.awayTeam?.name??'')),
+                                //  SvgCustomWidget(imageUrl: getCountryFlag(data?.awayTeam?.name??'')),
+                                  mediumText14(context, data?.awayTeam?.name??'',fontWeight: FontWeight.w600),
                                 ],
                               ),
                               1.h.heightBox,

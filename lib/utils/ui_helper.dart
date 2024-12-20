@@ -24,13 +24,13 @@ class UiHelper {
 
   static toastMessage(String msg,
       {ToastGravity? toastGravity = ToastGravity.BOTTOM,
-        Toast toastLength = Toast.LENGTH_SHORT}) {
+        Toast toastLength = Toast.LENGTH_LONG}) {
     Fluttertoast.cancel(); // Cancel any existing toast first
     Fluttertoast.showToast(
       msg: msg,
       toastLength: toastLength,
       gravity: toastGravity ?? ToastGravity.CENTER,
-      timeInSecForIosWeb: 1,
+      timeInSecForIosWeb: 2,
       textColor: Colors.white,
       // backgroundColor: Colors.red,
       // backgroundColor: const Color(0xffFF0235),

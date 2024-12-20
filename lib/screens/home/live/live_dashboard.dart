@@ -168,7 +168,7 @@ class _LiveDashboardState extends State<LiveDashboard> with TickerProviderStateM
                         children: [
                           Row(
                             children: [
-                              SvgCustomWidget(imageUrl: getCountryFlag(isHomeTeamBatting?liveScoreResponse.data?.homeTeam?.name??'':liveScoreResponse.data?.awayTeam?.name??''),),
+                            //  SvgCustomWidget(imageUrl: getCountryFlag(isHomeTeamBatting?liveScoreResponse.data?.homeTeam?.name??'':liveScoreResponse.data?.awayTeam?.name??''),),
                               5.w.widthBox,
                               Image.asset(
                                 'assets/images/bat.png',

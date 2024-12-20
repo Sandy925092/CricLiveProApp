@@ -556,3 +556,9 @@ void snackBarMessage(BuildContext context, String msg, {TextAlign textAlign = Te
     ),
   ));
 }
+
+String formatTime(int seconds) {
+  final minutes = (seconds ~/ 60).toString().padLeft(2, '0');
+  final secondsPart = (seconds % 60).toString().padLeft(2, '0');
+  return '$minutes:$secondsPart';
+}
