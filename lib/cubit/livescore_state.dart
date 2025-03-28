@@ -1,10 +1,11 @@
-
 part of 'livescore_cubit.dart';
-
-
 
 enum LiveScoreStatus {
   initial,
+
+  upcomingSeriesLoading,
+  upcomingSeriesSuccess,
+  upcomingSeriesError,
 
   privacyPolicyLoading,
   privacyPolicySuccess,
@@ -61,11 +62,7 @@ enum LiveScoreStatus {
   loginLoading,
   loginSuccess,
   loginError,
-
-
-
 }
-
 
 class LiveScoreState extends Equatable {
   final LiveScoreStatus status;
@@ -78,17 +75,15 @@ class LiveScoreState extends Equatable {
     this.responseData,
     this.errorData,
     this.error,
-
   });
 
   @override
   List<Object?> get props => [
-    status,
-    responseData,
-    errorData,
-    error,
-
-  ];
+        status,
+        responseData,
+        errorData,
+        error,
+      ];
 
   LiveScoreState copyWith({
     LiveScoreStatus? status,
@@ -102,9 +97,6 @@ class LiveScoreState extends Equatable {
       responseData: responseData ?? this.responseData,
       errorData: errorData ?? this.errorData,
       error: error ?? this.error,
-
     );
   }
 }
-
-

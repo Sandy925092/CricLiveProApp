@@ -36,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
               leadingWidth: 130,
               centerTitle: false,
               actions: [
-               /* GestureDetector(
+                /* GestureDetector(
                   onTap: () {
                     PersistentNavBarNavigator.pushNewScreen(
                       context,
@@ -68,8 +68,8 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       body: DefaultTabController(
-     //   length: 4, // Number of tabs
-        length: 1, // Number of tabs
+        length: 4, // Number of tabs
+        // length: 1, // Number of tabs
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: primaryColors,
@@ -95,25 +95,25 @@ class _HomeScreenState extends State<HomeScreen> {
                         fontWeight: FontWeight.w500,
                         fontFamily: "Poppins",
                       ),
-                   /*   1.w.widthBox,
-                      Container(
-                        width: 5.w,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle, color: buttonColors),
-                        child: Center(
-                          child: commonText(
-                            data: "1",
-                            fontSize: 13,
-                            fontWeight: FontWeight.w700,
-                            fontFamily: "Poppins",
-                            color: black,
-                          ),
-                        ),
-                      ).p(2)*/
+                      //  1.w.widthBox,
+                      //   Container(
+                      //     width: 5.w,
+                      //     decoration: BoxDecoration(
+                      //         shape: BoxShape.circle, color: buttonColors),
+                      //     child: Center(
+                      //       child: commonText(
+                      //         data: "1",
+                      //         fontSize: 13,
+                      //         fontWeight: FontWeight.w700,
+                      //         fontFamily: "Poppins",
+                      //         color: black,
+                      //       ),
+                      //     ),
+                      //   ).p(2)
                     ],
                   )), // Changed from icon to text
 
-                 /* Tab(
+                  Tab(
                       child: commonText(
                     data: "For You",
                     fontSize: 14,
@@ -138,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     maxLines: 1,
                     fontWeight: FontWeight.w500,
                     fontFamily: "Poppins",
-                  )),*/
+                  )),
                 ],
               ),
             ),
@@ -146,9 +146,9 @@ class _HomeScreenState extends State<HomeScreen> {
           body: const TabBarView(
             children: [
               LiveScreen(),
-             /* ForYou(),
+              ForYou(),
               UpcomingMatchScreen(),
-              FinishedScreen()*/
+              FinishedScreen()
             ],
           ),
         ),

@@ -9,9 +9,9 @@ import 'package:kisma_livescore/responses/login_response.dart';
 import 'package:kisma_livescore/responses/privacy_policy_response.dart';
 import 'package:kisma_livescore/responses/sign_up_response.dart';
 import 'package:kisma_livescore/responses/terms_and_conditions_response.dart';
+import 'package:kisma_livescore/responses/upcoming_series_response.dart';
 import 'package:kisma_livescore/utils/response_status.dart';
 import 'package:kisma_livescore/utils/shared_preference.dart';
-
 
 class LiveScoreRepository {
   String? token;
@@ -28,8 +28,8 @@ class LiveScoreRepository {
   // Get Privacy Policy
   Future<ResponseData> getPrivacyPolicy() async {
     try {
-      final response = await ApiService().sendRequest.get(
-          "/api/privacy-policy/all");
+      final response =
+          await ApiService().sendRequest.get("/api/privacy-policy/all");
       return ResponseData(
           statusCode: response.statusCode,
           response: PrivacyPolicyResponse.fromJson(response.data));
@@ -44,7 +44,8 @@ class LiveScoreRepository {
   // Get Term's and Conditions
   Future<ResponseData> getTermsAndConditions() async {
     try {
-      final response = await ApiService().sendRequest.get("/api/terms-and-conditions/all");
+      final response =
+          await ApiService().sendRequest.get("/api/terms-and-conditions/all");
       return ResponseData(
           statusCode: response.statusCode,
           response: TermsAndConditionsResponse.fromJson(response.data));
@@ -59,14 +60,16 @@ class LiveScoreRepository {
   // Help and Support
   Future<ResponseData> helpAndSupport(String query, String emailId) async {
     try {
-      final response = await ApiService(token: getToken()).sendRequest.post('/api/queries/create',
-          data: {
-            "query":query,
-            "emailId":emailId,
-          });
+      final response = await ApiService(token: getToken())
+          .sendRequest
+          .post('/api/queries/create', data: {
+        "query": query,
+        "emailId": emailId,
+      });
       return ResponseData(
         statusCode: response.statusCode,
-        response: response.data["message"],);
+        response: response.data["message"],
+      );
     } on DioException catch (e) {
       throw ErrorData(
           message: e.response!.data['message'], code: e.response!.statusCode);
@@ -90,6 +93,21 @@ class LiveScoreRepository {
     }
   }
 
+// get upcoming Series
+  Future<ResponseData> getUpcomingSeriesData() async {
+    try {
+      final response =
+          await ApiService().sendRequest.get("/matches/upcoming-series");
+      return ResponseData(
+          statusCode: response.statusCode,
+          response: UpcomingSeriesResponse.fromJson(response.data));
+    } on DioException catch (e) {
+      throw ErrorData(
+          message: e.response!.data['message'], code: e.response!.statusCode);
+    } on Exception catch (_) {
+      rethrow;
+    }
+  }
 
   // get Country Code and Flag
   Future<ResponseData> getCountryCodeAndFlag() async {
@@ -109,9 +127,9 @@ class LiveScoreRepository {
   Future<ResponseData> signUp(Map<String, dynamic> signUpDetails) async {
     try {
       final response = await ApiService().sendRequest.post(
-        "/users/register",
-        data: signUpDetails,
-      );
+            "/users/register",
+            data: signUpDetails,
+          );
       return ResponseData(
         statusCode: response.statusCode,
         response: SignUpResponse.fromJson(response.data),
@@ -127,9 +145,9 @@ class LiveScoreRepository {
   Future<ResponseData> verifyOtp(String email, String otp) async {
     try {
       final response = await ApiService().sendRequest.post(
-        "/users/verifyOtp?email=$email&otp=$otp",
-      //  data: {},
-      );
+            "/users/verifyOtp?email=$email&otp=$otp",
+            //  data: {},
+          );
       return ResponseData(
         statusCode: response.statusCode,
         response: response.data["message"],
@@ -145,9 +163,9 @@ class LiveScoreRepository {
   Future<ResponseData> forgotPassword(String email) async {
     try {
       final response = await ApiService().sendRequest.post(
-        "/users/forgot-password?email=$email",
-        //  data: {},
-      );
+            "/users/forgot-password?email=$email",
+            //  data: {},
+          );
       return ResponseData(
         statusCode: response.statusCode,
         response: response.data["message"],
@@ -160,12 +178,13 @@ class LiveScoreRepository {
     }
   }
 
-  Future<ResponseData> resetPassword(String email, String newPassword, String confirmNewPassword) async {
+  Future<ResponseData> resetPassword(
+      String email, String newPassword, String confirmNewPassword) async {
     try {
       final response = await ApiService().sendRequest.post(
-        "/users/reset-password?email=$email&newPassword=$newPassword&confirmNewPassword=$confirmNewPassword",
-        //  data: {},
-      );
+            "/users/reset-password?email=$email&newPassword=$newPassword&confirmNewPassword=$confirmNewPassword",
+            //  data: {},
+          );
       return ResponseData(
         statusCode: response.statusCode,
         response: response.data["message"],
@@ -181,12 +200,12 @@ class LiveScoreRepository {
   Future<ResponseData> login(String email, String password) async {
     try {
       final response = await ApiService().sendRequest.post(
-        "/users/login?email=$email&password=$password",
-        //  data: {},
-      );
+            "/users/login?email=$email&password=$password",
+            //  data: {},
+          );
       return ResponseData(
-        statusCode: response.statusCode,
-      //  response: response.data["message"],
+          statusCode: response.statusCode,
+          //  response: response.data["message"],
           response: LoginResponse.fromJson(response.data));
     } on DioException catch (e) {
       throw ErrorData(
@@ -195,5 +214,4 @@ class LiveScoreRepository {
       rethrow;
     }
   }
-
 }

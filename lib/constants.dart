@@ -1,7 +1,10 @@
-import 'package:kisma_livescore/responses/get_country_code_abd_flag_response.dart' as dfr;
+import 'package:kisma_livescore/responses/get_country_code_abd_flag_response.dart'
+    as dfr;
 
 /// URL PATH
-const BASEURL = 'http://34.238.14.72:8086';
+const BASEURL = 'http://172.16.100.163:8080/api'
+// 'http://34.238.14.72:8086'
+    ;
 
 const TOKEN = 'token';
 const EMAIL_ID = 'emailId';
@@ -20,11 +23,11 @@ const PASSWORD_LENGTH_VALIDATION =
 const EMPTY_CONFIRM_PASSWORD_VALIDATION = 'Please Enter Confirm Password';
 const EMPTY_NEW_PASSWORD_VALIDATION = 'Please Enter New Password';
 const EMPTY_PASSWORD_VALIDATION = 'Please Enter Password';
-const MATCHING_PASSWORD_VALIDATION = 'Password And Confirm Password Should Match';
+const MATCHING_PASSWORD_VALIDATION =
+    'Password And Confirm Password Should Match';
 
 class AppConstants {
   static const String fontFamily = "Poppins";
-
 
   static const String bowled = "0";
   static const String caught = "1";
@@ -35,7 +38,4 @@ class AppConstants {
   static const String handlingTheBall = "6";
   static const String hittingTheBallTwice = "7";
   static const String obstructingTheField = "8";
-
-
 }
-

@@ -27,9 +27,9 @@ class LiveScreen extends StatefulWidget {
 }
 
 class _LiveScreenState extends State<LiveScreen> {
-
   LiveScoreResponse liveScoreResponse = LiveScoreResponse();
-  GetCountryCodeAndFlagResponse getCountryCodeAndFlagResponse = GetCountryCodeAndFlagResponse();
+  GetCountryCodeAndFlagResponse getCountryCodeAndFlagResponse =
+      GetCountryCodeAndFlagResponse();
   @override
   void initState() {
     // initialize controller
@@ -62,51 +62,56 @@ class _LiveScreenState extends State<LiveScreen> {
   }
 
   late ExpandedTileController _controller;
-  ExpandedTileController controller3 = ExpandedTileController(isExpanded: false);
+  ExpandedTileController controller3 =
+      ExpandedTileController(isExpanded: false);
   bool? isTrue;
   List<bool> isTrueList = [false, false];
   Timer? _timer;
-
 
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: bgColor,
-      body: BlocConsumer<LiveScoreCubit,LiveScoreState>(
-        listener: (context,state){
+      body: BlocConsumer<LiveScoreCubit, LiveScoreState>(
+        listener: (context, state) {
           print("sate.status:${state.status}");
-          if(state.status == LiveScoreStatus.liveScoreSuccess){
+          if (state.status == LiveScoreStatus.liveScoreSuccess) {
             Loader.hide();
-            liveScoreResponse = state.responseData?.response as LiveScoreResponse;
-            BlocProvider.of<LiveScoreCubit>(context).getCountryCodeAndFlagCall();
+            liveScoreResponse =
+                state.responseData?.response as LiveScoreResponse;
+            BlocProvider.of<LiveScoreCubit>(context)
+                .getCountryCodeAndFlagCall();
           }
-          if(state.status == LiveScoreStatus.liveScoreSuccess1){
+          if (state.status == LiveScoreStatus.liveScoreSuccess1) {
             // Loader.hide();
-            liveScoreResponse = state.responseData?.response as LiveScoreResponse;
+            liveScoreResponse =
+                state.responseData?.response as LiveScoreResponse;
           }
-          if(state.status == LiveScoreStatus.getCountryCodeAndFlagSuccess){
-            getCountryCodeAndFlagResponse = state.responseData?.response as GetCountryCodeAndFlagResponse;
+          if (state.status == LiveScoreStatus.getCountryCodeAndFlagSuccess) {
+            getCountryCodeAndFlagResponse =
+                state.responseData?.response as GetCountryCodeAndFlagResponse;
             //   countryUtils.teamShortFormList.clear();
             teamShortFormList.clear();
-            if(getCountryCodeAndFlagResponse.data!=null && getCountryCodeAndFlagResponse.data!.isNotEmpty){
+            if (getCountryCodeAndFlagResponse.data != null &&
+                getCountryCodeAndFlagResponse.data!.isNotEmpty) {
               //    countryUtils.teamShortFormList.addAll(getCountryCodeAndFlagResponse.data!);
               teamShortFormList.addAll(getCountryCodeAndFlagResponse.data!);
             }
           }
-          if(state.status == LiveScoreStatus.liveScoreError){
+          if (state.status == LiveScoreStatus.liveScoreError) {
             Loader.hide();
             String message = state.errorData?.message ?? state.error ?? '';
-            UiHelper.toastMessage( message);
+            UiHelper.toastMessage(message);
           }
 
-          if(state.status == LiveScoreStatus.liveScoreError1){
+          if (state.status == LiveScoreStatus.liveScoreError1) {
             Loader.hide();
             String message = state.errorData?.message ?? state.error ?? '';
-            UiHelper.toastMessage( message);
+            UiHelper.toastMessage(message);
           }
         },
-        builder: (context,state){
+        builder: (context, state) {
           if (state.status == LiveScoreStatus.liveScoreLoading) {
             return const Center(
               child: CircularProgressIndicator(color: Color(0xFF0DA9AF)),
@@ -123,7 +128,8 @@ class _LiveScreenState extends State<LiveScreen> {
                 child: SizedBox(
                   height: screenHeight * 0.5,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 14,right: 14,top: 14),
+                    padding:
+                        const EdgeInsets.only(left: 14, right: 14, top: 14),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -132,23 +138,29 @@ class _LiveScreenState extends State<LiveScreen> {
                         //  Image.asset('assets/images/error.png', height: 45, width: 45),
                         const SizedBox(height: 10),
                         Padding(
-                          padding: const EdgeInsets.only(left :50.0 , right: 50.0),
+                          padding:
+                              const EdgeInsets.only(left: 50.0, right: 50.0),
                           child: statusCode == 401
                               ? mediumText14(
-                              context, error ?? '',//'You  have no internet connection Please enable Wi-fi or Mobile Data\nPull to refresh.',
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              textColor:const Color(0xffFFFFFF)
-                          ) : mediumText14 (
-                              context, '$error\n\nClick to refresh.',
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              textAlign: TextAlign.center,
-                              textColor:const Color(0xffFFFFFF)
-                          ),
+                                  context,
+                                  error ??
+                                      '', //'You  have no internet connection Please enable Wi-fi or Mobile Data\nPull to refresh.',
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  textColor: const Color(0xffFFFFFF))
+                              : mediumText14(
+                                  context, '$error\n\nClick to refresh.',
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  textAlign: TextAlign.center,
+                                  textColor: const Color(0xffFFFFFF)),
                         ),
                         IconButton(
-                          icon: const Icon(Icons.refresh,color: Colors.white,size: 35,),
+                          icon: const Icon(
+                            Icons.refresh,
+                            color: Colors.white,
+                            size: 35,
+                          ),
                           onPressed: () {
                             _getLiveScoreApi();
                             // Handle refresh action here
@@ -164,7 +176,7 @@ class _LiveScreenState extends State<LiveScreen> {
           return RefreshIndicator(
             onRefresh: _refreshPage,
             child: ListView.builder(
-                padding: EdgeInsets.only(left: 12,right: 12,top: 12),
+                padding: EdgeInsets.only(left: 12, right: 12, top: 12),
                 itemCount: 1,
                 itemBuilder: (context, index) {
                   return MyInkWell(
@@ -174,7 +186,7 @@ class _LiveScreenState extends State<LiveScreen> {
                         screen: const LiveDashboard(),
                         withNavBar: true, // OPTIONAL VALUE. True by default.
                         pageTransitionAnimation:
-                        PageTransitionAnimation.cupertino,
+                            PageTransitionAnimation.cupertino,
                       );
                     },
                     child: Container(
@@ -203,28 +215,57 @@ class _LiveScreenState extends State<LiveScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     1.h.heightBox,
-                                     Row(
-                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Expanded(
                                           flex: 8,
                                           child: Column(
                                             children: [
-                                              mediumText14(context, liveScoreResponse.data?.homeTeam?.name??'', maxLines: 1,overflow:TextOverflow.ellipsis),
-                                              const SizedBox(height: 12,),
-                                              liveScoreResponse.data?.homeTeam?.isBattingTeam==true || liveScoreResponse.data?.currentInning == 2?
-                                              Container(
-                                                padding: const EdgeInsets.only(left: 12, top: 5, bottom: 5, right: 12),
-                                                decoration: BoxDecoration(color: buttonColors, borderRadius: BorderRadius.circular(30)),
-                                                child: commonText(
-                                                  data: "${liveScoreResponse.data?.homeTeam?.score.toString()??''}/${liveScoreResponse.data?.homeTeam?.wickets.toString()??''}",
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w700,
-                                                  fontFamily: "Poppins",
-                                                  color: black,
-                                                ),
-                                              ):
-                                              mediumText14(context, "Not yet").pOnly(top: 3,bottom: 6),
+                                              mediumText14(
+                                                  context,
+                                                  liveScoreResponse.data
+                                                          ?.homeTeam?.name ??
+                                                      '',
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis),
+                                              const SizedBox(
+                                                height: 12,
+                                              ),
+                                              liveScoreResponse.data?.homeTeam
+                                                              ?.isBattingTeam ==
+                                                          true ||
+                                                      liveScoreResponse.data
+                                                              ?.currentInning ==
+                                                          2
+                                                  ? Container(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 12,
+                                                              top: 5,
+                                                              bottom: 5,
+                                                              right: 12),
+                                                      decoration: BoxDecoration(
+                                                          color: buttonColors,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      30)),
+                                                      child: commonText(
+                                                        data:
+                                                            "${liveScoreResponse.data?.homeTeam?.score.toString() ?? ''}/${liveScoreResponse.data?.homeTeam?.wickets.toString() ?? ''}",
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontFamily: "Poppins",
+                                                        color: black,
+                                                      ),
+                                                    )
+                                                  : mediumText14(
+                                                          context, "Not yet")
+                                                      .pOnly(top: 3, bottom: 6),
                                             ],
                                           ),
                                         ),
@@ -239,24 +280,37 @@ class _LiveScreenState extends State<LiveScreen> {
                                                 fontFamily: "Poppins",
                                                 color: Colors.red,
                                               ),
-                                              const SizedBox(height: 12,),
-                                              liveScoreResponse.data?.currentBall==null?
-                                              commonText(data:"Not Started",
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w300,
-                                                fontFamily: "Poppins",
-                                                color: overColor,
-                                                alignment: TextAlign.center
-
-                                              ):commonText(
-                                                //  data: liveScoreResponse.data?.currentOver==null?"Not Started":"${liveScoreResponse.data?.currentOver?.overNumber.toString()??''}.${liveScoreResponse.data?.currentOver?.ballByBall?.length.toString()??''}/${liveScoreResponse.data?.oversPerInning?.toString()??''} ov",
-                                                //  data: liveScoreResponse.data?.currentBall==null?"Not Started":"${liveScoreResponse.data?.currentBall?.over.toString()??''}.${liveScoreResponse.data?.currentBall?.ballNumber?.toString()??''}/${liveScoreResponse.data?.oversPerInning?.toString()??''} ov",
-                                                data: liveScoreResponse.data?.homeTeam?.isBattingTeam==true?"${liveScoreResponse.data?.homeTeam?.overs}.${liveScoreResponse.data?.homeTeam?.balls}/${liveScoreResponse.data?.oversPerInning?.toString()??''} ov":"${liveScoreResponse.data?.awayTeam?.overs}.${liveScoreResponse.data?.awayTeam?.balls}/${liveScoreResponse.data?.oversPerInning?.toString()??''} ov",
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w300,
-                                                fontFamily: "Poppins",
-                                                color: overColor,
+                                              const SizedBox(
+                                                height: 12,
                                               ),
+                                              liveScoreResponse
+                                                          .data?.currentBall ==
+                                                      null
+                                                  ? commonText(
+                                                      data: "Not Started",
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.w300,
+                                                      fontFamily: "Poppins",
+                                                      color: overColor,
+                                                      alignment:
+                                                          TextAlign.center)
+                                                  : commonText(
+                                                      //  data: liveScoreResponse.data?.currentOver==null?"Not Started":"${liveScoreResponse.data?.currentOver?.overNumber.toString()??''}.${liveScoreResponse.data?.currentOver?.ballByBall?.length.toString()??''}/${liveScoreResponse.data?.oversPerInning?.toString()??''} ov",
+                                                      //  data: liveScoreResponse.data?.currentBall==null?"Not Started":"${liveScoreResponse.data?.currentBall?.over.toString()??''}.${liveScoreResponse.data?.currentBall?.ballNumber?.toString()??''}/${liveScoreResponse.data?.oversPerInning?.toString()??''} ov",
+                                                      data: liveScoreResponse
+                                                                  .data
+                                                                  ?.homeTeam
+                                                                  ?.isBattingTeam ==
+                                                              true
+                                                          ? "${liveScoreResponse.data?.homeTeam?.overs}.${liveScoreResponse.data?.homeTeam?.balls}/${liveScoreResponse.data?.oversPerInning?.toString() ?? ''} ov"
+                                                          : "${liveScoreResponse.data?.awayTeam?.overs}.${liveScoreResponse.data?.awayTeam?.balls}/${liveScoreResponse.data?.oversPerInning?.toString() ?? ''} ov",
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.w300,
+                                                      fontFamily: "Poppins",
+                                                      color: overColor,
+                                                    ),
                                             ],
                                           ),
                                         ),
@@ -264,28 +318,57 @@ class _LiveScreenState extends State<LiveScreen> {
                                           flex: 8,
                                           child: Column(
                                             children: [
-                                              mediumText14(context,liveScoreResponse.data?.awayTeam?.name??'', maxLines: 1,overflow:TextOverflow.ellipsis),
-                                              const SizedBox(height: 12,),
-                                              liveScoreResponse.data?.awayTeam?.isBattingTeam==true || liveScoreResponse.data?.currentInning == 2?
-                                              Container(
-                                                padding: const EdgeInsets.only(left: 12, top: 5, bottom: 5, right: 12),
-                                                decoration: BoxDecoration(color: buttonColors, borderRadius: BorderRadius.circular(30)),
-                                                child: commonText(
-                                                  data: "${liveScoreResponse.data?.awayTeam?.score.toString()??''}/${liveScoreResponse.data?.awayTeam?.wickets.toString()??''}",
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w700,
-                                                  fontFamily: "Poppins",
-                                                  color: black,
-                                                ),
-                                              ):
-                                             /* commonText(
+                                              mediumText14(
+                                                  context,
+                                                  liveScoreResponse.data
+                                                          ?.awayTeam?.name ??
+                                                      '',
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis),
+                                              const SizedBox(
+                                                height: 12,
+                                              ),
+                                              liveScoreResponse.data?.awayTeam
+                                                              ?.isBattingTeam ==
+                                                          true ||
+                                                      liveScoreResponse.data
+                                                              ?.currentInning ==
+                                                          2
+                                                  ? Container(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 12,
+                                                              top: 5,
+                                                              bottom: 5,
+                                                              right: 12),
+                                                      decoration: BoxDecoration(
+                                                          color: buttonColors,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      30)),
+                                                      child: commonText(
+                                                        data:
+                                                            "${liveScoreResponse.data?.awayTeam?.score.toString() ?? ''}/${liveScoreResponse.data?.awayTeam?.wickets.toString() ?? ''}",
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontFamily: "Poppins",
+                                                        color: black,
+                                                      ),
+                                                    )
+                                                  :
+                                                  /* commonText(
                                                 data: "${liveScoreResponse.data?.awayTeam?.score.toString()??''}/${liveScoreResponse.data?.awayTeam?.wickets.toString()??''}",
                                                 fontSize: 15,
                                                 fontWeight: FontWeight.w700,
                                                 fontFamily: "Poppins",
                                                 color: black,
                                               )*/
-                                              mediumText14(context, "Not yet").pOnly(top: 3,bottom: 6),
+                                                  mediumText14(
+                                                          context, "Not yet")
+                                                      .pOnly(top: 3, bottom: 6),
                                             ],
                                           ),
                                         ),
@@ -296,7 +379,6 @@ class _LiveScreenState extends State<LiveScreen> {
                                 ),
                               ),
                             ),
-
                           ],
                         ),
                       ),
@@ -304,13 +386,12 @@ class _LiveScreenState extends State<LiveScreen> {
                   );
                 }),
           );
-
         },
       ),
     );
   }
 
-  Future<void> _refreshPage() async{
+  Future<void> _refreshPage() async {
     await _getLiveScoreApi2();
   }
 }
