@@ -39,11 +39,6 @@ class _SignUpState extends State<SignUp> {
            if (state.status == LiveScoreStatus.signUpSuccess) {
              SignUpResponse signUpResponse = state.responseData?.response as SignUpResponse;
              UiHelper.toastMessage(signUpResponse.message ?? '');
-          /*   CustomNavigator.push(
-                 context: context,
-                 screen: OtpScreen(
-                     token: signUpResponse.data?.token.toString(),
-                     email: emailController.text));*/
              showModalBottomSheet(
                            context: context,
                            builder: (context) =>

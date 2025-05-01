@@ -24,14 +24,7 @@ class UpcomingMatchScreen extends StatefulWidget {
 
 class _UpcomingMatchScreenState extends State<UpcomingMatchScreen> {
   UpcomingSeriesResponse upcomingSeriesResponse = UpcomingSeriesResponse();
-  ExpandedTileController _controller2 =
-      ExpandedTileController(isExpanded: false);
-  ExpandedTileController controller3 =
-      ExpandedTileController(isExpanded: false);
-  bool isTrue2 = false;
 
-  bool get wantKeepAlive => true;
-  bool isTrue3 = false;
   late ExpandedTileController _controller;
   bool? isTrue;
   List<bool> isTrueList = [false, false];
@@ -112,8 +105,10 @@ class _UpcomingMatchScreenState extends State<UpcomingMatchScreen> {
                                   fontWeight: FontWeight.w500,
                                   textColor: const Color(0xffFFFFFF))
                               : mediumText14(
-                                  context, '$error\n\nClick to refresh.',
-                                  fontSize: 16,
+                                  // context, '$error\n\nClick to refresh.',
+                              context, "${"No data found"}\n \n Click to refresh",
+
+                              fontSize: 16,
                                   fontWeight: FontWeight.w500,
                                   textAlign: TextAlign.center,
                                   textColor: const Color(0xffFFFFFF)),
@@ -151,7 +146,10 @@ class _UpcomingMatchScreenState extends State<UpcomingMatchScreen> {
                               textAlign: TextAlign.center,
                               textColor: const Color(0xffFFFFFF)),
                         )
-                      : ExpandedTileList.builder(
+                      :
+                  (upcomingSeriesResponse.data?.isNotEmpty ?? false)
+                      ?
+                  ExpandedTileList.builder(
                           itemCount: upcomingSeriesResponse.data?.length ?? 0,
                           shrinkWrap: true,
                           // padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -212,15 +210,13 @@ class _UpcomingMatchScreenState extends State<UpcomingMatchScreen> {
                                   ),
                                 ],
                               ),
-                              content: upcomingSeriesResponse
-                                              .data?[index].fixtures?.length ==
-                                          null &&
+                              content:
                                       upcomingSeriesResponse
                                               .data?[index].fixtures?.length ==
                                           0
                                   ? Center(
                                       child: mediumText14(
-                                          context, 'No Upcoming Series',
+                                          context, 'No match found',
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500,
                                           textAlign: TextAlign.center,
@@ -278,32 +274,48 @@ class _UpcomingMatchScreenState extends State<UpcomingMatchScreen> {
                                                               MainAxisAlignment
                                                                   .spaceBetween,
                                                           children: [
+                                                            // Flexible(
+                                                            //   child: SizedBox(
+                                                            //     width: 25.w,
+                                                            //     child:
+                                                            //         commonText(
+                                                            //       data: upcomingSeriesResponse
+                                                            //               .data?[
+                                                            //                   index]
+                                                            //               .fixtures?[
+                                                            //                   i]
+                                                            //               .homeTeam
+                                                            //               ?.name ??
+                                                            //           "N/A",
+                                                            //       fontSize: 14,
+                                                            //       fontWeight:
+                                                            //           FontWeight
+                                                            //               .w400,
+                                                            //       fontFamily:
+                                                            //           "Poppins",
+                                                            //       color: Colors
+                                                            //           .grey
+                                                            //           .withOpacity(
+                                                            //               0.9),
+                                                            //     ),
+                                                            //   ),
+                                                            // ),
+
                                                             Flexible(
                                                               child: SizedBox(
                                                                 width: 25.w,
-                                                                child:
-                                                                    commonText(
-                                                                  data: upcomingSeriesResponse
-                                                                          .data?[
-                                                                              index]
-                                                                          .fixtures?[
-                                                                              i]
-                                                                          .homeTeam
-                                                                          ?.name ??
-                                                                      "N/A",
+                                                                child: commonText(
+                                                                  data: upcomingSeriesResponse.data?[index].fixtures?[i].homeTeam?.name != null
+                                                                      ? upcomingSeriesResponse.data![index].fixtures![i].homeTeam!.name!
+                                                                      : upcomingSeriesResponse.data![index].fixtures![i].homeTeam?.id?.toString() ?? "N/A",
                                                                   fontSize: 14,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400,
-                                                                  fontFamily:
-                                                                      "Poppins",
-                                                                  color: Colors
-                                                                      .grey
-                                                                      .withOpacity(
-                                                                          0.9),
+                                                                  fontWeight: FontWeight.w400,
+                                                                  fontFamily: "Poppins",
+                                                                  color: Colors.grey.withOpacity(0.9),
                                                                 ),
                                                               ),
                                                             ),
+
                                                             Container(
                                                               width: 25.w,
                                                               padding: EdgeInsets
@@ -340,29 +352,44 @@ class _UpcomingMatchScreenState extends State<UpcomingMatchScreen> {
                                                             ).pOnly(
                                                                 left: 32,
                                                                 right: 32),
+                                                            // Flexible(
+                                                            //   child: SizedBox(
+                                                            //     width: 25.w,
+                                                            //     child:
+                                                            //         commonText(
+                                                            //       data: upcomingSeriesResponse
+                                                            //               .data?[
+                                                            //                   index]
+                                                            //               .fixtures?[
+                                                            //                   i]
+                                                            //               .awayTeam
+                                                            //               ?.name ??
+                                                            //           "N/A",
+                                                            //       fontSize: 14,
+                                                            //       fontWeight:
+                                                            //           FontWeight
+                                                            //               .w400,
+                                                            //       fontFamily:
+                                                            //           "Poppins",
+                                                            //       color: Colors
+                                                            //           .grey
+                                                            //           .withOpacity(
+                                                            //               0.9),
+                                                            //     ),
+                                                            //   ),
+                                                            // ),
+
                                                             Flexible(
                                                               child: SizedBox(
                                                                 width: 25.w,
-                                                                child:
-                                                                    commonText(
-                                                                  data: upcomingSeriesResponse
-                                                                          .data?[
-                                                                              index]
-                                                                          .fixtures?[
-                                                                              i]
-                                                                          .awayTeam
-                                                                          ?.name ??
-                                                                      "N/A",
+                                                                child: commonText(
+                                                                  data: upcomingSeriesResponse.data?[index].fixtures?[i].awayTeam?.name != null
+                                                                      ? upcomingSeriesResponse.data![index].fixtures![i].awayTeam!.name!
+                                                                      : upcomingSeriesResponse.data![index].fixtures![i].awayTeam?.id?.toString() ?? "N/A",
                                                                   fontSize: 14,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400,
-                                                                  fontFamily:
-                                                                      "Poppins",
-                                                                  color: Colors
-                                                                      .grey
-                                                                      .withOpacity(
-                                                                          0.9),
+                                                                  fontWeight: FontWeight.w400,
+                                                                  fontFamily: "Poppins",
+                                                                  color: Colors.grey.withOpacity(0.9),
                                                                 ),
                                                               ),
                                                             ),
@@ -393,7 +420,16 @@ class _UpcomingMatchScreenState extends State<UpcomingMatchScreen> {
                                 debugPrint("long tapped!!");
                               },
                             );
-                          }),
+                          }):Center(
+                    child: mediumText14(
+                      context,
+                      'No Upcoming Series',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      textAlign: TextAlign.center,
+                      textColor: const Color(0xffFFFFFF),
+                    ),
+                  ),
                 ],
               ),
             ),

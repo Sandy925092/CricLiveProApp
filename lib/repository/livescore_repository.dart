@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:kisma_livescore/constants.dart';
 import 'package:kisma_livescore/repository/api_service.dart';
+import 'package:kisma_livescore/responses/finishedserires.dart';
 import 'package:kisma_livescore/responses/get_country_code_abd_flag_response.dart';
 import 'package:kisma_livescore/responses/live_score_response.dart';
 import 'package:kisma_livescore/responses/login_response.dart';
@@ -29,7 +30,7 @@ class LiveScoreRepository {
   Future<ResponseData> getPrivacyPolicy() async {
     try {
       final response =
-          await ApiService().sendRequest.get("/api/privacy-policy/all");
+          await ApiService().sendRequest.get("/privacy-policy/all");
       return ResponseData(
           statusCode: response.statusCode,
           response: PrivacyPolicyResponse.fromJson(response.data));
@@ -45,7 +46,7 @@ class LiveScoreRepository {
   Future<ResponseData> getTermsAndConditions() async {
     try {
       final response =
-          await ApiService().sendRequest.get("/api/terms-and-conditions/all");
+          await ApiService().sendRequest.get("/terms-and-conditions/all");
       return ResponseData(
           statusCode: response.statusCode,
           response: TermsAndConditionsResponse.fromJson(response.data));
@@ -62,7 +63,7 @@ class LiveScoreRepository {
     try {
       final response = await ApiService(token: getToken())
           .sendRequest
-          .post('/api/queries/create', data: {
+          .post('/queries/create', data: {
         "query": query,
         "emailId": emailId,
       });
@@ -81,6 +82,7 @@ class LiveScoreRepository {
   // get Live score
   Future<ResponseData> getLiveScore() async {
     try {
+      // final response = await ApiService().sendRequest.get("/sqs/consume");
       final response = await ApiService().sendRequest.get("/sqs/consume");
       return ResponseData(
           statusCode: response.statusCode,
@@ -97,10 +99,30 @@ class LiveScoreRepository {
   Future<ResponseData> getUpcomingSeriesData() async {
     try {
       final response =
+       //   await ApiService().sendRequest.get("/matches/upcoming-series");
           await ApiService().sendRequest.get("/matches/upcoming-series");
       return ResponseData(
           statusCode: response.statusCode,
           response: UpcomingSeriesResponse.fromJson(response.data));
+    } on DioException catch (e) {
+      throw ErrorData(
+          message: e.response!.data['message'], code: e.response!.statusCode);
+    } on Exception catch (_) {
+      rethrow;
+    }
+  }
+
+  // Finished Series
+
+
+  Future<ResponseData> getFinishesSeries() async {
+    try {
+      final response =
+      // await ApiService().sendRequest.get("/matches/finished-series");
+      await ApiService().sendRequest.get("/matches/finished-series");
+      return ResponseData(
+          statusCode: response.statusCode,
+          response: FinishedSeriesResponse.fromJson(response.data));
     } on DioException catch (e) {
       throw ErrorData(
           message: e.response!.data['message'], code: e.response!.statusCode);

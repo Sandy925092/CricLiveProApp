@@ -7,6 +7,10 @@ enum LiveScoreStatus {
   upcomingSeriesSuccess,
   upcomingSeriesError,
 
+  finishedSeriesLoading,
+  finishedSeriesSuccess,
+  finishedSeriesError,
+
   privacyPolicyLoading,
   privacyPolicySuccess,
   privacyPolicyError,

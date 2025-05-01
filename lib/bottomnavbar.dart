@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:kisma_livescore/screens/home/homeScreen.dart';
 import 'package:kisma_livescore/commonwidget.dart';
 import 'package:kisma_livescore/screens/events/myevents.dart';
+import 'package:kisma_livescore/screens/home/socket/WebSocketService.dart';
 import 'package:kisma_livescore/screens/series/seriespage.dart';
 import 'package:kisma_livescore/screens/settings/settings.dart';
 import 'package:kisma_livescore/utils/colorfile.dart';
@@ -17,9 +18,30 @@ class Dashboard extends StatefulWidget {
 
   @override
   State<Dashboard> createState() => _DashboardState();
+
 }
 
 class _DashboardState extends State<Dashboard> {
+  // late WebSocketService webSocketService;
+
+
+  @override
+  void initState() {
+    // Initialize WebSocket service
+    // webSocketService = WebSocketService();
+    // Activate WebSocket client
+    // webSocketService.activate();
+    super.initState();
+  }
+
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   // Disconnect WebSocket service
+  //   webSocketService.disconnect();
+  // }
+
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;

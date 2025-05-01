@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:kisma_livescore/bottomnavbar.dart';
 import 'package:kisma_livescore/main.dart';
+import 'package:kisma_livescore/screens/auth/login.dart';
 import 'package:kisma_livescore/screens/auth/signup.dart';
 
 class SplashImages extends StatefulWidget {
@@ -45,11 +46,11 @@ class _SplashImagesState extends State<SplashImages> {
                   /*  Navigator.of(context).pushReplacement(MaterialPageRoute(builder:
                       (BuildContext context) => const SignUp()));*/
                   if(loginValue==true){
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (c) => Dashboard(menuScreenContext: context)), (route) => false);
+                    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (c) => Dashboard(menuScreenContext: context)), (route) => false);
                   }else{
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder:
-                        (BuildContext context) => const SignUp()));
+                    // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (c) => Dashboard(menuScreenContext: context)), (route) => false);
+
+                     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => const Login()));
                   }
 
                 });

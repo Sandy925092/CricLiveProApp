@@ -129,6 +129,28 @@ class LiveScoreCubit extends Cubit<LiveScoreState> {
     }
   }
 
+
+
+  Future<void> getFinishedSeries() async {
+    emit(state.copyWith(status: LiveScoreStatus.finishedSeriesLoading));
+    try {
+      ResponseData response = await repository.getFinishesSeries();
+      emit(state.copyWith(
+          status: LiveScoreStatus.finishedSeriesSuccess,
+          responseData: response));
+    } on ErrorData catch (errorData) {
+      emit(state.copyWith(
+          status: LiveScoreStatus.finishedSeriesError,
+          errorData: errorData,
+          error: null));
+    } catch (e) {
+      emit(state.copyWith(
+          status: LiveScoreStatus.finishedSeriesError,
+          error: e.toString(),
+          errorData: null));
+    }
+  }
+
   Future<void> getLiveScoreDashboardCall() async {
     emit(state.copyWith(status: LiveScoreStatus.liveScoreDashboardLoading));
     try {
