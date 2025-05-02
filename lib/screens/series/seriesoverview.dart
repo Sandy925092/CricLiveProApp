@@ -109,11 +109,11 @@ class _SeriesOverviewScreenState extends State<SeriesOverviewScreen> {
                       ],
                     ).pSymmetric(h: 30, v: 10),
                   ).onTap(() {
-                    Navigator.of(context, rootNavigator: true).push(
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              const SeriesMatchScorecardScreen()),
-                    );
+                    // Navigator.of(context, rootNavigator: true).push(
+                    //   MaterialPageRoute(
+                    //       builder: (context) =>
+                    //            SeriesMatchScorecardScreen(matchList:,)),
+                    // );
                   });
                 }),
             2.h.heightBox

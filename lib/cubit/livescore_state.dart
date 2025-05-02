@@ -66,6 +66,7 @@ enum LiveScoreStatus {
   loginLoading,
   loginSuccess,
   loginError,
+  liveMatchSocketUpdate
 }
 
 class LiveScoreState extends Equatable {
@@ -73,12 +74,14 @@ class LiveScoreState extends Equatable {
   final ResponseData? responseData;
   final ErrorData? errorData;
   final String? error;
+  final List<SocketLiveMatchResponse>? socketLiveData;
 
   const LiveScoreState({
     this.status = LiveScoreStatus.initial,
     this.responseData,
     this.errorData,
     this.error,
+    this.socketLiveData,
   });
 
   @override
@@ -87,6 +90,7 @@ class LiveScoreState extends Equatable {
         responseData,
         errorData,
         error,
+    socketLiveData
       ];
 
   LiveScoreState copyWith({
@@ -95,12 +99,14 @@ class LiveScoreState extends Equatable {
     ErrorData? errorData,
     String? error,
     String? message,
+    List<SocketLiveMatchResponse>? socketLiveData,
   }) {
     return LiveScoreState(
       status: status ?? this.status,
       responseData: responseData ?? this.responseData,
       errorData: errorData ?? this.errorData,
       error: error ?? this.error,
+      socketLiveData: socketLiveData?? this.socketLiveData
     );
   }
 }

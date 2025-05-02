@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kisma_livescore/repository/livescore_repository.dart';
+import 'package:kisma_livescore/responses/socketlivematch.dart';
 import 'package:kisma_livescore/utils/response_status.dart';
 
 part 'livescore_state.dart';
@@ -10,6 +11,19 @@ class LiveScoreCubit extends Cubit<LiveScoreState> {
   final LiveScoreRepository repository;
 
   LiveScoreCubit(this.repository) : super(const LiveScoreState());
+
+  List<SocketLiveMatchResponse>? liveData;
+
+  void updateLiveDataFromSocket(List<SocketLiveMatchResponse> data) {
+    emit(state.copyWith(
+      status: LiveScoreStatus.liveMatchSocketUpdate,
+      socketLiveData: data,
+    ));
+  }
+
+  Matches? getMatch(int seriesIndex, int matchIndex) {
+    return liveData?[seriesIndex].matches?[matchIndex];
+  }
 
   Future<void> privacyPolicyCall() async {
     emit(state.copyWith(status: LiveScoreStatus.privacyPolicyLoading));

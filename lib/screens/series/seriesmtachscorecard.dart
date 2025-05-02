@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kisma_livescore/commonwidget.dart';
 import 'package:kisma_livescore/customwidget/commonwidget.dart';
 import 'package:kisma_livescore/responses/live_score_response.dart';
@@ -8,8 +11,13 @@ import 'package:kisma_livescore/utils/colorfile.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../../cubit/livescore_cubit.dart';
+import '../../responses/socketlivematch.dart';
+
 class SeriesMatchScorecardScreen extends StatefulWidget {
-  const SeriesMatchScorecardScreen({super.key});
+  final Matches matchList;
+
+  SeriesMatchScorecardScreen({super.key, required this.matchList});
 
   @override
   State<SeriesMatchScorecardScreen> createState() =>
@@ -23,15 +31,40 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
   TabController? _controller2;
   int _currentIndex = 0;
   int _currentIndex2 = 0;
+  final allInnings = <Map<String, dynamic>>[];
   var students = {
     "id": ['123', '456', '789'],
     "firstName": ["old", "gold", "silver"],
     "surName": ["new", 'newwww', "newest"]
   };
 
+  List<Map<String, dynamic>> orderedInnings = [];
+
+
+  dynamic teamAId;
+  dynamic teamBId;
+  dynamic teamAInnings;
+  dynamic teamBInnings;
+  dynamic maxLength;
+
   void initState() {
+    print("selected match");
+    // log(widget.matchList);
+    print(widget.matchList);
+
+    teamAId = widget.matchList.teamAId;
+    teamBId = widget.matchList.teamBId;
+    teamAInnings = widget.matchList.innings
+        ?.where((inning) => inning.battingTeam?.teamId == teamAId)
+        .toList();
+
+    teamBInnings = widget.matchList.innings
+        ?.where((inning) => inning.battingTeam?.teamId == teamBId)
+        .toList();
+
     _controller = TabController(length: 2, vsync: this);
-    _controller2 = TabController(length: 2, vsync: this);
+    // _controller2 = TabController(length: 2, vsync: this);
+    _controller2 = TabController(length: 0, vsync: this);
     // TODO: implement initState
     super.initState();
   }
@@ -49,7 +82,9 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
           leadingWidth: 30,
           centerTitle: false,
           title: commonText(
-                  data: "ENG vs IND Matches",
+                  data:
+                      "${widget.matchList.teamAName.toString()} vs ${widget.matchList.teamBName.toString()}",
+                  // data: "dsads",
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   fontFamily: "Poppins",
@@ -67,7 +102,87 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
         ),
       ),
       body: SafeArea(
-        child: Column(
+        child: BlocBuilder<LiveScoreCubit, LiveScoreState>(
+          buildWhen: (prev, curr) =>
+          curr.status == LiveScoreStatus.liveMatchSocketUpdate,
+          builder: (context, state) {
+            // Use updated match data from socket
+            final updatedMatch = state.socketLiveData
+                ?.expand((e) => e.matches ?? [])
+                .firstWhere(
+                  (m) => m.fixtureId == widget.matchList.fixtureId,
+              orElse: () => widget.matchList, // fallback to passed match
+            );
+
+            teamAId = updatedMatch.teamAId;
+            teamBId = updatedMatch.teamBId;
+            teamAInnings = updatedMatch.innings
+                ?.where((inning) => inning.battingTeam?.teamId == teamAId)
+                .toList();
+
+            teamBInnings = updatedMatch.innings
+                ?.where((inning) => inning.battingTeam?.teamId == teamBId)
+                .toList();
+
+            // 1. Combine and label innings from both teams
+            
+            final maxLength = (teamAInnings?.length ?? 0) > (teamBInnings?.length ?? 0)
+                ? (teamAInnings?.length ?? 0)
+                : (teamBInnings?.length ?? 0);
+
+            for (int i = 0; i < maxLength; i++) {
+              if (i < (teamAInnings?.length ?? 0)) {
+                final inning = teamAInnings![i];
+                allInnings.add({
+                  'team': updatedMatch.teamAName ??
+                      updatedMatch.teamAId.toString() ?? '',
+                  'runs': inning.battingTeam?.runs ?? "0",
+                  'wickets': inning.battingTeam?.wickets ?? "0",
+                  'overs': inning.battingTeam?.overs ?? '0.0',
+                });
+              }
+              if (i < (teamBInnings?.length ?? 0)) { 
+                final inning = teamBInnings![i];
+                allInnings.add({
+                  'team': updatedMatch.teamBName ??
+                      updatedMatch.teamBId.toString() ?? '',
+                  'runs': inning.battingTeam?.runs ?? "0",
+                  'wickets': inning.battingTeam?.wickets ?? "0",
+                  'overs': inning.battingTeam?.overs ?? '0.0',
+                });
+              }
+            }
+
+
+            // for (var inning in teamAInnings ?? []) {
+            //   allInnings.add({
+            //     'team':updatedMatch?.teamAName ??
+            //         updatedMatch?.teamAId.toString() ??
+            //         '' , // or use teamAName dynamically
+            //     'runs': inning.battingTeam?.runs ?? "0",
+            //     'wickets': inning.battingTeam?.wickets ?? "0",
+            //     'overs': inning.battingTeam?.overs ?? '0.0',
+            //   });
+            // }
+            //
+            // for (var inning in teamBInnings ?? []) {
+            //   allInnings.add({
+            //     'team': updatedMatch?.teamBName ??
+            //         updatedMatch?.teamBId.toString() ??
+            //         '', // or use teamBName dynamically
+            //     'runs': inning.battingTeam?.runs ?? "0",
+            //     'wickets': inning.battingTeam?.wickets ?? "0",
+            //     'overs': inning.battingTeam?.overs ?? '0.0',
+            //   });
+            // }
+
+            updateTabController();
+
+
+            print("updatedMatch.toString()");
+            print(updatedMatch?.teamAName);
+            print(allInnings.toString());
+    return Column(
           children: [
             Container(
               // margin: EdgeInsets.only(bottom: 10),
@@ -89,20 +204,86 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                             scale: 3,
                           ),
                           1.heightBox,
-                          Text(
-                            'India',
-                            style: TextStyle(
-                                color: Color(0xffE4E5E9),
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: 25.w,
+                                child: commonText(
+                                  alignment: TextAlign.center,
+                                  data: updatedMatch?.teamAName ??
+                                      updatedMatch?.teamAId.toString() ??
+                                      '',
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: "Poppins",
+                                  color: Colors.grey.withOpacity(0.9),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              SizedBox(
+                                height: teamAInnings?.length != null
+                                    ? teamAInnings!.length * 40.0
+                                    : 40,
+                                width: MediaQuery.of(context).size.width * 0.3,
+                                child: ListView.builder(
+                                  itemCount: teamAInnings?.length ?? 0,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemBuilder: (context, inningIndex) {
+                                    final inning = teamAInnings![inningIndex];
+                                    return Container(
+                                      margin: EdgeInsets.only(bottom: 5),
+                                      width: 90,
+                                      height: 30,
+                                      decoration: BoxDecoration(
+                                        color: Colors.green,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          commonText(
+                                            data:
+                                                "${inning.battingTeam?.runs ?? 'N/A'}",
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: "Poppins",
+                                            color: Colors.black,
+                                          ),
+                                          commonText(
+                                            data: "/",
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: "Poppins",
+                                            color: Colors.black,
+                                          ),
+                                          commonText(
+                                            data:
+                                                "${inning.battingTeam?.wickets ?? 'N/A'}",
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: "Poppins",
+                                            color: Colors.black,
+                                          ),
+                                          commonText(
+                                            data:
+                                                " (${inning.battingTeam?.overs ?? 'N/A'} ov)",
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: "Poppins",
+                                            color: Colors.black,
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
-                          Text(
-                            '350/5',
-                            style: TextStyle(
-                                color: Color(0xffE4E5E9),
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400),
-                          )
                         ],
                       ),
                       Column(
@@ -112,20 +293,125 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                             scale: 3,
                           ),
                           1.h.heightBox,
-                          Text(
-                            'Australia',
-                            style: TextStyle(
-                                color: Color(0xffE4E5E9),
+                          Column(
+                            // crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              commonText(
+                                alignment:
+                                TextAlign.center,
+                                data: updatedMatch
+                                    .teamBName
+                                    .toString() ??
+                                    "",
                                 fontSize: 14,
-                                fontWeight: FontWeight.w400),
+                                fontWeight:
+                                FontWeight.w400,
+                                fontFamily: "Poppins",
+                                color: Colors.grey
+                                    .withOpacity(0.9),
+
+                              ),SizedBox(
+                                height: 10,
+                              ),
+                              SizedBox(
+                                width:
+                                MediaQuery.of(context)
+                                    .size
+                                    .width *
+                                    0.3,
+                                height: teamBInnings
+                                    ?.length !=
+                                    null
+                                    ? teamBInnings!
+                                    .length *
+                                    40.0
+                                    : 40,
+                                child: ListView.builder(
+                                  itemCount: teamBInnings
+                                      ?.length ??
+                                      0,
+                                  physics:
+                                  NeverScrollableScrollPhysics(),
+                                  itemBuilder: (context,
+                                      inningIndex) {
+                                    final inning =
+                                    teamBInnings![
+                                    inningIndex];
+                                    return Container(
+                                      margin:
+                                      EdgeInsets.only(
+                                          bottom: 5),
+                                      width: 90,
+                                      height: 30,
+                                      decoration:
+                                      BoxDecoration(
+                                        color:
+                                        Colors.green,
+                                        borderRadius:
+                                        BorderRadius
+                                            .circular(
+                                            10),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment
+                                            .center,
+                                        children: [
+                                          commonText(
+                                            data:
+                                            "${inning.battingTeam?.runs ?? 'N/A'}",
+                                            fontSize: 14,
+                                            fontWeight:
+                                            FontWeight
+                                                .w400,
+                                            fontFamily:
+                                            "Poppins",
+                                            color: Colors
+                                                .black,
+                                          ),
+                                          commonText(
+                                            data: "/",
+                                            fontSize: 14,
+                                            fontWeight:
+                                            FontWeight
+                                                .w400,
+                                            fontFamily:
+                                            "Poppins",
+                                            color: Colors
+                                                .black,
+                                          ),
+                                          commonText(
+                                            data:
+                                            "${inning.battingTeam?.wickets ?? 'N/A'}",
+                                            fontSize: 14,
+                                            fontWeight:
+                                            FontWeight
+                                                .w400,
+                                            fontFamily:
+                                            "Poppins",
+                                            color: Colors
+                                                .black,
+                                          ),
+                                          commonText(
+                                            data:
+                                            " (${inning.battingTeam?.overs ?? 'N/A'} ov)",
+                                            fontSize: 12,
+                                            fontWeight:
+                                            FontWeight
+                                                .w400,
+                                            fontFamily:
+                                            "Poppins",
+                                            color: Colors
+                                                .black,
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
-                          Text(
-                            '300/5',
-                            style: TextStyle(
-                                color: Color(0xffE4E5E9),
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400),
-                          )
                         ],
                       )
                     ],
@@ -206,39 +492,29 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                             backgroundColor: bgColor,
                             bottom: ButtonsTabBar(
                               center: false,
-                              contentPadding:
-                                  EdgeInsets.symmetric(horizontal: 30),
+                              contentPadding: EdgeInsets.symmetric(horizontal: 30),
                               radius: 10,
                               height: 7.h,
-                              unselectedBackgroundColor:
-                                  const Color.fromARGB(255, 226, 226, 226),
+                              unselectedBackgroundColor: const Color.fromARGB(255, 226, 226, 226),
                               decoration: BoxDecoration(color: neonColor),
                               controller: _controller2,
-                              tabs: [
-                                Tab(
-                                  // height: 20,
+                              tabs: List.generate(allInnings.length, (index) {
+                                final inning = allInnings[index];
+                                return Tab(
                                   child: Text(
-                                    'IND 146-2 (20.0)',
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500),
+                                    '${inning['team']} ${inning['runs']}-${inning['wickets']} (${inning['overs']})',
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
-                                ),
-                                Tab(
-                                  // height: 20,
-                                  child: Text(
-                                    'AUS 000-0 (00.0)',
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ),
-                              ],
+                                );
+                              }),
                             ),
                           ),
                         ),
+
                         Expanded(
                             child:
                                 TabBarView(controller: _controller2, children: [
@@ -2402,13 +2678,21 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                       ],
                     ),
                   ),
-                  LiveLineUpTab(tmpLiveScoreResponse: liveScoreResponse,),
+                  LiveLineUpTab(
+                    tmpLiveScoreResponse: liveScoreResponse,
+                  ),
                 ],
               ),
             ),
           ],
-        ),
+        );
+  },
+),
       ),
     );
+  }
+
+  void updateTabController() {
+    _controller2 = TabController(length: allInnings.length, vsync: this);
   }
 }
