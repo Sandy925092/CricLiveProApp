@@ -120,6 +120,7 @@ class Innings {
   final List<FallOfWickets>? fallOfWickets;
   final List<Partnerships>? partnerships;
   final List<MaxOversPerDay>? maxOversPerDay;
+  final List<YetToBat>? yetToBat;
   final num? totalOvers;
   final List<dynamic>? powerplays;
   final List<Interruptions>? interruptions;
@@ -139,6 +140,7 @@ class Innings {
     this.fallOfWickets,
     this.partnerships,
     this.maxOversPerDay,
+    this.yetToBat,
     this.totalOvers,
     this.powerplays,
     this.interruptions,
@@ -159,6 +161,7 @@ class Innings {
         fallOfWickets = (json['fallOfWickets'] as List?)?.map((dynamic e) => FallOfWickets.fromJson(e as Map<String,dynamic>)).toList(),
         partnerships = (json['partnerships'] as List?)?.map((dynamic e) => Partnerships.fromJson(e as Map<String,dynamic>)).toList(),
         maxOversPerDay = (json['maxOversPerDay'] as List?)?.map((dynamic e) => MaxOversPerDay.fromJson(e as Map<String,dynamic>)).toList(),
+        yetToBat = (json['yetToBat'] as List?)?.map((dynamic e) => YetToBat.fromJson(e as Map<String,dynamic>)).toList(),
         totalOvers = json['totalOvers'] as num?,
         powerplays = json['powerplays'] as List?,
         interruptions = (json['interruptions'] as List?)?.map((dynamic e) => Interruptions.fromJson(e as Map<String,dynamic>)).toList(),
@@ -513,6 +516,45 @@ class MaxOversPerDay {
     'day' : day,
     'maxOvers' : maxOvers,
     'sequenceNumber' : sequenceNumber
+  };
+}
+
+class YetToBat {
+  final num? id;
+  final String? name;
+  final num? batOrder;
+  final String? role;
+  final String? battingHandedness;
+  final String? bowlingHandedness;
+  final String? bowlingStyle;
+
+  YetToBat({
+    this.id,
+    this.name,
+    this.batOrder,
+    this.role,
+    this.battingHandedness,
+    this.bowlingHandedness,
+    this.bowlingStyle,
+  });
+
+  YetToBat.fromJson(Map<String, dynamic> json)
+      : id = json['id'] as num?,
+        name = json['day'] as String?,
+        batOrder = json['batOrder'] as num?,
+        role = json['role'] as String?,
+        battingHandedness = json['battingHandedness'] as String?,
+        bowlingHandedness = json['bowlingHandedness'] as String?,
+        bowlingStyle = json['bowlingStyle'] as String?;
+
+  Map<String, dynamic> toJson() => {
+    'id' : id,
+    'name' : name,
+    'batOrder' : batOrder,
+    'role' : role,
+    'battingHandedness' : battingHandedness,
+    'bowlingHandedness' : bowlingHandedness,
+    'bowlingStyle' : bowlingStyle,
   };
 }
 

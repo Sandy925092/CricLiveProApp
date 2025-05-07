@@ -9,6 +9,7 @@ import 'package:kisma_livescore/responses/live_score_response.dart';
 import 'package:kisma_livescore/responses/login_response.dart';
 import 'package:kisma_livescore/responses/privacy_policy_response.dart';
 import 'package:kisma_livescore/responses/sign_up_response.dart';
+import 'package:kisma_livescore/responses/socketlivematch.dart';
 import 'package:kisma_livescore/responses/terms_and_conditions_response.dart';
 import 'package:kisma_livescore/responses/upcoming_series_response.dart';
 import 'package:kisma_livescore/utils/response_status.dart';
@@ -111,6 +112,32 @@ class LiveScoreRepository {
       rethrow;
     }
   }
+
+
+  // get live match data api
+  Future<ResponseData> getLiveMatch() async {
+    try {
+      final response = await ApiService().sendRequest.get(
+          "http://34.238.14.72:8080/api/test-bss/series-scorecards");
+
+      final dataList = response.data as List;
+
+      final parsedList = dataList
+          .map((item) => SocketLiveMatchResponse.fromJson(item as Map<String, dynamic>))
+          .toList();
+
+      return ResponseData(
+        statusCode: response.statusCode,
+        response: parsedList, // ✅ List<SocketLiveMatchResponse>
+      );
+    } on DioException catch (e) {
+      throw ErrorData(
+          message: e.response?.data['message'], code: e.response?.statusCode);
+    } on Exception catch (_) {
+      rethrow;
+    }
+  }
+
 
   // Finished Series
 

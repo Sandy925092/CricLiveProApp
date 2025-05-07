@@ -16,18 +16,18 @@ import 'package:velocity_x/velocity_x.dart';
 import '../../cubit/livescore_cubit.dart';
 import '../../responses/socketlivematch.dart';
 
-class SeriesMatchScorecardScreen extends StatefulWidget {
+class SeriesMatchApiScorecardScreen extends StatefulWidget {
   final Matches matchList;
 
-  SeriesMatchScorecardScreen({super.key, required this.matchList});
+  SeriesMatchApiScorecardScreen({super.key, required this.matchList});
 
   @override
-  State<SeriesMatchScorecardScreen> createState() =>
-      _SeriesMatchScorecardScreenState();
+  State<SeriesMatchApiScorecardScreen> createState() =>
+      _SeriesMatchApiScorecardScreenState();
 }
 
-class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
-    with TickerProviderStateMixin {
+class _SeriesMatchApiScorecardScreenState
+    extends State<SeriesMatchApiScorecardScreen> with TickerProviderStateMixin {
   LiveScoreResponse liveScoreResponse = LiveScoreResponse();
   TabController? _controller;
   TabController? _controller2;
@@ -44,6 +44,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
 
   List<Map<String, dynamic>> orderedInnings = [];
   int selectedTabIndex = 0;
+  int passingValue = 1;
 
   dynamic teamAId;
   dynamic teamBId;
@@ -73,7 +74,6 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
     teamAInnings = widget.matchList.innings
         ?.where((inning) => inning.battingTeam?.teamId == teamAId)
         .toList();
-
     if (teamAInnings != null) {
       for (var inning in teamAInnings) {
         if (inning.fallOfWickets != null) {
@@ -105,6 +105,11 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
       }
     }
 
+    print("fall of wickets");
+    print(jsonEncode(fallOfWicketsteamA));
+    print(jsonEncode(teamAInnings));
+    print(jsonEncode(fallOfWicketsteamB));
+
     _controller = TabController(length: 2, vsync: this);
     // _controller2 = TabController(length: 2, vsync: this);
     _controller2 = TabController(length: 0, vsync: this);
@@ -116,6 +121,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
         });
       }
     });
+
     final teamAId1 = widget.matchList.teamAId;
     final teamBId2 = widget.matchList.teamBId;
 
@@ -125,7 +131,8 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
     teamBIndex = widget.matchList.teamLineups
             ?.indexWhere((lineup) => lineup.teamId == teamBId2) ??
         -1;
-    // TODO: implement initState
+
+    print(jsonEncode(teamALineUp));
     super.initState();
   }
 
@@ -175,79 +182,12 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                     orElse: () => widget.matchList, // fallback to passed match
                   );
 
-              teamAId = updatedMatch.teamAId;
-              teamBId = updatedMatch.teamBId;
-              teamAInnings = updatedMatch.innings
-                  ?.where((inning) => inning.battingTeam?.teamId == teamAId)
-                  .toList();
+              //  teamALineUp?.addAll(widget.matchList.teamLineups ?? []);
 
-              teamBInnings = updatedMatch.innings
-                  ?.where((inning) => inning.battingTeam?.teamId == teamBId)
-                  .toList();
-
-              // 1. Combine and label innings from both teams
-
-              // final maxLength =
-              //     (teamAInnings?.length ?? 0) > (teamBInnings?.length ?? 0)
-              //         ? (teamAInnings?.length ?? 0)
-              //         : (teamBInnings?.length ?? 0);
-              //
-              // for (int i = 0; i < maxLength; i++) {
-              //   if (i < (teamAInnings?.length ?? 0)) {
-              //     final inning = teamAInnings![i];
-              //     allInnings.add({
-              //       'team': updatedMatch.teamAName ??
-              //           updatedMatch.teamAId.toString() ??
-              //           '',
-              //       'runs': inning.battingTeam?.runs ?? "0",
-              //       'wickets': inning.battingTeam?.wickets ?? "0",
-              //       'overs': inning.battingTeam?.overs ?? '0.0',
-              //       'inningData': inning,
-              //     });
-              //   }
-              //   if (i < (teamBInnings?.length ?? 0)) {
-              //     final inning = teamBInnings![i];
-              //     allInnings.add({
-              //       'team': updatedMatch.teamBName ??
-              //           updatedMatch.teamBId.toString() ??
-              //           '',
-              //       'runs': inning.battingTeam?.runs ?? "0",
-              //       'wickets': inning.battingTeam?.wickets ?? "0",
-              //       'overs': inning.battingTeam?.overs ?? '0.0',
-              //       'inningData': inning,
-              //     });
-              //   }
-              // }
-
-              // for (var inning in teamAInnings ?? []) {
-              //   allInnings.add({
-              //     'team':updatedMatch?.teamAName ??
-              //         updatedMatch?.teamAId.toString() ??
-              //         '' , // or use teamAName dynamically
-              //     'runs': inning.battingTeam?.runs ?? "0",
-              //     'wickets': inning.battingTeam?.wickets ?? "0",
-              //     'overs': inning.battingTeam?.overs ?? '0.0',
-              //   });
-              // }
-              //
-              // for (var inning in teamBInnings ?? []) {
-              //   allInnings.add({
-              //     'team': updatedMatch?.teamBName ??
-              //         updatedMatch?.teamBId.toString() ??
-              //         '', // or use teamBName dynamically
-              //     'runs': inning.battingTeam?.runs ?? "0",
-              //     'wickets': inning.battingTeam?.wickets ?? "0",
-              //     'overs': inning.battingTeam?.overs ?? '0.0',
-              //   });
-              // }
-
-              // updateTabController();
+              print("teaALineUp");
 
               getAllInningsInitial();
 
-              print("updatedMatch.toString()");
-              print(updatedMatch?.teamAName);
-              print(allInnings.toString());
               return Column(
                 children: [
                   Container(
@@ -536,49 +476,63 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                               ).pSymmetric(h: 10),
                             ),
                             SizedBox(
-                                height: 8.h,
-                                child: TabBar(
-                                  dividerColor: Colors.transparent,
-                                  controller: _controller2,
-                                  isScrollable: true,
+                              height: 8.h,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  // Ensure left alignment of the column
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    // Removed unnecessary alignment inside container, it's redundant with CrossAxisAlignment.start
+                                    TabBar(
+                                      controller: _controller2,
+                                      isScrollable: true,
+                                      onTap: (index) {
+                                        selectedTabIndex = index;
+                                        passingValue = index + 1;
 
-                                  onTap: (index) {
-                                    selectedTabIndex = index;
-                                    getAllInnings();
-                                  },
-                                  // indicator: BoxDecoration(
-                                  //   color: neonColor,
-                                  //   borderRadius: BorderRadius.circular(10),
-                                  // ),
-                                  indicatorPadding: EdgeInsets.symmetric(vertical: 5),
-                                  labelPadding:
-                                      EdgeInsets.symmetric(horizontal: 10),
-                                  labelColor: Colors.black,
-                                  unselectedLabelColor: Colors.black,
-                                  tabs: List.generate(allInnings.length,
-                                      (index) {
-                                    final inning = allInnings[index];
-                                    return Container(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 20, vertical: 5),
-                                      decoration: BoxDecoration(
-                                        color: selectedTabIndex == index
-                                            ? neonColor
-                                            : const Color.fromARGB(
-                                                255, 226, 226, 226),
-                                        borderRadius:
-                                            BorderRadius.circular(10),
+                                        // Perform your getAllInnings logic here
+                                        getAllInnings();
+                                      },
+                                      indicator: BoxDecoration(
+                                        color: neonColor,
+                                        borderRadius: BorderRadius.circular(10),
                                       ),
-                                      child: Text(
-                                        '${inning['team']}',
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    );
-                                  }),
-                                )
+                                      indicatorPadding:
+                                          EdgeInsets.symmetric(vertical: 5),
+                                      labelPadding:
+                                          EdgeInsets.symmetric(horizontal: 10),
+                                      labelColor: Colors.black,
+                                      unselectedLabelColor: Colors.black,
+                                      tabs: List.generate(allInnings.length,
+                                          (index) {
+                                        final inning = allInnings[index];
+                                        return Container(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 15, vertical: 10),
+                                          decoration: BoxDecoration(
+                                            color: selectedTabIndex == index
+                                                ? neonColor
+                                                : const Color.fromARGB(
+                                                    255, 226, 226, 226),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: Text(
+                                            // Replace with the correct team info
+                                            '${inning['team']}',
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        );
+                                      }),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ],
                         )
@@ -637,11 +591,8 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                       ],
                                     ),
                                   ),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(10)),
-                                        color: CupertinoColors.systemGrey5),
+                                  Card(
+                                    color: Colors.white,
                                     margin: EdgeInsets.all(10),
                                     child: Table(
                                       columnWidths: {
@@ -671,19 +622,13 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: [
-                                                    Text(
-                                                      batter.playerName
-                                                                  .toString() ==
-                                                              "Unknown Player"
-                                                          ? batter.playerId
-                                                              .toString()
-                                                          : batter.playerName
-                                                              .toString(),
-                                                      style: TextStyle(
-                                                          fontSize: 14,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
+                                                    Text(batter.playerName
+                                                                .toString() ==
+                                                            "Unknown Player"
+                                                        ? batter.playerId
+                                                            .toString()
+                                                        : batter.playerName
+                                                            .toString()),
                                                     Row(
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment
@@ -693,26 +638,22 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                                               .start,
                                                       children: [
                                                         SizedBox(width: 4),
-                                                        batter.isOut == true
-                                                            ? SizedBox(
-                                                                width: MediaQuery.of(
-                                                                            context)
-                                                                        .size
-                                                                        .width *
-                                                                    0.2,
-                                                                child: Text(
+                                                        Expanded(
+                                                          child: batter.isOut ==
+                                                                  true
+                                                              ? Text(
                                                                   batter
                                                                       .dismissal
                                                                       .toString(),
                                                                   style: TextStyle(
                                                                       fontSize:
                                                                           12),
-                                                                ),
-                                                              )
-                                                            : Icon(
-                                                                Icons
-                                                                    .sports_cricket,
-                                                                size: 16),
+                                                                )
+                                                              : Icon(
+                                                                  Icons
+                                                                      .sports_cricket,
+                                                                  size: 16),
+                                                        ),
                                                       ],
                                                     ),
                                                   ],
@@ -748,9 +689,6 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                       ],
                                     ),
                                   ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
                                   Container(
                                     margin: const EdgeInsets.only(
                                         left: 10.0, right: 10),
@@ -765,132 +703,67 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                               color: Colors.white),
                                         ),
                                         Text(
-                                          teamAExtras.total == 0
-                                              ? '${teamAExtras.total}'
-                                              : '${teamAExtras.total} '
-                                              '('
-                                              '${teamAExtras.byes != 0 ? 'b ${teamAExtras.byes} ' : ''}'
-                                              '${teamAExtras.legByes != 0 ? ', lb ${teamAExtras.legByes}' : ''}'
-                                              '${teamAExtras.wides != 0 ? ', w ${teamAExtras.wides}' : ''}'
-                                              '${teamAExtras.noBalls != 0 ? ', nb ${teamAExtras.noBalls}' : ''}'
-                                              '${teamAExtras.penalty != 0 ? ', p ${teamAExtras.penalty}' : ''}'
-                                              ')',
+                                          '${teamAExtras.total} '
+                                          '('
+                                          '${teamAExtras.byes != 0 ? 'b ${teamAExtras.byes}, ' : ''}'
+                                          '${teamAExtras.legByes != 0 ? 'lb ${teamAExtras.legByes}, ' : ''}'
+                                          '${teamAExtras.wides != 0 ? 'w ${teamAExtras.wides}, ' : ''}'
+                                          '${teamAExtras.noBalls != 0 ? 'nb ${teamAExtras.noBalls}, ' : ''}'
+                                          '${teamAExtras.penalty != 0 ? 'p ${teamAExtras.penalty}' : ''}'
+                                          ')',
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white,
                                           ),
                                         )
-
                                       ],
                                     ),
                                   ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  yetToBat?.length != 0
-                                      ? Container(
-                                          margin: const EdgeInsets.only(
-                                              left: 10.0, right: 10),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                "Yet to bat",
-                                                style: TextStyle(
+                                  Container(
+                                    margin: const EdgeInsets.only(
+                                        left: 10.0, right: 10),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Yet to bat",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white),
+                                        ),
+                                        GridView.builder(
+                                          gridDelegate:
+                                              SliverGridDelegateWithFixedCrossAxisCount(
+                                                  crossAxisCount: 2),
+                                          itemCount: yetToBat?.length,
+                                          itemBuilder: (context, index) {
+
+                                            print("in the list");
+                                            print(yetToBat?[index].name.toString());
+                                            return Row(
+                                              children: [
+                                                Image.asset(
+                                                    "assets/images/iv_player_image.png"),
+                                                Text(
+                                                  yetToBat?[index].name ==
+                                                          "Unknown Player"
+                                                      ? '${yetToBat?[index].id}'
+                                                      : '${yetToBat?[index].name}',
+                                                  style: TextStyle(
                                                     fontWeight: FontWeight.bold,
-                                                    color: Colors.white),
-                                              ),
-                                              SizedBox(
-                                                height: yetToBat!.length * 40.0,
-                                                child: GridView.builder(
-                                                  gridDelegate:
-                                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                                          crossAxisCount: 2,
-                                                          crossAxisSpacing: 10,
-                                                          childAspectRatio:
-                                                              2.5),
-                                                  itemCount: yetToBat?.length,
-                                                  physics:
-                                                      NeverScrollableScrollPhysics(),
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    print("in the list");
-                                                    print(yetToBat?[index]
-                                                        .name
-                                                        .toString());
-                                                    return Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              6.0),
-                                                      child: Container(
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .all(Radius
-                                                                        .circular(
-                                                                            10)),
-                                                            color:
-                                                                Color.fromARGB(
-                                                                    255,
-                                                                    226,
-                                                                    226,
-                                                                    226)),
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: Row(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              ClipRRect(
-                                                                borderRadius: BorderRadius
-                                                                    .all(Radius
-                                                                        .circular(
-                                                                            20)),
-                                                                child: Image.asset(
-                                                                    "assets/images/iv_player_image.png"),
-                                                              ),
-                                                              SizedBox(
-                                                                width: 5,
-                                                              ),
-                                                              Center(
-                                                                child: SizedBox(
-                                                                  width: 100,
-                                                                  child: Text(
-                                                                    yetToBat?[index].name.toString() ==
-                                                                            "null"
-                                                                        ? '${yetToBat?[index].id}'
-                                                                        : '${yetToBat?[index].name}',
-                                                                    maxLines: 2,
-                                                                    // textAlign: TextAlign.center,
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      color: Colors
-                                                                          .black,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              )
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    );
-                                                  },
-                                                ),
-                                              )
-                                            ],
-                                          ),
+                                                    color: Colors.white,
+                                                  ),
+                                                )
+                                              ],
+                                            );
+                                          },
                                         )
-                                      : SizedBox(),
+                                      ],
+                                    ),
+                                  ),
                                 ],
                               ),
                               SizedBox(
@@ -977,20 +850,13 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                                         CrossAxisAlignment
                                                             .start,
                                                     children: [
-                                                      Text(
-                                                        batter.playerName
-                                                                    .toString() ==
-                                                                "Unknown Player"
-                                                            ? batter.playerId
-                                                                .toString()
-                                                            : batter.playerName
-                                                                .toString(),
-                                                        style: TextStyle(
-                                                            fontSize: 14,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
+                                                      Text(batter.playerName
+                                                                  .toString() ==
+                                                              "Unknown Player"
+                                                          ? batter.playerId
+                                                              .toString()
+                                                          : batter.playerName
+                                                              .toString()),
                                                       Row(
                                                         crossAxisAlignment:
                                                             CrossAxisAlignment
@@ -1059,7 +925,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                               SizedBox(
                                 height: 10,
                               ),
-                              fallOfWicketsteamA!.length!=0?ListView(
+                              ListView(
                                 shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
                                 children: [
@@ -1138,21 +1004,15 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: [
-                                                    Text(
-                                                      fallOfWickets.playerName
-                                                                  .toString() ==
-                                                              "Unknown Player"
-                                                          ? fallOfWickets
-                                                              .playerId
-                                                              .toString()
-                                                          : fallOfWickets
-                                                              .playerName
-                                                              .toString(),
-                                                      style: TextStyle(
-                                                          fontSize: 14,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
+                                                    Text(fallOfWickets
+                                                                .playerName
+                                                                .toString() ==
+                                                            "Unknown Player"
+                                                        ? fallOfWickets.playerId
+                                                            .toString()
+                                                        : fallOfWickets
+                                                            .playerName
+                                                            .toString()),
                                                   ],
                                                 ),
                                               ),
@@ -1216,7 +1076,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                   //   ),
                                   // ),
                                 ],
-                              ):SizedBox(),
+                              ),
                               SizedBox(
                                 height: 10,
                               ),
@@ -1495,7 +1355,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                                 .lineup
                                                 ?.length ??
                                             0) *
-                                        50.0,
+                                        40.0,
                                     child: GridView.builder(
                                       itemCount: widget
                                           .matchList
@@ -1607,7 +1467,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                                 .lineup
                                                 ?.length ??
                                             0) *
-                                        50.0,
+                                        40.0,
                                     child: GridView.builder(
                                       itemCount: widget
                                           .matchList
@@ -1710,71 +1570,6 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
     _controller2 = TabController(length: allInnings.length, vsync: this);
   }
 
-  void getAllInningsInitial() {
-    final maxLength = (teamAInnings?.length ?? 0) > (teamBInnings?.length ?? 0)
-        ? (teamAInnings?.length ?? 0)
-        : (teamBInnings?.length ?? 0);
-    allInnings.clear();
-
-    for (int i = 0; i < maxLength; i++) {
-      if (i < (teamAInnings?.length ?? 0)) {
-        final inning = teamAInnings![i];
-
-        allInnings.add({
-          // 'team': updatedMatch.teamAName ?? updatedMatch.teamAId.toString() ??'',
-          'team': widget.matchList.teamAName ??
-              widget.matchList.teamAId.toString() ??
-              '',
-          'runs': inning.battingTeam?.runs ?? "0",
-          'wickets': inning.battingTeam?.wickets ?? "0",
-          'overs': inning.battingTeam?.overs ?? '0.0',
-          'inningData': inning,
-        });
-      }
-      if (i < (teamBInnings?.length ?? 0)) {
-        final inning = teamBInnings![i];
-        allInnings.add({
-          // 'team': updatedMatch.teamBName ?? updatedMatch.teamBId.toString() ?? '',
-          'team': widget.matchList.teamBName ??
-              widget.matchList.teamAId.toString() ??
-              '',
-
-          'runs': inning.battingTeam?.runs ?? "0",
-          'wickets': inning.battingTeam?.wickets ?? "0",
-          'overs': inning.battingTeam?.overs ?? '0.0',
-          'inningData': inning,
-        });
-      }
-    }
-    print("all innings length");
-    print(allInnings.length);
-    // log(allInnings[0]['inningData']);
-    // log(allInnings[2]['inningData']);
-    // log(allInnings[3]['inningData']);
-    final selectedInning = allInnings[selectedTabIndex]['inningData'];
-    batters = selectedInning.batters ?? [];
-    bowlers = selectedInning.bowlers ?? [];
-    print("batters names");
-    print(jsonEncode(batters));
-
-    if (selectedInning.fallOfWickets.length != 0) {
-      fallOfWicketsteamA = selectedInning.fallOfWickets ?? [];
-    }
-    if (selectedInning.partnerships.length != 0) {
-      partnerships = selectedInning.partnerships ?? [];
-    }
-
-    teamAExtras = selectedInning.extras;
-    if (selectedInning.yetToBat != null) {
-      yetToBat = selectedInning.yetToBat ?? [];
-    }
-
-    print("yet to bat data 2");
-    print(jsonEncode(yetToBat));
-
-    updateTabController();
-  }
-
   void getAllInnings() {
     final maxLength = (teamAInnings?.length ?? 0) > (teamBInnings?.length ?? 0)
         ? (teamAInnings?.length ?? 0)
@@ -1813,11 +1608,26 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
     }
     print("all innings length");
     print(allInnings.length);
+    print(passingValue);
     // log(allInnings[0]['inningData']);
     // log(allInnings[2]['inningData']);
     // log(allInnings[3]['inningData']);
     final selectedInning = allInnings[selectedTabIndex]['inningData'];
     batters = selectedInning.batters ?? [];
+    print("batters names");
+    print(jsonEncode(batters));
+
+    // if (teamBInnings != null) {
+    //   for (var inning in teamBInnings) {
+    //     if (inning.fallOfWickets != null) {
+    //       fallOfWicketsteamB?.addAll(inning.fallOfWickets!);
+    //     }
+    //     if (inning.extras != null) {
+    //       teamBExtras = inning.extras;
+    //     }
+    //   }
+    //
+    // }
 
     if (selectedInning.fallOfWickets.length != 0) {
       fallOfWicketsteamA = selectedInning.fallOfWickets ?? [];
@@ -1831,11 +1641,112 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
       yetToBat = selectedInning.yetToBat ?? [];
     }
 
+    // if (teamAInnings != null) {
+    //   for (var inning in teamAInnings) {
+    //     if (inning.fallOfWickets != null) {
+    //       fallOfWicketsteamA?.addAll(inning.fallOfWickets!);
+    //     }
+    //     if (inning.extras != null) {
+    //       teamAExtras = inning.extras;
+    //     }
+    //   }
+    //
+    // }
+
     updateTabController();
 
-    print("yet to bat data 2");
+    print("updatedMatch.toString()");
+    print(jsonEncode(yetToBat));
+    setState(() {});
+  }
+
+  void getAllInningsInitial() {
+    final maxLength = (teamAInnings?.length ?? 0) > (teamBInnings?.length ?? 0)
+        ? (teamAInnings?.length ?? 0)
+        : (teamBInnings?.length ?? 0);
+    allInnings.clear();
+
+    for (int i = 0; i < maxLength; i++) {
+      if (i < (teamAInnings?.length ?? 0)) {
+        final inning = teamAInnings![i];
+
+        allInnings.add({
+          // 'team': updatedMatch.teamAName ?? updatedMatch.teamAId.toString() ??'',
+          'team': widget.matchList.teamAName ??
+              widget.matchList.teamAId.toString() ??
+              '',
+          'runs': inning.battingTeam?.runs ?? "0",
+          'wickets': inning.battingTeam?.wickets ?? "0",
+          'overs': inning.battingTeam?.overs ?? '0.0',
+          'inningData': inning,
+        });
+      }
+      if (i < (teamBInnings?.length ?? 0)) {
+        final inning = teamBInnings![i];
+        allInnings.add({
+          // 'team': updatedMatch.teamBName ?? updatedMatch.teamBId.toString() ?? '',
+          'team': widget.matchList.teamBName ??
+              widget.matchList.teamAId.toString() ??
+              '',
+
+          'runs': inning.battingTeam?.runs ?? "0",
+          'wickets': inning.battingTeam?.wickets ?? "0",
+          'overs': inning.battingTeam?.overs ?? '0.0',
+          'inningData': inning,
+        });
+      }
+    }
+    print("all innings length");
+    print(allInnings.length);
+    print(passingValue);
+    // log(allInnings[0]['inningData']);
+    // log(allInnings[2]['inningData']);
+    // log(allInnings[3]['inningData']);
+    final selectedInning = allInnings[selectedTabIndex]['inningData'];
+    batters = selectedInning.batters ?? [];
+    bowlers = selectedInning.bowlers ?? [];
+    print("batters names");
+    print(jsonEncode(batters));
+
+    if (selectedInning.fallOfWickets.length != 0) {
+      fallOfWicketsteamA = selectedInning.fallOfWickets ?? [];
+    }
+    if (selectedInning.partnerships.length != 0) {
+      partnerships = selectedInning.partnerships ?? [];
+    }
+
+    teamAExtras = selectedInning.extras;
+    if (selectedInning.yetToBat != null) {
+      yetToBat = selectedInning.yetToBat ?? [];
+    }
+
+    print("updatedMatch 2.toString()");
     print(jsonEncode(yetToBat));
 
-    setState(() {});
+    // if (teamBInnings != null) {
+    //   for (var inning in teamBInnings) {
+    //     if (inning.fallOfWickets != null) {
+    //       fallOfWicketsteamB?.addAll(inning.fallOfWickets!);
+    //     }
+    //     if (inning.extras != null) {
+    //       teamBExtras = inning.extras;
+    //     }
+    //   }
+    //
+    // }
+    //
+    // if (teamAInnings != null) {
+    //   for (var inning in teamAInnings) {
+    //     if (inning.fallOfWickets != null) {
+    //       fallOfWicketsteamA?.addAll(inning.fallOfWickets!);
+    //     }
+    //     if (inning.extras != null) {
+    //       teamAExtras = inning.extras;
+    //     }
+    //   }
+
+    // }
+
+    updateTabController();
   }
 }

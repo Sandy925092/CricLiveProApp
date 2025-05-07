@@ -76,75 +76,78 @@ class _LineAll16State extends State<LineAll16> {
                           padding: const EdgeInsets.only(top:60),
                           child: mediumText14(context, 'Not announced',textColor:white,fontSize: 16),
                         ):
-                        ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: expHomePlayerOrderList?.length,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return  expHomePlayerOrderList![index].expBatOrder==0?const SizedBox():
-                              Container(
-                                margin: const EdgeInsets.only(bottom: 10),
-                                padding: const EdgeInsets.only(left: 7,right: 7,top: 7,bottom: 7),
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(3)),
-                                child: Row(
-                                  children: [
-                                    CircleAvatar(
-                                      backgroundColor: Color(0xff001548),
-                                      child: Image.asset(
-                                        'assets/images/batternew.png',
-                                        scale: 3,
-                                      ),
-                                    ),
-                                    2.w.widthBox,
-                                    Expanded(
-                                      child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Flexible(
-                                                flex:8,
-                                                child: mediumText14(context, expHomePlayerOrderList![index].shortName??'',fontWeight:FontWeight.w700,
-                                                  maxLines: 1,overflow: TextOverflow.ellipsis,),
-                                              ),
-                                              const SizedBox(width: 2,),
-                                              (expHomePlayerOrderList[index].isCap==true && expHomePlayerOrderList[index].isWK==true)?
-                                              Flexible(
-                                                flex:5,
-                                                child: mediumText14(context,"(C&WK)",fontWeight:FontWeight.w400,fontSize: 11, maxLines: 1,overflow: TextOverflow.ellipsis,),
-                                              ):expHomePlayerOrderList[index].isCap==true?
-                                              Flexible(
-                                                flex:3,
-                                                child: mediumText14(context,"(C)",fontWeight:FontWeight.w500,fontSize: 12, maxLines: 1,overflow: TextOverflow.ellipsis,),
-                                              ):expHomePlayerOrderList[index].isWK==true?
-                                              Flexible(
-                                                flex:3,
-                                                child: mediumText14(context,"(WK)",fontWeight:FontWeight.w500,fontSize: 12, maxLines: 1,overflow: TextOverflow.ellipsis,),
-                                              ):const SizedBox(),
+                        // ListView.builder(
+                        //     shrinkWrap: true,
+                        //     itemCount: expHomePlayerOrderList?.length,
+                        //     physics: const NeverScrollableScrollPhysics(),
+                        //     itemBuilder: (context, index) {
+                        //       return  expHomePlayerOrderList![index].expBatOrder==0?const SizedBox():
+                        //       Container(
+                        //         margin: const EdgeInsets.only(bottom: 10),
+                        //         padding: const EdgeInsets.only(left: 7,right: 7,top: 7,bottom: 7),
+                        //         decoration: BoxDecoration(
+                        //             color: Colors.white,
+                        //             borderRadius: BorderRadius.circular(3)),
+                        //         child: Row(
+                        //           children: [
+                        //             CircleAvatar(
+                        //               backgroundColor: Color(0xff001548),
+                        //               child: Image.asset(
+                        //                 'assets/images/batternew.png',
+                        //                 scale: 3,
+                        //               ),
+                        //             ),
+                        //             2.w.widthBox,
+                        //             // Expanded(
+                        //             //   child: Column(
+                        //             //       mainAxisAlignment: MainAxisAlignment.center,
+                        //             //       crossAxisAlignment: CrossAxisAlignment.start,
+                        //             //       mainAxisSize: MainAxisSize.min,
+                        //             //     children: [
+                        //             //       Row(
+                        //             //         children: [
+                        //             //           Flexible(
+                        //             //             flex:8,
+                        //             //             child: mediumText14(context, expHomePlayerOrderList![index].shortName??'',fontWeight:FontWeight.w700,
+                        //             //               maxLines: 1,overflow: TextOverflow.ellipsis,),
+                        //             //           ),
+                        //             //           const SizedBox(width: 2,),
+                        //             //           (expHomePlayerOrderList[index].isCap==true && expHomePlayerOrderList[index].isWK==true)?
+                        //             //           Flexible(
+                        //             //             flex:5,
+                        //             //             child: mediumText14(context,"(C&WK)",fontWeight:FontWeight.w400,fontSize: 11, maxLines: 1,overflow: TextOverflow.ellipsis,),
+                        //             //           ):expHomePlayerOrderList[index].isCap==true?
+                        //             //           Flexible(
+                        //             //             flex:3,
+                        //             //             child: mediumText14(context,"(C)",fontWeight:FontWeight.w500,fontSize: 12, maxLines: 1,overflow: TextOverflow.ellipsis,),
+                        //             //           ):expHomePlayerOrderList[index].isWK==true?
+                        //             //           Flexible(
+                        //             //             flex:3,
+                        //             //             child: mediumText14(context,"(WK)",fontWeight:FontWeight.w500,fontSize: 12, maxLines: 1,overflow: TextOverflow.ellipsis,),
+                        //             //           ):const SizedBox(),
+                        //             //
+                        //             //         ],
+                        //             //       ),
+                        //             //      /* Row(
+                        //             //         children: [
+                        //             //           smallText12(context, 'LH',fontSize: 11),
+                        //             //           1.w.widthBox,
+                        //             //           Image.asset(
+                        //             //             'assets/images/bat.png',
+                        //             //             scale: 3,
+                        //             //           ),
+                        //             //         ],
+                        //             //       )*/
+                        //             //     ],
+                        //             //   ),
+                        //             // )
+                        //           ],
+                        //         ),
+                        //       );
+                        //     }),
 
-                                            ],
-                                          ),
-                                         /* Row(
-                                            children: [
-                                              smallText12(context, 'LH',fontSize: 11),
-                                              1.w.widthBox,
-                                              Image.asset(
-                                                'assets/images/bat.png',
-                                                scale: 3,
-                                              ),
-                                            ],
-                                          )*/
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              );
-                            }),
+
+                        SizedBox()
                       ],
                     ),
                   ),

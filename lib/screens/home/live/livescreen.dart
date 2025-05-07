@@ -22,6 +22,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../../responses/socketlivematch.dart';
+import '../../series/seriesmtachapiscorecard.dart';
 import '../../series/seriesmtachscorecard.dart';
 import '../socket/WebSocketService.dart';
 
@@ -49,42 +50,7 @@ class _LiveScreenState extends State<LiveScreen>
 
     _connectToSocket();
 
-    // // Restore previous live data if available
-    // if (_latestLiveData != null) {
-    //   liveData = _latestLiveData!;
-    // }
-    //
-    // // Only connect if not already connected
-    // if (!StompWebSocketService().isConnected) {
-    //   StompWebSocketService().connect(
-    //     topic: "/topic/scorecard",
-    //     onMessage: (message) {
-    //       try {
-    //         final jsonData = json.decode(message);
-    //         final parsed = SocketLiveMatchResponse.fromJson(jsonData);
-    //
-    //         _latestLiveData = parsed;
-    //
-    //         if (mounted) {
-    //           setState(() {
-    //             liveData = parsed;
-    //           });
-    //         } else {
-    //           print("📦 Data updated in memory (UI not visible)");
-    //         }
-    //       } catch (e, stack) {
-    //         print("❌ Error parsing or setting state: $e");
-    //         print("🪵 Stack trace: $stack");
-    //       }
-    //     },
-    //     onConnectCallback: () {
-    //       print("🟢 Connected to topic");
-    //     },
-    //     onError: (error) {
-    //       print("❗ Error: $error");
-    //     },
-    //   );
-    // }
+    // liveMatchApi();
 
     // Expanded tile controller init
     _controller = ExpandedTileController(isExpanded: true);
@@ -130,12 +96,20 @@ class _LiveScreenState extends State<LiveScreen>
       body: BlocConsumer<LiveScoreCubit, LiveScoreState>(
         listener: (context, state) {
           print("sate.status:${state.status}");
-          if (state.status == LiveScoreStatus.liveScoreSuccess) {
+          if (state.status == LiveScoreStatus.upcomingSeriesSuccess) {
             Loader.hide();
-            liveScoreResponse =
-                state.responseData?.response as LiveScoreResponse;
-            BlocProvider.of<LiveScoreCubit>(context)
-                .getCountryCodeAndFlagCall();
+            // liveScoreResponse =
+            //     state.responseData?.response as LiveScoreResponse;
+            // BlocProvider.of<LiveScoreCubit>(context)
+            //     .getCountryCodeAndFlagCall();
+
+            liveData = state.responseData?.response as List<SocketLiveMatchResponse>;
+
+
+            print("live data in api");
+            print(jsonEncode(liveData));
+
+
           }
           if (state.status == LiveScoreStatus.liveScoreSuccess1) {
             // Loader.hide();
@@ -307,7 +281,9 @@ class _LiveScreenState extends State<LiveScreen>
                                 textAlign: TextAlign.center,
                                 textColor: const Color(0xffFFFFFF)),
                           )
-                        : ListView.builder(
+                        :
+
+                    ListView.builder(
                             shrinkWrap: true,
                             itemCount: liveData?[index].matches?.length,
                             physics: NeverScrollableScrollPhysics(),
@@ -320,29 +296,24 @@ class _LiveScreenState extends State<LiveScreen>
                                   .matches?[i]
                                   .innings
                                   ?.where((inning) =>
-                                      inning.battingTeam?.teamId == teamAId)
+                              inning.battingTeam?.teamId == teamAId)
                                   .toList();
 
                               final teamBInnings = liveData?[index]
                                   .matches?[i]
                                   .innings
                                   ?.where((inning) =>
-                                      inning.battingTeam?.teamId == teamBId)
+                              inning.battingTeam?.teamId == teamBId)
                                   .toList();
+
 
                               return GestureDetector(
                                 onTap: () {
                                   final match = liveData?[index].matches?[i];
 
                                   if (match != null) {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            SeriesMatchScorecardScreen(
-                                                matchList: match),
-                                      ),
-                                    );
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => SeriesMatchScorecardScreen(matchList: match),),);
+                                    // Navigator.push(context, MaterialPageRoute(builder: (context) => SeriesMatchApiScorecardScreen(matchList: match),),);
                                   }
                                 },
                                 child: Padding(
@@ -372,19 +343,21 @@ class _LiveScreenState extends State<LiveScreen>
                                                   width: 25.w,
                                                   child: commonText(
                                                     alignment: TextAlign.center,
-                                                    data: liveData?[index]
-                                                            .matches?[i]
-                                                            .teamAName ??
-                                                        liveData?[index]
-                                                            .matches?[i]
-                                                            .teamAId
-                                                            .toString() ??
-                                                        '',
+                                                    data:liveData?[index]
+                                                        .matches?[i]
+                                                        .teamAName
+                                                        .toString()=="Unknown Team"?
+                                                    "${liveData?[index]
+                                                        .matches?[i]
+                                                        .teamAId
+                                                        .toString()}":"${liveData?[index]
+                                                        .matches?[i]
+                                                        .teamAName
+                                                        .toString()}",
                                                     fontSize: 14,
                                                     fontWeight: FontWeight.w400,
                                                     fontFamily: "Poppins",
-                                                    color: Colors.grey
-                                                        .withOpacity(0.9),
+                                                    color: Colors.black,
                                                   ),
                                                 ),
                                                 SizedBox(
@@ -505,13 +478,18 @@ class _LiveScreenState extends State<LiveScreen>
                                                   data: liveData?[index]
                                                           .matches?[i]
                                                           .teamBName
-                                                          .toString() ??
-                                                      "",
+                                                          .toString()=="Unknown Team"?
+                                                      "${liveData?[index]
+                                                          .matches?[i]
+                                                          .teamBId
+                                                          .toString()}":"${liveData?[index]
+                                                      .matches?[i]
+                                                      .teamBName
+                                                      .toString()}",
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.w400,
                                                   fontFamily: "Poppins",
-                                                  color: Colors.grey
-                                                      .withOpacity(0.9),
+                                                  color: Colors.black,
                                                 ),
                                                 SizedBox(
                                                   height: 10,
@@ -786,5 +764,9 @@ class _LiveScreenState extends State<LiveScreen>
         },
       );
     }
+  }
+
+  Future<void> liveMatchApi() async {
+    await BlocProvider.of<LiveScoreCubit>(context).getLiveMatchApiData();
   }
 }

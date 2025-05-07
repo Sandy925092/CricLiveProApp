@@ -156,7 +156,7 @@ class _LiveLineUpTabState extends State<LiveLineUpTab> with TickerProviderStateM
             child: TabBarView(
               controller: _controller,
               children:  [
-                LineAll16(tmpLiveScoreResponse: widget.tmpLiveScoreResponse,),
+                // LineAll16(tmpLiveScoreResponse: widget.tmpLiveScoreResponse,),
               /*  const LineBat8(),
                 const LineUpBowl6(),
                 const LineUpAr2(),*/
