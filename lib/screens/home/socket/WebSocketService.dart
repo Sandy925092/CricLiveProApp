@@ -1,4 +1,9 @@
+import 'dart:convert';
+
+import 'package:flutter/cupertino.dart';
 import 'package:stomp_dart_client/stomp_dart_client.dart';
+import 'dart:developer' as developer;
+
 
 class StompWebSocketService {
   static final StompWebSocketService _instance = StompWebSocketService._internal();
@@ -38,7 +43,8 @@ class StompWebSocketService {
               destination: topic,
               callback: (StompFrame frame) {
                 if (frame.body != null) {
-                  print("📩 Received message: ${frame.body}");
+                  print("📩 Received message: ");
+                  developer.log(frame.body.toString());
                   onMessage(frame.body!);
                 } else {
                   print("⚠️ Empty frame received.");

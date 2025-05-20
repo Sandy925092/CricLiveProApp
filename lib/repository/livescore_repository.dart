@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:kisma_livescore/constants.dart';
 import 'package:kisma_livescore/repository/api_service.dart';
+import 'package:kisma_livescore/responses/finished_match.dart';
+import 'package:kisma_livescore/responses/finishedmatchdetails.dart';
 import 'package:kisma_livescore/responses/finishedserires.dart';
 import 'package:kisma_livescore/responses/get_country_code_abd_flag_response.dart';
 import 'package:kisma_livescore/responses/live_score_response.dart';
@@ -118,7 +120,8 @@ class LiveScoreRepository {
   Future<ResponseData> getLiveMatch() async {
     try {
       final response = await ApiService().sendRequest.get(
-          "http://34.238.14.72:8080/api/test-bss/series-scorecards");
+          // "http://34.238.14.72:8080/api/test-bss/series-scorecards");
+          "/test-bss/get-live");
 
       final dataList = response.data as List;
 
@@ -142,14 +145,52 @@ class LiveScoreRepository {
   // Finished Series
 
 
-  Future<ResponseData> getFinishesSeries() async {
+  Future<ResponseData> getFinishesSeries(String pageno, ) async {
     try {
       final response =
-      // await ApiService().sendRequest.get("/matches/finished-series");
-      await ApiService().sendRequest.get("/matches/finished-series");
+      await ApiService().sendRequest.get("/series/started?page=${pageno}&size=10");
+      // await ApiService().sendRequest.get("http://192.168.4.25:8080/api/series/started?page=0&size=10");
       return ResponseData(
           statusCode: response.statusCode,
           response: FinishedSeriesResponse.fromJson(response.data));
+          // response: FinishedMatchResponse.fromJson(response.data));
+    } on DioException catch (e) {
+      throw ErrorData(
+          message: e.response!.data['message'], code: e.response!.statusCode);
+    } on Exception catch (_) {
+      rethrow;
+    }
+  }
+
+  // Finished Series
+
+
+  Future<ResponseData> getMatchDetails(String matchId, ) async {
+    try {
+      final response =
+      await ApiService().sendRequest.get("/test-bss/${matchId}");
+      // await ApiService().sendRequest.get("http://192.168.4.25:8080/api/series/started?page=0&size=10");
+      return ResponseData(
+          statusCode: response.statusCode,
+          response: FinishedMatchDetailsResponse.fromJson(response.data));
+      // response: FinishedMatchResponse.fromJson(response.data));
+    } on DioException catch (e) {
+      throw ErrorData(
+          message: e.response!.data['message'], code: e.response!.statusCode);
+    } on Exception catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<ResponseData> getFinishesMatch(String pageno,String seriesId ) async {
+    try {
+      final response =
+      await ApiService().sendRequest.get("/matches/completed-matches/${seriesId}");
+      // await ApiService().sendRequest.get("http://192.168.4.25:8080/api/matches/completed-matches/${seriesId}");
+      return ResponseData(
+          statusCode: response.statusCode,
+          response: FinishedMatchResponse.fromJson(response.data));
+      // response: FinishedMatchResponse.fromJson(response.data));
     } on DioException catch (e) {
       throw ErrorData(
           message: e.response!.data['message'], code: e.response!.statusCode);
@@ -176,7 +217,7 @@ class LiveScoreRepository {
   Future<ResponseData> signUp(Map<String, dynamic> signUpDetails) async {
     try {
       final response = await ApiService().sendRequest.post(
-            "/users/register",
+            "/auth/register",
             data: signUpDetails,
           );
       return ResponseData(
@@ -194,8 +235,11 @@ class LiveScoreRepository {
   Future<ResponseData> verifyOtp(String email, String otp) async {
     try {
       final response = await ApiService().sendRequest.post(
-            "/users/verifyOtp?email=$email&otp=$otp",
-            //  data: {},
+            "/auth/verify-otp",
+            data: {
+              "email":email,
+              "otp":otp
+            },
           );
       return ResponseData(
         statusCode: response.statusCode,
@@ -212,7 +256,7 @@ class LiveScoreRepository {
   Future<ResponseData> forgotPassword(String email) async {
     try {
       final response = await ApiService().sendRequest.post(
-            "/users/forgot-password?email=$email",
+            "/auth/forgot-password?email=$email",
             //  data: {},
           );
       return ResponseData(
@@ -231,8 +275,12 @@ class LiveScoreRepository {
       String email, String newPassword, String confirmNewPassword) async {
     try {
       final response = await ApiService().sendRequest.post(
-            "/users/reset-password?email=$email&newPassword=$newPassword&confirmNewPassword=$confirmNewPassword",
-            //  data: {},
+            "/auth/reset-password",
+             data: {
+              "email":email,
+               "newPassword":newPassword,
+               "confirmPassword":confirmNewPassword
+             },
           );
       return ResponseData(
         statusCode: response.statusCode,
@@ -249,8 +297,12 @@ class LiveScoreRepository {
   Future<ResponseData> login(String email, String password) async {
     try {
       final response = await ApiService().sendRequest.post(
-            "/users/login?email=$email&password=$password",
-            //  data: {},
+            "/auth/login",
+             data: {
+              "email":email,
+               "password":password,
+               "deviceToken":"12345"
+             },
           );
       return ResponseData(
           statusCode: response.statusCode,

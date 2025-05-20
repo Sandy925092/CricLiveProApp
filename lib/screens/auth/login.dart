@@ -39,7 +39,7 @@ class _LoginState extends State<Login> {
           if (state.status == LiveScoreStatus.loginSuccess) {
             LoginResponse loginResponse = state.responseData?.response as LoginResponse;
             UiHelper.toastMessage(loginResponse.message ?? '');
-            if(loginResponse.data?.status == 1){
+            if(loginResponse.data?.otpVerified == true){
               print('loginResponse.data?.email.toString():${loginResponse.data?.email.toString()}');
               PreferenceManager.insertValue(key: EMAIL_ID, value: loginResponse.data?.email.toString());
               PreferenceManager.insertValue(key: USER_ID, value: loginResponse.data?.id.toString());

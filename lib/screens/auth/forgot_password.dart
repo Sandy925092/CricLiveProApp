@@ -28,9 +28,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         print('state.status:${state.status}');
         if (state.status == LiveScoreStatus.forgotPasswordSuccess){
           UiHelper.toastMessage(state.responseData?.response ?? '');
-          Navigator.of(context).pop();
         //  CustomNavigator.pushReplacement(context: context, screen: const ResetPassword());
-          Navigator.of(context).pop();
+        //   Navigator.of(context).pop();
           showModalBottomSheet(
             context: context,
             builder: (context) =>

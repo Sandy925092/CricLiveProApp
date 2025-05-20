@@ -144,20 +144,20 @@ class LiveScoreCubit extends Cubit<LiveScoreState> {
   }
 
     Future<void> getLiveMatchApiData() async {
-    emit(state.copyWith(status: LiveScoreStatus.upcomingSeriesLoading));
+    emit(state.copyWith(status: LiveScoreStatus.liveApiLoading));
     try {
       ResponseData response = await repository.getLiveMatch();
       emit(state.copyWith(
-          status: LiveScoreStatus.upcomingSeriesSuccess,
+          status: LiveScoreStatus.liveApiSuccess,
           responseData: response));
     } on ErrorData catch (errorData) {
       emit(state.copyWith(
-          status: LiveScoreStatus.upcomingSeriesError,
+          status: LiveScoreStatus.liveApiError,
           errorData: errorData,
           error: null));
     } catch (e) {
       emit(state.copyWith(
-          status: LiveScoreStatus.upcomingSeriesError,
+          status: LiveScoreStatus.liveApiError,
           error: e.toString(),
           errorData: null));
     }
@@ -165,10 +165,10 @@ class LiveScoreCubit extends Cubit<LiveScoreState> {
 
 
 
-  Future<void> getFinishedSeries() async {
+  Future<void> getFinishedSeries(String pageno,) async {
     emit(state.copyWith(status: LiveScoreStatus.finishedSeriesLoading));
     try {
-      ResponseData response = await repository.getFinishesSeries();
+      ResponseData response = await repository.getFinishesSeries(pageno);
       emit(state.copyWith(
           status: LiveScoreStatus.finishedSeriesSuccess,
           responseData: response));
@@ -180,6 +180,46 @@ class LiveScoreCubit extends Cubit<LiveScoreState> {
     } catch (e) {
       emit(state.copyWith(
           status: LiveScoreStatus.finishedSeriesError,
+          error: e.toString(),
+          errorData: null));
+    }
+  }
+
+  Future<void> getMatchDetails(String matchId,) async {
+    emit(state.copyWith(status: LiveScoreStatus.matchDetailsLoading));
+    try {
+      ResponseData response = await repository.getMatchDetails(matchId);
+      emit(state.copyWith(
+          status: LiveScoreStatus.matchDetailsSuccess,
+          responseData: response));
+    } on ErrorData catch (errorData) {
+      emit(state.copyWith(
+          status: LiveScoreStatus.matchDetailsError,
+          errorData: errorData,
+          error: null));
+    } catch (e) {
+      emit(state.copyWith(
+          status: LiveScoreStatus.matchDetailsError,
+          error: e.toString(),
+          errorData: null));
+    }
+  }
+
+  Future<void> getFinishMatch(String pageno, String seriesId) async {
+    emit(state.copyWith(status: LiveScoreStatus.finishedMatchLoading));
+    try {
+      ResponseData response = await repository.getFinishesMatch(pageno, seriesId);
+      emit(state.copyWith(
+          status: LiveScoreStatus.finishedMatchSuccess,
+          responseData: response));
+    } on ErrorData catch (errorData) {
+      emit(state.copyWith(
+          status: LiveScoreStatus.finishedMatchError,
+          errorData: errorData,
+          error: null));
+    } catch (e) {
+      emit(state.copyWith(
+          status: LiveScoreStatus.finishedMatchError,
           error: e.toString(),
           errorData: null));
     }

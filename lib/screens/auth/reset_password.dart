@@ -30,7 +30,7 @@ class _ResetPasswordState extends State<ResetPassword> {
         print('state.status:${state.status}');
         if (state.status == LiveScoreStatus.resetPasswordSuccess){
           UiHelper.toastMessage(state.responseData?.response ?? '');
-          Navigator.of(context).pop();
+          // Navigator.of(context).pop();
           CustomNavigator.pushAndRemoveUntil(context: context, screen: Login());
         }
         else if (state.status == LiveScoreStatus.resetPasswordError){

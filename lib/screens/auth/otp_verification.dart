@@ -73,7 +73,7 @@ class _OTPVerificationState extends State<OTPVerification> {
         print('state.status:${state.status}');
         if (state.status == LiveScoreStatus.verifyOtpSuccess){
           UiHelper.toastMessage(state.responseData?.response ?? '');
-          Navigator.of(context).pop();
+          // Navigator.of(context).pop();
           if(widget.fromPage=="forgotPassword"){
           showModalBottomSheet(
             context: context,

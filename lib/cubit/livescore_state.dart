@@ -11,6 +11,18 @@ enum LiveScoreStatus {
   finishedSeriesSuccess,
   finishedSeriesError,
 
+  liveApiLoading,
+  liveApiSuccess,
+  liveApiError,
+
+  matchDetailsLoading,
+  matchDetailsSuccess,
+  matchDetailsError,
+
+  finishedMatchLoading,
+  finishedMatchSuccess,
+  finishedMatchError,
+
   privacyPolicyLoading,
   privacyPolicySuccess,
   privacyPolicyError,

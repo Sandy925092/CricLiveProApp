@@ -83,6 +83,8 @@ class _UpcomingMatchScreenState extends State<UpcomingMatchScreen> {
                 physics: const AlwaysScrollableScrollPhysics(),
                 child: SizedBox(
                   height: screenHeight * 0.5,
+                  width: MediaQuery.of(context).size.width,
+
                   child: Padding(
                     padding:
                         const EdgeInsets.only(left: 14, right: 14, top: 14),
@@ -97,13 +99,15 @@ class _UpcomingMatchScreenState extends State<UpcomingMatchScreen> {
                           padding:
                               const EdgeInsets.only(left: 50.0, right: 50.0),
                           child: statusCode == 401
-                              ? mediumText14(
-                                  context,
-                                  error ??
-                                      '', //'You  have no internet connection Please enable Wi-fi or Mobile Data\nPull to refresh.',
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  textColor: const Color(0xffFFFFFF))
+                              ? Center(
+                                child: mediumText14(
+                                    context,
+                                    error ??
+                                        '', //'You  have no internet connection Please enable Wi-fi or Mobile Data\nPull to refresh.',
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    textColor: const Color(0xffFFFFFF)),
+                              )
                               : mediumText14(
                                   // context, '$error\n\nClick to refresh.',
                               context, "${"No data found"}\n \n Click to refresh",
@@ -195,7 +199,7 @@ class _UpcomingMatchScreenState extends State<UpcomingMatchScreen> {
                                             fontWeight: FontWeight.w700,
                                             fontFamily: "Poppins",
                                             color: white,
-                                            maxLines: 1,
+                                            maxLines: 3,
                                             overflow: TextOverflow.ellipsis),
                                       ),
                                     ],
@@ -339,7 +343,7 @@ class _UpcomingMatchScreenState extends State<UpcomingMatchScreen> {
                                                                       TextAlign
                                                                           .center,
                                                                   data:
-                                                                      "Starting \n in ${DateFormat("d/M/yy").format(DateTime.parse(upcomingSeriesResponse.data?[index].fixtures?[i].startTimes?.first.date ?? "2025-04-04T10:00:00"))}",
+                                                                      "Starting on\n ${DateFormat("d/M/yy").format(DateTime.parse(upcomingSeriesResponse.data?[index].fixtures?[i].startTimes?.first.date ?? "2025-04-04T10:00:00"))}",
                                                                   fontSize: 10,
                                                                   fontWeight:
                                                                       FontWeight

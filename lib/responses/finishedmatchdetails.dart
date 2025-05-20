@@ -1,42 +1,42 @@
-class SocketLiveMatchResponse {
-  final dynamic seriesId;
-  final dynamic seriesName;
-  final List<Matches>? matches;
+class FinishedMatchDetailsResponse {
+  final bool? success;
+  final String? message;
+  final Data? data;
 
-  SocketLiveMatchResponse({
-    this.seriesId,
-    this.seriesName,
-    this.matches,
+  FinishedMatchDetailsResponse({
+    this.success,
+    this.message,
+    this.data,
   });
 
-  SocketLiveMatchResponse.fromJson(Map<String, dynamic> json)
-      : seriesId = json['seriesId'],
-        seriesName = json['seriesName'],
-        matches = (json['matches'] as List?)?.map((dynamic e) => Matches.fromJson(e as Map<String,dynamic>)).toList();
+  FinishedMatchDetailsResponse.fromJson(Map<String, dynamic> json)
+      : success = json['success'] as bool?,
+        message = json['message'] as String?,
+        data = (json['data'] as Map<String,dynamic>?) != null ? Data.fromJson(json['data'] as Map<String,dynamic>) : null;
 
   Map<String, dynamic> toJson() => {
-    'seriesId' : seriesId,
-    'seriesName' : seriesName,
-    'matches' : matches?.map((e) => e.toJson()).toList()
+    'success' : success,
+    'message' : message,
+    'data' : data?.toJson()
   };
 }
 
-class Matches {
+class Data {
   final num? fixtureId;
-  final dynamic seriesId;
-  final dynamic seriesName;
+  final num? seriesId;
+  final String? seriesName;
   final String? matchStatus;
   final num? teamAId;
   final String? teamAName;
   final num? teamBId;
   final String? teamBName;
   final TossInfo? tossInfo;
-  final List<Innings>? innings;
+  final List<InningsDetails>? innings;
   final Result? result;
-  final List<TeamLineups>? teamLineups;
+  final List<TeamLineupsDetails>? teamLineups;
   final String? updatedAt;
 
-  Matches({
+  Data({
     this.fixtureId,
     this.seriesId,
     this.seriesName,
@@ -52,19 +52,19 @@ class Matches {
     this.updatedAt,
   });
 
-  Matches.fromJson(Map<String, dynamic> json)
-      : fixtureId = json['fixtureId'] as int?,
-        seriesId = json['seriesId'],
-        seriesName = json['seriesName'],
+  Data.fromJson(Map<String, dynamic> json)
+      : fixtureId = json['fixtureId'] as num?,
+        seriesId = json['seriesId'] as num?,
+        seriesName = json['seriesName'] as String?,
         matchStatus = json['matchStatus'] as String?,
-        teamAId = json['teamAId'] as int?,
+        teamAId = json['teamAId'] as num?,
         teamAName = json['teamAName'] as String?,
-        teamBId = json['teamBId'] as int?,
+        teamBId = json['teamBId'] as num?,
         teamBName = json['teamBName'] as String?,
         tossInfo = (json['tossInfo'] as Map<String,dynamic>?) != null ? TossInfo.fromJson(json['tossInfo'] as Map<String,dynamic>) : null,
-        innings = (json['innings'] as List?)?.map((dynamic e) => Innings.fromJson(e as Map<String,dynamic>)).toList(),
+        innings = (json['innings'] as List?)?.map((dynamic e) => InningsDetails.fromJson(e as Map<String,dynamic>)).toList(),
         result = (json['result'] as Map<String,dynamic>?) != null ? Result.fromJson(json['result'] as Map<String,dynamic>) : null,
-        teamLineups = (json['teamLineups'] as List?)?.map((dynamic e) => TeamLineups.fromJson(e as Map<String,dynamic>)).toList(),
+        teamLineups = (json['teamLineups'] as List?)?.map((dynamic e) => TeamLineupsDetails.fromJson(e as Map<String,dynamic>)).toList(),
         updatedAt = json['updatedAt'] as String?;
 
   Map<String, dynamic> toJson() => {
@@ -85,9 +85,9 @@ class Matches {
 }
 
 class TossInfo {
-  final int? tossWinnerTeamId;
+  final num? tossWinnerTeamId;
   final String? decision;
-  final int? sequenceNumber;
+  final num? sequenceNumber;
 
   TossInfo({
     this.tossWinnerTeamId,
@@ -96,9 +96,9 @@ class TossInfo {
   });
 
   TossInfo.fromJson(Map<String, dynamic> json)
-      : tossWinnerTeamId = json['tossWinnerTeamId'] as int?,
+      : tossWinnerTeamId = json['tossWinnerTeamId'] as num?,
         decision = json['decision'] as String?,
-        sequenceNumber = json['sequenceNumber'] as int?;
+        sequenceNumber = json['sequenceNumber'] as num?;
 
   Map<String, dynamic> toJson() => {
     'tossWinnerTeamId' : tossWinnerTeamId,
@@ -107,28 +107,28 @@ class TossInfo {
   };
 }
 
-class Innings {
+class InningsDetails {
   final num? inningNumber;
   final BattingTeam? battingTeam;
   final BowlingTeam? bowlingTeam;
-  final List<Batters>? batters;
-  final List<Bowlers>? bowlers;
-  final Extras? extras;
+  final List<BattersDetails>? batters;
+  final List<BowlersDetails>? bowlers;
+  final ExtrasDetails? extras;
   final num? currentRunRate;
   final dynamic requiredRunRate;
-  final dynamic target;
-  final List<FallOfWickets>? fallOfWickets;
-  final List<Partnerships>? partnerships;
-  final List<MaxOversPerDay>? maxOversPerDay;
-  final List<YetToBat>? yetToBat;
-  final num? totalOvers;
-  final List<dynamic>? powerplays;
+  final num? target;
+  final List<FallOfWicketsDetails>? fallOfWickets;
+  final List<PartnershipsDetails>? partnerships;
+  final dynamic maxOversPerDay;
+  final dynamic totalOvers;
+  final List<Powerplays>? powerplays;
   final List<Interruptions>? interruptions;
-  final List<OverSummaries>? overSummaries;
   final bool? ended;
   final num? legalBalls;
+  final List<YetToBatDetails>? yetToBat;
+  final List<OverSummariesDetails>? overSummaries;
 
-  Innings({
+  InningsDetails({
     this.inningNumber,
     this.battingTeam,
     this.bowlingTeam,
@@ -141,35 +141,35 @@ class Innings {
     this.fallOfWickets,
     this.partnerships,
     this.maxOversPerDay,
-    this.yetToBat,
     this.totalOvers,
     this.powerplays,
     this.interruptions,
-    this.overSummaries,
     this.ended,
     this.legalBalls,
+    this.yetToBat,
+    this.overSummaries,
   });
 
-  Innings.fromJson(Map<String, dynamic> json)
+  InningsDetails.fromJson(Map<String, dynamic> json)
       : inningNumber = json['inningNumber'] as num?,
         battingTeam = (json['battingTeam'] as Map<String,dynamic>?) != null ? BattingTeam.fromJson(json['battingTeam'] as Map<String,dynamic>) : null,
         bowlingTeam = (json['bowlingTeam'] as Map<String,dynamic>?) != null ? BowlingTeam.fromJson(json['bowlingTeam'] as Map<String,dynamic>) : null,
-        batters = (json['batters'] as List?)?.map((dynamic e) => Batters.fromJson(e as Map<String,dynamic>)).toList(),
-        bowlers = (json['bowlers'] as List?)?.map((dynamic e) => Bowlers.fromJson(e as Map<String,dynamic>)).toList(),
-        extras = (json['extras'] as Map<String,dynamic>?) != null ? Extras.fromJson(json['extras'] as Map<String,dynamic>) : null,
+        batters = (json['batters'] as List?)?.map((dynamic e) => BattersDetails.fromJson(e as Map<String,dynamic>)).toList(),
+        bowlers = (json['bowlers'] as List?)?.map((dynamic e) => BowlersDetails.fromJson(e as Map<String,dynamic>)).toList(),
+        extras = (json['extras'] as Map<String,dynamic>?) != null ? ExtrasDetails.fromJson(json['extras'] as Map<String,dynamic>) : null,
         currentRunRate = json['currentRunRate'] as num?,
         requiredRunRate = json['requiredRunRate'],
-        target = json['target'],
-        fallOfWickets = (json['fallOfWickets'] as List?)?.map((dynamic e) => FallOfWickets.fromJson(e as Map<String,dynamic>)).toList(),
-        partnerships = (json['partnerships'] as List?)?.map((dynamic e) => Partnerships.fromJson(e as Map<String,dynamic>)).toList(),
-        maxOversPerDay = (json['maxOversPerDay'] as List?)?.map((dynamic e) => MaxOversPerDay.fromJson(e as Map<String,dynamic>)).toList(),
-        yetToBat = (json['yetToBat'] as List?)?.map((dynamic e) => YetToBat.fromJson(e as Map<String,dynamic>)).toList(),
-        totalOvers = json['totalOvers'] as num?,
-        powerplays = json['powerplays'] as List?,
+        target = json['target'] as num?,
+        fallOfWickets = (json['fallOfWickets'] as List?)?.map((dynamic e) => FallOfWicketsDetails.fromJson(e as Map<String,dynamic>)).toList(),
+        partnerships = (json['partnerships'] as List?)?.map((dynamic e) => PartnershipsDetails.fromJson(e as Map<String,dynamic>)).toList(),
+        maxOversPerDay = json['maxOversPerDay'],
+        totalOvers = json['totalOvers'],
+        powerplays = (json['powerplays'] as List?)?.map((dynamic e) => Powerplays.fromJson(e as Map<String,dynamic>)).toList(),
         interruptions = (json['interruptions'] as List?)?.map((dynamic e) => Interruptions.fromJson(e as Map<String,dynamic>)).toList(),
-        overSummaries = (json['overSummaries'] as List?)?.map((dynamic e) => OverSummaries.fromJson(e as Map<String,dynamic>)).toList(),
         ended = json['ended'] as bool?,
-        legalBalls = json['legalBalls'] as num?;
+        legalBalls = json['legalBalls'] as num?,
+        yetToBat = (json['yetToBat'] as List?)?.map((dynamic e) => YetToBatDetails.fromJson(e as Map<String,dynamic>)).toList(),
+        overSummaries = (json['overSummaries'] as List?)?.map((dynamic e) => OverSummariesDetails.fromJson(e as Map<String,dynamic>)).toList();
 
   Map<String, dynamic> toJson() => {
     'inningNumber' : inningNumber,
@@ -183,22 +183,55 @@ class Innings {
     'target' : target,
     'fallOfWickets' : fallOfWickets?.map((e) => e.toJson()).toList(),
     'partnerships' : partnerships?.map((e) => e.toJson()).toList(),
-    'maxOversPerDay' : maxOversPerDay?.map((e) => e.toJson()).toList(),
+    'maxOversPerDay' : maxOversPerDay,
     'totalOvers' : totalOvers,
-    'powerplays' : powerplays,
+    'powerplays' : powerplays?.map((e) => e.toJson()).toList(),
     'interruptions' : interruptions?.map((e) => e.toJson()).toList(),
-    'overSummaries' : overSummaries?.map((e) => e.toJson()).toList(),
     'ended' : ended,
-    'legalBalls' : legalBalls
+    'legalBalls' : legalBalls,
+    'yetToBat' : yetToBat?.map((e) => e.toJson()).toList(),
+    'overSummaries' : overSummaries?.map((e) => e.toJson()).toList()
   };
 }
+
+class Interruptions {
+  final num? inningNumber;
+  final dynamic deliveryId;
+  final dynamic reason;
+  final num? sequenceNumber;
+  final String? timestamp;
+
+  Interruptions({
+    this.inningNumber,
+    this.deliveryId,
+    this.reason,
+    this.sequenceNumber,
+    this.timestamp,
+  });
+
+  Interruptions.fromJson(Map<String, dynamic> json)
+      : inningNumber = json['inningNumber'] as num?,
+        deliveryId = json['deliveryId'],
+        reason = json['reason'],
+        sequenceNumber = json['sequenceNumber'] as num?,
+        timestamp = json['timestamp'] as String?;
+
+  Map<String, dynamic> toJson() => {
+    'inningNumber' : inningNumber,
+    'deliveryId' : deliveryId,
+    'reason' : reason,
+    'sequenceNumber' : sequenceNumber,
+    'timestamp' : timestamp
+  };
+}
+
 
 class BattingTeam {
   final num? teamId;
   final dynamic teamName;
   final num? runs;
   final num? wickets;
-  final num? overs;
+  final double? overs;
 
   BattingTeam({
     this.teamId,
@@ -213,7 +246,7 @@ class BattingTeam {
         teamName = json['teamName'],
         runs = json['runs'] as num?,
         wickets = json['wickets'] as num?,
-        overs = json['overs'] as num?;
+        overs = json['overs'] as double?;
 
   Map<String, dynamic> toJson() => {
     'teamId' : teamId,
@@ -255,7 +288,7 @@ class BowlingTeam {
   };
 }
 
-class Batters {
+class BattersDetails {
   final num? playerId;
   final String? playerName;
   final num? runs;
@@ -267,7 +300,7 @@ class Batters {
   final String? dismissal;
   final bool? isOut;
 
-  Batters({
+  BattersDetails({
     this.playerId,
     this.playerName,
     this.runs,
@@ -280,7 +313,7 @@ class Batters {
     this.isOut,
   });
 
-  Batters.fromJson(Map<String, dynamic> json)
+  BattersDetails.fromJson(Map<String, dynamic> json)
       : playerId = json['playerId'] as num?,
         playerName = json['playerName'] as String?,
         runs = json['runs'] as num?,
@@ -306,16 +339,16 @@ class Batters {
   };
 }
 
-class Bowlers {
+class BowlersDetails {
   final num? playerId;
   final String? playerName;
   final num? overs;
   final num? maidens;
   final num? runsConceded;
   final num? wickets;
-  final num? economyRate;
+  final double? economyRate;
 
-  Bowlers({
+  BowlersDetails({
     this.playerId,
     this.playerName,
     this.overs,
@@ -325,14 +358,14 @@ class Bowlers {
     this.economyRate,
   });
 
-  Bowlers.fromJson(Map<String, dynamic> json)
+  BowlersDetails.fromJson(Map<String, dynamic> json)
       : playerId = json['playerId'] as num?,
         playerName = json['playerName'] as String?,
         overs = json['overs'] as num?,
         maidens = json['maidens'] as num?,
         runsConceded = json['runsConceded'] as num?,
         wickets = json['wickets'] as num?,
-        economyRate = json['economyRate'] as num?;
+        economyRate = json['economyRate'] as double?;
 
   Map<String, dynamic> toJson() => {
     'playerId' : playerId,
@@ -345,7 +378,7 @@ class Bowlers {
   };
 }
 
-class Extras {
+class ExtrasDetails {
   final num? byes;
   final num? legByes;
   final num? wides;
@@ -353,7 +386,7 @@ class Extras {
   final num? penalty;
   final num? total;
 
-  Extras({
+  ExtrasDetails({
     this.byes,
     this.legByes,
     this.wides,
@@ -362,7 +395,7 @@ class Extras {
     this.total,
   });
 
-  Extras.fromJson(Map<String, dynamic> json)
+  ExtrasDetails.fromJson(Map<String, dynamic> json)
       : byes = json['byes'] as num?,
         legByes = json['legByes'] as num?,
         wides = json['wides'] as num?,
@@ -380,14 +413,14 @@ class Extras {
   };
 }
 
-class FallOfWickets {
+class FallOfWicketsDetails {
   final num? wicketNumber;
   final num? scoreAtFall;
-  final num? overAtFall;
+  final double? overAtFall;
   final num? playerId;
   final String? playerName;
 
-  FallOfWickets({
+  FallOfWicketsDetails({
     this.wicketNumber,
     this.scoreAtFall,
     this.overAtFall,
@@ -395,10 +428,10 @@ class FallOfWickets {
     this.playerName,
   });
 
-  FallOfWickets.fromJson(Map<String, dynamic> json)
+  FallOfWicketsDetails.fromJson(Map<String, dynamic> json)
       : wicketNumber = json['wicketNumber'] as num?,
         scoreAtFall = json['scoreAtFall'] as num?,
-        overAtFall = json['overAtFall'] as num?,
+        overAtFall = json['overAtFall'] as double?,
         playerId = json['playerId'] as num?,
         playerName = json['playerName'] as String?;
 
@@ -411,14 +444,14 @@ class FallOfWickets {
   };
 }
 
-class Partnerships {
+class PartnershipsDetails {
   final num? wicketNumber;
   final Batsman1? batsman1;
   final Batsman2? batsman2;
   final num? totalRuns;
   final num? totalBalls;
 
-  Partnerships({
+  PartnershipsDetails({
     this.wicketNumber,
     this.batsman1,
     this.batsman2,
@@ -426,7 +459,7 @@ class Partnerships {
     this.totalBalls,
   });
 
-  Partnerships.fromJson(Map<String, dynamic> json)
+  PartnershipsDetails.fromJson(Map<String, dynamic> json)
       : wicketNumber = json['wicketNumber'] as num?,
         batsman1 = (json['batsman1'] as Map<String,dynamic>?) != null ? Batsman1.fromJson(json['batsman1'] as Map<String,dynamic>) : null,
         batsman2 = (json['batsman2'] as Map<String,dynamic>?) != null ? Batsman2.fromJson(json['batsman2'] as Map<String,dynamic>) : null,
@@ -496,80 +529,45 @@ class Batsman2 {
   };
 }
 
-class MaxOversPerDay {
+class Powerplays {
   final num? inningNumber;
-  final num? day;
-  final num? maxOvers;
+  final num? firstOver;
+  final num? lastOver;
+  final String? type;
   final num? sequenceNumber;
 
-  MaxOversPerDay({
+  Powerplays({
     this.inningNumber,
-    this.day,
-    this.maxOvers,
+    this.firstOver,
+    this.lastOver,
+    this.type,
     this.sequenceNumber,
   });
 
-  MaxOversPerDay.fromJson(Map<String, dynamic> json)
+  Powerplays.fromJson(Map<String, dynamic> json)
       : inningNumber = json['inningNumber'] as num?,
-        day = json['day'] as num?,
-        maxOvers = json['maxOvers'] as num?,
+        firstOver = json['firstOver'] as num?,
+        lastOver = json['lastOver'] as num?,
+        type = json['type'] as String?,
         sequenceNumber = json['sequenceNumber'] as num?;
 
   Map<String, dynamic> toJson() => {
     'inningNumber' : inningNumber,
-    'day' : day,
-    'maxOvers' : maxOvers,
+    'firstOver' : firstOver,
+    'lastOver' : lastOver,
+    'type' : type,
     'sequenceNumber' : sequenceNumber
   };
 }
 
-class YetToBat {
-  final num? id;
-  final String? name;
-  final num? batOrder;
-  final String? role;
-  final String? battingHandedness;
-  final String? bowlingHandedness;
-  final String? bowlingStyle;
-
-  YetToBat({
-    this.id,
-    this.name,
-    this.batOrder,
-    this.role,
-    this.battingHandedness,
-    this.bowlingHandedness,
-    this.bowlingStyle,
-  });
-
-  YetToBat.fromJson(Map<String, dynamic> json)
-      : id = json['id'] as num?,
-        name = json['day'] as String?,
-        batOrder = json['batOrder'] as num?,
-        role = json['role'] as String?,
-        battingHandedness = json['battingHandedness'] as String?,
-        bowlingHandedness = json['bowlingHandedness'] as String?,
-        bowlingStyle = json['bowlingStyle'] as String?;
-
-  Map<String, dynamic> toJson() => {
-    'id' : id,
-    'name' : name,
-    'batOrder' : batOrder,
-    'role' : role,
-    'battingHandedness' : battingHandedness,
-    'bowlingHandedness' : bowlingHandedness,
-    'bowlingStyle' : bowlingStyle,
-  };
-}
-
-class Interruptions {
+class numerruptions {
   final num? inningNumber;
   final dynamic deliveryId;
   final dynamic reason;
   final num? sequenceNumber;
   final String? timestamp;
 
-  Interruptions({
+  numerruptions({
     this.inningNumber,
     this.deliveryId,
     this.reason,
@@ -577,7 +575,7 @@ class Interruptions {
     this.timestamp,
   });
 
-  Interruptions.fromJson(Map<String, dynamic> json)
+  numerruptions.fromJson(Map<String, dynamic> json)
       : inningNumber = json['inningNumber'] as num?,
         deliveryId = json['deliveryId'],
         reason = json['reason'],
@@ -592,21 +590,62 @@ class Interruptions {
     'timestamp' : timestamp
   };
 }
-class OverSummaries {
+
+class YetToBatDetails {
+  final num? id;
+  final String? name;
+  final num? batOrder;
+  final String? role;
+  final String? battingHandedness;
+  final String? bowlingHandedness;
+  final String? bowlingStyle;
+
+  YetToBatDetails({
+    this.id,
+    this.name,
+    this.batOrder,
+    this.role,
+    this.battingHandedness,
+    this.bowlingHandedness,
+    this.bowlingStyle,
+  });
+
+  YetToBatDetails.fromJson(Map<String, dynamic> json)
+      : id = json['id'] as num?,
+        name = json['name'] as String?,
+        batOrder = json['batOrder'] as num?,
+        role = json['role'] as String?,
+        battingHandedness = json['battingHandedness'] as String?,
+        bowlingHandedness = json['bowlingHandedness'] as String?,
+        bowlingStyle = json['bowlingStyle'] as String?;
+
+  Map<String, dynamic> toJson() => {
+    'id' : id,
+    'name' : name,
+    'batOrder' : batOrder,
+    'role' : role,
+    'battingHandedness' : battingHandedness,
+    'bowlingHandedness' : bowlingHandedness,
+    'bowlingStyle' : bowlingStyle
+  };
+}
+
+class OverSummariesDetails {
   final num? overNumber;
-  final List<dynamic>? balls;
+  final List<String>? balls;
   final num? totalRuns;
 
-  OverSummaries({
+  OverSummariesDetails({
     this.overNumber,
     this.balls,
     this.totalRuns,
   });
 
-  OverSummaries.fromJson(Map<String, dynamic> json)
+  OverSummariesDetails.fromJson(Map<String, dynamic> json)
       : overNumber = json['overNumber'] as num?,
-        balls = json['balls'] as List<dynamic>?,
-        totalRuns = json['totalRuns'];
+        balls = (json['balls'] as List?)?.map((dynamic e) => e as String).toList(),
+        totalRuns = json['totalRuns'] as num?;
+
   Map<String, dynamic> toJson() => {
     'overNumber' : overNumber,
     'balls' : balls,
@@ -617,27 +656,35 @@ class OverSummaries {
 class Result {
   final String? type;
   final num? winningTeamId;
+  final num? marginRuns;
+  final dynamic marginWickets;
   final num? sequenceNumber;
 
   Result({
     this.type,
     this.winningTeamId,
+    this.marginRuns,
+    this.marginWickets,
     this.sequenceNumber,
   });
 
   Result.fromJson(Map<String, dynamic> json)
       : type = json['type'] as String?,
         winningTeamId = json['winningTeamId'] as num?,
+        marginRuns = json['marginRuns'] as num?,
+        marginWickets = json['marginWickets'],
         sequenceNumber = json['sequenceNumber'] as num?;
 
   Map<String, dynamic> toJson() => {
     'type' : type,
     'winningTeamId' : winningTeamId,
+    'marginRuns' : marginRuns,
+    'marginWickets' : marginWickets,
     'sequenceNumber' : sequenceNumber
   };
 }
 
-class TeamLineups {
+class TeamLineupsDetails {
   final num? teamId;
   final num? sequenceNumber;
   final num? captainId;
@@ -646,7 +693,7 @@ class TeamLineups {
   final String? wicketKeeperName;
   final List<Lineup>? lineup;
 
-  TeamLineups({
+  TeamLineupsDetails({
     this.teamId,
     this.sequenceNumber,
     this.captainId,
@@ -656,7 +703,7 @@ class TeamLineups {
     this.lineup,
   });
 
-  TeamLineups.fromJson(Map<String, dynamic> json)
+  TeamLineupsDetails.fromJson(Map<String, dynamic> json)
       : teamId = json['teamId'] as num?,
         sequenceNumber = json['sequenceNumber'] as num?,
         captainId = json['captainId'] as num?,
@@ -679,38 +726,38 @@ class TeamLineups {
 class Lineup {
   final num? id;
   final String? name;
+  final num? batOrder;
   final String? role;
   final String? battingHandedness;
   final String? bowlingHandedness;
   final String? bowlingStyle;
-  final num? batOrder;
 
   Lineup({
     this.id,
     this.name,
+    this.batOrder,
     this.role,
     this.battingHandedness,
     this.bowlingHandedness,
     this.bowlingStyle,
-    this.batOrder,
   });
 
   Lineup.fromJson(Map<String, dynamic> json)
       : id = json['id'] as num?,
         name = json['name'] as String?,
+        batOrder = json['batOrder'] as num?,
         role = json['role'] as String?,
         battingHandedness = json['battingHandedness'] as String?,
         bowlingHandedness = json['bowlingHandedness'] as String?,
-        bowlingStyle = json['bowlingStyle'] as String?,
-        batOrder = json['batOrder'] as num?;
+        bowlingStyle = json['bowlingStyle'] as String?;
 
   Map<String, dynamic> toJson() => {
     'id' : id,
     'name' : name,
+    'batOrder' : batOrder,
     'role' : role,
     'battingHandedness' : battingHandedness,
     'bowlingHandedness' : bowlingHandedness,
-    'bowlingStyle' : bowlingStyle,
-    'batOrder' : batOrder
+    'bowlingStyle' : bowlingStyle
   };
 }

@@ -30,7 +30,7 @@ class Data {
   final dynamic confirmPassword;
   final List<int>? otpCreatedAt;
   final dynamic otp;
-  final int? status;
+  final bool? otpVerified;
 
   Data({
     this.id,
@@ -41,19 +41,19 @@ class Data {
     this.confirmPassword,
     this.otpCreatedAt,
     this.otp,
-    this.status,
+    this.otpVerified,
   });
 
   Data.fromJson(Map<String, dynamic> json)
       : id = json['id'] as String?,
-        name = json['name'] as String?,
+        name = json['fullName'] as String?,
         email = json['email'] as String?,
         country = json['country'] as String?,
         password = json['password'] as String?,
         confirmPassword = json['confirmPassword'],
         otpCreatedAt = (json['otpCreatedAt'] as List?)?.map((dynamic e) => e as int).toList(),
         otp = json['otp'],
-        status = json['status'] as int?;
+        otpVerified = json['otpVerified'] as bool?;
 
   Map<String, dynamic> toJson() => {
     'id' : id,
@@ -64,6 +64,6 @@ class Data {
     'confirmPassword' : confirmPassword,
     'otpCreatedAt' : otpCreatedAt,
     'otp' : otp,
-    'status' : status
+    'otpVerified' : otpVerified
   };
 }

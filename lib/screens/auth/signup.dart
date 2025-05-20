@@ -240,11 +240,12 @@ class _SignUpState extends State<SignUp> {
                            //BlocProvider.of<LiveScoreCubit>(context).helpAndSupportCall(emailController.text, queryController.text);
                            //    BlocProvider.of<LiveScoreCubit>(context).twoStepVerifyOTPCall(currentText);
                            Map<String, dynamic> signUpDetails = {
-                             "name": nameController.text,
+                             "fullName": nameController.text,
                              "email": emailController.text.toString().toLowerCase(),
                              "country": countryController.text,
                              "password": passwordController.text,
                              "confirmPassword": confirmPasswordController.text,
+                             "deviceToken": "abc123xyzDeviceToken"
                            };
                            print('signUpDetails:$signUpDetails');
                           BlocProvider.of<LiveScoreCubit>(context).signUpCall(signUpDetails);

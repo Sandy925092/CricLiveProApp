@@ -51,6 +51,8 @@ class _SeriesMatchApiScorecardScreenState
   dynamic teamAInnings;
   dynamic teamBInnings;
   dynamic maxLength;
+  dynamic currentRunRate;
+  dynamic RequiredRunRate;
   dynamic teamAIndex;
   dynamic teamBIndex;
   List<Batters>? batters;
@@ -63,6 +65,7 @@ class _SeriesMatchApiScorecardScreenState
   List<FallOfWickets>? fallOfWicketsteamB = [];
   List<Partnerships>? partnerships = [];
   List<YetToBat>? yetToBat = [];
+  List<OverSummaries>? overSummaries = [];
 
   void initState() {
     print("selected match");
@@ -132,7 +135,8 @@ class _SeriesMatchApiScorecardScreenState
             ?.indexWhere((lineup) => lineup.teamId == teamBId2) ??
         -1;
 
-    print(jsonEncode(teamALineUp));
+    print("jsonEncode(teamALineUp)");
+    print(jsonEncode(widget.matchList.teamLineups));
     super.initState();
   }
 
@@ -461,7 +465,7 @@ class _SeriesMatchApiScorecardScreenState
                                   color: CupertinoColors.systemGrey5),
                               child: Row(
                                 children: [
-                                  Text('CRR: 9.04',
+                                  Text('CRR: 9.26',
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 10,
@@ -475,6 +479,98 @@ class _SeriesMatchApiScorecardScreenState
                                 ],
                               ).pSymmetric(h: 10),
                             ),
+                            overSummaries?.length != 0
+                                ? Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: SizedBox(
+                                      height: 50,
+                                      width: MediaQuery.of(context).size.width,
+                                      child: ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: overSummaries?.length,
+                                        itemBuilder: (context, index) {
+                                          return Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                height: 30,
+                                                width: 60,
+                                                decoration: BoxDecoration(
+                                                    color: Colors.grey,
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(10))),
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(4.0),
+                                                  child: Center(
+                                                    child: Text(
+                                                        "Over ${overSummaries?[index].overNumber.toString() ?? ""}",
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight.w500)),
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 30,
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                child: ListView.builder(
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  itemCount: overSummaries?[index]
+                                                      .balls
+                                                      ?.length,
+                                                  itemBuilder: (context, index1) {
+                                                    return Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 8.0),
+                                                      child: Container(
+                                                        height: 30,
+                                                        width: 30,
+                                                        decoration: BoxDecoration(
+                                                          border: Border.all(color: Colors.grey),
+                                                          shape: BoxShape.circle,),
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(4.0),
+                                                          child: Center(
+                                                            child: Text(
+                                                                "${overSummaries?[index].balls?[index1].toString() ?? ""}",
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontSize: 12,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500)),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              )
+                                            ],
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                )
+                                : SizedBox(),
                             SizedBox(
                               height: 8.h,
                               child: Padding(
@@ -734,32 +830,37 @@ class _SeriesMatchApiScorecardScreenState
                                               fontWeight: FontWeight.bold,
                                               color: Colors.white),
                                         ),
-                                        GridView.builder(
-                                          gridDelegate:
-                                              SliverGridDelegateWithFixedCrossAxisCount(
-                                                  crossAxisCount: 2),
-                                          itemCount: yetToBat?.length,
-                                          itemBuilder: (context, index) {
-
-                                            print("in the list");
-                                            print(yetToBat?[index].name.toString());
-                                            return Row(
-                                              children: [
-                                                Image.asset(
-                                                    "assets/images/iv_player_image.png"),
-                                                Text(
-                                                  yetToBat?[index].name ==
-                                                          "Unknown Player"
-                                                      ? '${yetToBat?[index].id}'
-                                                      : '${yetToBat?[index].name}',
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.white,
-                                                  ),
-                                                )
-                                              ],
-                                            );
-                                          },
+                                        SizedBox(
+                                          height: 200,
+                                          child: GridView.builder(
+                                            gridDelegate:
+                                                SliverGridDelegateWithFixedCrossAxisCount(
+                                                    crossAxisCount: 2),
+                                            itemCount: yetToBat?.length,
+                                            itemBuilder: (context, index) {
+                                              print("in the list");
+                                              print(yetToBat?[index]
+                                                  .name
+                                                  .toString());
+                                              return Row(
+                                                children: [
+                                                  Image.asset(
+                                                      "assets/images/iv_player_image.png"),
+                                                  Text(
+                                                    yetToBat?[index].name ==
+                                                            "Unknown Player"
+                                                        ? '${yetToBat?[index].id}'
+                                                        : '${yetToBat?[index].name}',
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.white,
+                                                    ),
+                                                  )
+                                                ],
+                                              );
+                                            },
+                                          ),
                                         )
                                       ],
                                     ),
@@ -1640,6 +1741,9 @@ class _SeriesMatchApiScorecardScreenState
     if (selectedInning.yetToBat != null) {
       yetToBat = selectedInning.yetToBat ?? [];
     }
+    if (selectedInning.overSummaries != null) {
+      overSummaries = selectedInning.overSummaries ?? [];
+    }
 
     // if (teamAInnings != null) {
     //   for (var inning in teamAInnings) {
@@ -1656,7 +1760,7 @@ class _SeriesMatchApiScorecardScreenState
     updateTabController();
 
     print("updatedMatch.toString()");
-    print(jsonEncode(yetToBat));
+    print(jsonEncode(overSummaries));
     setState(() {});
   }
 
@@ -1719,9 +1823,13 @@ class _SeriesMatchApiScorecardScreenState
     if (selectedInning.yetToBat != null) {
       yetToBat = selectedInning.yetToBat ?? [];
     }
+    if (selectedInning.overSummaries != null) {
+      overSummaries = selectedInning.overSummaries ?? [];
+    }
 
     print("updatedMatch 2.toString()");
     print(jsonEncode(yetToBat));
+    print(jsonEncode(overSummaries));
 
     // if (teamBInnings != null) {
     //   for (var inning in teamBInnings) {
