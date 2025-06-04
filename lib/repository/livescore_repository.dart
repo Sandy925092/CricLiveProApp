@@ -7,9 +7,11 @@ import 'package:kisma_livescore/responses/finished_match.dart';
 import 'package:kisma_livescore/responses/finishedmatchdetails.dart';
 import 'package:kisma_livescore/responses/finishedserires.dart';
 import 'package:kisma_livescore/responses/get_country_code_abd_flag_response.dart';
+import 'package:kisma_livescore/responses/likedMatch.dart';
 import 'package:kisma_livescore/responses/live_score_response.dart';
 import 'package:kisma_livescore/responses/login_response.dart';
 import 'package:kisma_livescore/responses/privacy_policy_response.dart';
+import 'package:kisma_livescore/responses/searchResponse.dart';
 import 'package:kisma_livescore/responses/sign_up_response.dart';
 import 'package:kisma_livescore/responses/socketlivematch.dart';
 import 'package:kisma_livescore/responses/terms_and_conditions_response.dart';
@@ -99,11 +101,14 @@ class LiveScoreRepository {
   }
 
 // get upcoming Series
-  Future<ResponseData> getUpcomingSeriesData() async {
+  Future<ResponseData> getUpcomingSeriesData(
+      String token, String pageNo) async {
     try {
       final response =
-       //   await ApiService().sendRequest.get("/matches/upcoming-series");
-          await ApiService().sendRequest.get("/matches/upcoming-series");
+          //   await ApiService().sendRequest.get("/matches/upcoming-series");
+          await ApiService(token: token)
+              .sendRequest
+              .get("/matches/upcoming-series?page=${pageNo}&size=10");
       return ResponseData(
           statusCode: response.statusCode,
           response: UpcomingSeriesResponse.fromJson(response.data));
@@ -116,6 +121,28 @@ class LiveScoreRepository {
   }
 
 
+
+// get upcoming Series
+  Future<ResponseData> getLikedMatch(
+      String token) async {
+    try {
+      final response =
+      //   await ApiService().sendRequest.get("/matches/upcoming-series");
+      await ApiService(token: token)
+          .sendRequest
+          .get("/liked-fixtures/grouped-by-series");
+          // .get("http://192.168.29.11:8080/api/liked-fixtures/grouped-by-series");
+      return ResponseData(
+          statusCode: response.statusCode,
+          response: LikedMatchResponse.fromJson(response.data));
+    } on DioException catch (e) {
+      throw ErrorData(
+          message: e.response!.data['message'], code: e.response!.statusCode);
+    } on Exception catch (_) {
+      rethrow;
+    }
+  }
+
   // get live match data api
   Future<ResponseData> getLiveMatch() async {
     try {
@@ -126,7 +153,8 @@ class LiveScoreRepository {
       final dataList = response.data as List;
 
       final parsedList = dataList
-          .map((item) => SocketLiveMatchResponse.fromJson(item as Map<String, dynamic>))
+          .map((item) =>
+              SocketLiveMatchResponse.fromJson(item as Map<String, dynamic>))
           .toList();
 
       return ResponseData(
@@ -141,19 +169,38 @@ class LiveScoreRepository {
     }
   }
 
+  // get search mateches
+  Future<ResponseData> searchMatches(String query) async {
+    try {
+      final response = await ApiService().sendRequest.get(
+        "http://34.238.14.72:8080/api/matches/completed/search?query=${query}");
+          // "/matches/completed/search?query=${query}");
+
+      return ResponseData(
+          statusCode: response.statusCode,
+          response: SearchResponse.fromJson(response.data));
+    } on DioException catch (e) {
+      throw ErrorData(
+          message: e.response?.data['message'], code: e.response?.statusCode);
+    } on Exception catch (_) {
+      rethrow;
+    }
+  }
 
   // Finished Series
 
-
-  Future<ResponseData> getFinishesSeries(String pageno, ) async {
+  Future<ResponseData> getFinishesSeries(
+    String pageno,
+  ) async {
     try {
-      final response =
-      await ApiService().sendRequest.get("/series/started?page=${pageno}&size=10");
+      final response = await ApiService()
+          .sendRequest
+          .get("/series/started?page=${pageno}&size=10");
       // await ApiService().sendRequest.get("http://192.168.4.25:8080/api/series/started?page=0&size=10");
       return ResponseData(
           statusCode: response.statusCode,
           response: FinishedSeriesResponse.fromJson(response.data));
-          // response: FinishedMatchResponse.fromJson(response.data));
+      // response: FinishedMatchResponse.fromJson(response.data));
     } on DioException catch (e) {
       throw ErrorData(
           message: e.response!.data['message'], code: e.response!.statusCode);
@@ -164,11 +211,12 @@ class LiveScoreRepository {
 
   // Finished Series
 
-
-  Future<ResponseData> getMatchDetails(String matchId, ) async {
+  Future<ResponseData> getMatchDetails(
+    String matchId,
+  ) async {
     try {
       final response =
-      await ApiService().sendRequest.get("/test-bss/${matchId}");
+          await ApiService().sendRequest.get("/test-bss/${matchId}");
       // await ApiService().sendRequest.get("http://192.168.4.25:8080/api/series/started?page=0&size=10");
       return ResponseData(
           statusCode: response.statusCode,
@@ -182,10 +230,11 @@ class LiveScoreRepository {
     }
   }
 
-  Future<ResponseData> getFinishesMatch(String pageno,String seriesId ) async {
+  Future<ResponseData> getFinishesMatch(String pageno, String seriesId) async {
     try {
-      final response =
-      await ApiService().sendRequest.get("/matches/completed-matches/${seriesId}");
+      final response = await ApiService()
+          .sendRequest
+          .get("/matches/completed-matches/${seriesId}");
       // await ApiService().sendRequest.get("http://192.168.4.25:8080/api/matches/completed-matches/${seriesId}");
       return ResponseData(
           statusCode: response.statusCode,
@@ -235,12 +284,9 @@ class LiveScoreRepository {
   Future<ResponseData> verifyOtp(String email, String otp) async {
     try {
       final response = await ApiService().sendRequest.post(
-            "/auth/verify-otp",
-            data: {
-              "email":email,
-              "otp":otp
-            },
-          );
+        "/auth/verify-otp",
+        data: {"email": email, "otp": otp},
+      );
       return ResponseData(
         statusCode: response.statusCode,
         response: response.data["message"],
@@ -275,13 +321,13 @@ class LiveScoreRepository {
       String email, String newPassword, String confirmNewPassword) async {
     try {
       final response = await ApiService().sendRequest.post(
-            "/auth/reset-password",
-             data: {
-              "email":email,
-               "newPassword":newPassword,
-               "confirmPassword":confirmNewPassword
-             },
-          );
+        "/auth/reset-password",
+        data: {
+          "email": email,
+          "newPassword": newPassword,
+          "confirmPassword": confirmNewPassword
+        },
+      );
       return ResponseData(
         statusCode: response.statusCode,
         response: response.data["message"],
@@ -297,13 +343,49 @@ class LiveScoreRepository {
   Future<ResponseData> login(String email, String password) async {
     try {
       final response = await ApiService().sendRequest.post(
-            "/auth/login",
-             data: {
-              "email":email,
-               "password":password,
-               "deviceToken":"12345"
-             },
+        "/auth/login",
+        data: {"email": email, "password": password, "deviceToken": "12345"},
+      );
+      return ResponseData(
+          statusCode: response.statusCode,
+          //  response: response.data["message"],
+          response: LoginResponse.fromJson(response.data));
+    } on DioException catch (e) {
+      throw ErrorData(
+          message: e.response!.data['message'], code: e.response!.statusCode);
+    } on Exception catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<ResponseData> likeMatch(
+      String token, Map<String, dynamic> matchDetails) async {
+    print("match details");
+    print(matchDetails);
+    try {
+      final response = await ApiService(token: token).sendRequest.post(
+            "/liked-fixtures/like",
+            data: matchDetails,
           );
+      return ResponseData(
+          statusCode: response.statusCode,
+          //  response: response.data["message"],
+          response: LoginResponse.fromJson(response.data));
+    } on DioException catch (e) {
+      throw ErrorData(
+          message: e.response!.data['message'], code: e.response!.statusCode);
+    } on Exception catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<ResponseData> unLikeMatch(
+      String token, String fixtureId) async {
+    try {
+      final response = await ApiService(token: token).sendRequest.delete(
+        "/liked-fixtures/unlike/${fixtureId}",
+        // "http://192.168.29.11:8080/api/liked-fixtures/unlike/${fixtureId}",
+      );
       return ResponseData(
           statusCode: response.statusCode,
           //  response: response.data["message"],

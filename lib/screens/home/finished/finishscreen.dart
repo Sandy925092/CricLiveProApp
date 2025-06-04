@@ -57,13 +57,19 @@ class _FinishedScreenState extends State<FinishedScreen> {
   }
 
   Future<void> _refreshPage() async {
-    // await getFinished();
+    _pagingController = PagingController(
+      firstPageKey: 0,
+    );
+
+    print("call inittstate1");
+
+    _fetchPage(pageNo);
+
+    _pagingController.addPageRequestListener((pageKey) {
+      _fetchPage(pageKey);
+    });
   }
 
-  void fetchNextPage() async {
-    pageNo++;
-    // await getFinished(isLoadMore: true);
-  }
 
   @override
   void initState() {
@@ -155,12 +161,21 @@ class _FinishedScreenState extends State<FinishedScreen> {
             FinishedMatchResponse finishedMatchResponse =
                 state.responseData?.response as FinishedMatchResponse;
             Loader.hide();
+            matchData.clear();
+
+            print("Match data details");
+            print(matchData.length);
 
             if (finishedMatchResponse.data?.length != 0) {
               matchData.clear();
               matchData.addAll(finishedMatchResponse.data ?? []);
             }
+            else{
+              matchData.clear();
+            }
           }
+          print("Match data details after");
+          print(matchData.length);
 
           // if (state.status == LiveScoreStatus.finishedSeriesSuccess) {
           //   var newData = (state.responseData?.response as FinishedMatchResponse).data;
@@ -188,6 +203,7 @@ class _FinishedScreenState extends State<FinishedScreen> {
             String message = state.errorData?.message ?? state.error ?? '';
 
             print(message);
+            matchData.clear();
             UiHelper.toastMessage(message);
           }
 
@@ -307,8 +323,9 @@ class _FinishedScreenState extends State<FinishedScreen> {
                                         onExpansionChanged: (expanded) async {
                                           expandedIndex =
                                               expanded ? index : null;
-                                          print(
-                                              "Tapped index: $index, expanded: $expanded");
+                                          print("Tapped index: $index, expanded: ${seriesName[index]
+                                              .id2
+                                              .toString()}");
                                           await BlocProvider.of<LiveScoreCubit>(
                                                   context)
                                               .getFinishMatch(
@@ -485,7 +502,7 @@ class _FinishedScreenState extends State<FinishedScreen> {
                                                                           alignment:
                                                                               TextAlign.center,
                                                                           data:
-                                                                              items.winningTeamName??"N/A",
+                                                                              "${"${items.winningTeamName} won"??"N/A"}",
                                                                           fontSize:
                                                                               10,
                                                                           fontWeight:

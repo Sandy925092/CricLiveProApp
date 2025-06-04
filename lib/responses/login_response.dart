@@ -25,6 +25,7 @@ class Data {
   final String? id;
   final String? name;
   final String? email;
+  final String? token;
   final String? country;
   final String? password;
   final dynamic confirmPassword;
@@ -36,6 +37,7 @@ class Data {
     this.id,
     this.name,
     this.email,
+    this.token,
     this.country,
     this.password,
     this.confirmPassword,
@@ -48,6 +50,7 @@ class Data {
       : id = json['id'] as String?,
         name = json['fullName'] as String?,
         email = json['email'] as String?,
+        token = json['token'] as String?,
         country = json['country'] as String?,
         password = json['password'] as String?,
         confirmPassword = json['confirmPassword'],
@@ -59,6 +62,7 @@ class Data {
     'id' : id,
     'name' : name,
     'email' : email,
+    'token' : token,
     'country' : country,
     'password' : password,
     'confirmPassword' : confirmPassword,

@@ -21,7 +21,8 @@ class FinishedMatchScorecardScreen extends StatefulWidget {
   String matchId;
   String winningTeam;
 
-  FinishedMatchScorecardScreen({super.key, required this.matchId, required this.winningTeam});
+  FinishedMatchScorecardScreen(
+      {super.key, required this.matchId, required this.winningTeam});
 
   @override
   State<FinishedMatchScorecardScreen> createState() =>
@@ -37,9 +38,7 @@ class _FinishedMatchScorecardScreenState
   FinishedMatchDetailsResponse finishedMatchDetailsResponse =
       FinishedMatchDetailsResponse();
 
-
   late ScrollController _scrollController;
-
 
   final allInnings = <Map<String, dynamic>>[];
   var students = {
@@ -61,8 +60,8 @@ class _FinishedMatchScorecardScreenState
   dynamic RequiredRunRate;
   dynamic teamAIndex;
   dynamic teamBIndex;
-  String teamAName ="";
-  String teamBName ="";
+  String teamAName = "";
+  String teamBName = "";
   List<BattersDetails>? batters;
   List<BowlersDetails>? bowlers;
   late ExtrasDetails teamAExtras;
@@ -92,6 +91,7 @@ class _FinishedMatchScorecardScreenState
 
     super.initState();
   }
+
   @override
   void dispose() {
     _scrollController.dispose();
@@ -140,11 +140,29 @@ class _FinishedMatchScorecardScreenState
                 if (finishedMatchDetailsResponse.data != null) {
                   teamAId = finishedMatchDetailsResponse.data?.teamAId ?? 0;
                   teamBId = finishedMatchDetailsResponse.data?.teamBId;
+
                   teamAInnings = finishedMatchDetailsResponse.data?.innings
-                      ?.where((inning) => inning.battingTeam?.teamId == teamAId)
+                      ?.where((inning) => inning.inningNumber == 1)
                       .toList();
+
                   if (teamAInnings != null) {
-                    for (var inning in teamAInnings) {
+                    for (var inning in teamAInnings!) {
+                      if (inning.battingTeam.teamId == teamAId) {
+                        teamAName = finishedMatchDetailsResponse.data?.teamAName
+                                .toString() ??
+                            "";
+                        teamBName = finishedMatchDetailsResponse.data?.teamBName
+                                .toString() ??
+                            "";
+                      } else {
+                        teamBName = finishedMatchDetailsResponse.data?.teamAName
+                                .toString() ??
+                            "";
+                        teamAName = finishedMatchDetailsResponse.data?.teamBName
+                                .toString() ??
+                            "";
+                      }
+
                       if (inning.fallOfWickets != null) {
                         fallOfWicketsteamA?.addAll(inning.fallOfWickets!);
                       }
@@ -158,10 +176,26 @@ class _FinishedMatchScorecardScreenState
                   }
 
                   teamBInnings = finishedMatchDetailsResponse.data?.innings
-                      ?.where((inning) => inning.battingTeam?.teamId == teamBId)
+                      ?.where((inning) => inning.inningNumber == 2)
                       .toList();
+
                   if (teamBInnings != null) {
-                    for (var inning in teamBInnings) {
+                    for (var inning in teamBInnings!) {
+                      if (inning.battingTeam.teamId != teamAId) {
+                        teamAName = finishedMatchDetailsResponse.data?.teamAName
+                                .toString() ??
+                            "";
+                        teamBName = finishedMatchDetailsResponse.data?.teamBName
+                                .toString() ??
+                            "";
+                      } else {
+                        teamBName = finishedMatchDetailsResponse.data?.teamAName
+                                .toString() ??
+                            "";
+                        teamAName = finishedMatchDetailsResponse.data?.teamBName
+                                .toString() ??
+                            "";
+                      }
                       if (inning.fallOfWickets != null) {
                         fallOfWicketsteamB?.addAll(inning.fallOfWickets!);
                       }
@@ -173,6 +207,40 @@ class _FinishedMatchScorecardScreenState
                       }
                     }
                   }
+
+                  // teamAInnings = finishedMatchDetailsResponse.data?.innings
+                  //     ?.where((inning) => inning.battingTeam?.teamId == teamAId)
+                  //     .toList();
+                  // if (teamAInnings != null) {
+                  //   for (var inning in teamAInnings) {
+                  //     if (inning.fallOfWickets != null) {
+                  //       fallOfWicketsteamA?.addAll(inning.fallOfWickets!);
+                  //     }
+                  //     if (inning.partnerships != null) {
+                  //       partnerships?.addAll(inning.partnerships!);
+                  //     }
+                  //     if (inning.extras != null) {
+                  //       teamAExtras = inning.extras;
+                  //     }
+                  //   }
+                  // }
+                  //
+                  // teamBInnings = finishedMatchDetailsResponse.data?.innings
+                  //     ?.where((inning) => inning.battingTeam?.teamId == teamBId)
+                  //     .toList();
+                  // if (teamBInnings != null) {
+                  //   for (var inning in teamBInnings) {
+                  //     if (inning.fallOfWickets != null) {
+                  //       fallOfWicketsteamB?.addAll(inning.fallOfWickets!);
+                  //     }
+                  //     if (inning.partnerships != null) {
+                  //       partnerships?.addAll(inning.partnerships!);
+                  //     }
+                  //     if (inning.extras != null) {
+                  //       teamBExtras = inning.extras;
+                  //     }
+                  //   }
+                  // }
 
                   print("fall of wickets");
                   print(jsonEncode(fallOfWicketsteamA));
@@ -204,13 +272,10 @@ class _FinishedMatchScorecardScreenState
                   print("jsonEncode(teamALineUp)");
                   print(jsonEncode(
                       finishedMatchDetailsResponse.data?.teamLineups));
+                  print(teamAName);
+                  print(teamBName);
 
-
-                  teamAName = finishedMatchDetailsResponse.data?.teamAName.toString()??"";
-                  teamBName = finishedMatchDetailsResponse.data?.teamBName.toString()??"";
-                  setState(() {
-
-                  });
+                  setState(() {});
                 }
               }
 
@@ -268,13 +333,13 @@ class _FinishedMatchScorecardScreenState
                                         width: 25.w,
                                         child: commonText(
                                           alignment: TextAlign.center,
-                                          // data: updatedMatch?.teamAName ?? updatedMatch?.teamAId.toString() ?? '',
-                                          data: finishedMatchDetailsResponse
-                                                  .data?.teamAName ??
-                                              finishedMatchDetailsResponse
-                                                  .data?.teamAId
-                                                  .toString() ??
-                                              '',
+                                          data: teamAName ?? '',
+                                          // data: finishedMatchDetailsResponse
+                                          //         .data?.teamAName ??
+                                          //     finishedMatchDetailsResponse
+                                          //         .data?.teamAId
+                                          //         .toString() ??
+                                          //     '',
                                           fontSize: 14,
                                           fontWeight: FontWeight.w400,
                                           fontFamily: "Poppins",
@@ -365,11 +430,11 @@ class _FinishedMatchScorecardScreenState
                                     children: [
                                       commonText(
                                         alignment: TextAlign.center,
-                                        data: finishedMatchDetailsResponse
-                                                .data?.teamBName
-                                                .toString() ??
-                                            "",
-                                        // data: updatedMatch.teamBName.toString() ?? "",
+                                        // data: finishedMatchDetailsResponse
+                                        //         .data?.teamBName
+                                        //         .toString() ??
+                                        //     "",
+                                        data: teamBName ?? "",
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
                                         fontFamily: "Poppins",
@@ -522,11 +587,31 @@ class _FinishedMatchScorecardScreenState
                                 child: Row(
                                   children: [
                                     Spacer(),
-                                    Text('${widget.winningTeam} won',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w700)),
+                                    finishedMatchDetailsResponse
+                                                .data?.result?.marginRuns !=
+                                            null
+                                        ? Text(
+                                            '${widget.winningTeam} by ${finishedMatchDetailsResponse.data?.result?.marginRuns} runs ',
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w700))
+                                        : finishedMatchDetailsResponse.data
+                                                    ?.result?.marginWickets !=
+                                                null
+                                            ? Text(
+                                                '${widget.winningTeam} by ${finishedMatchDetailsResponse.data?.result?.marginWickets} wickets',
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 12,
+                                                    fontWeight:
+                                                        FontWeight.w700))
+                                            : Text(' ${widget.winningTeam} won',
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 12,
+                                                    fontWeight:
+                                                        FontWeight.w700)),
                                     SizedBox(
                                       width: 10,
                                     )
@@ -541,113 +626,117 @@ class _FinishedMatchScorecardScreenState
                               ),
                               overSummaries?.length != 0
                                   ? Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: SizedBox(
-                                  height: 50,
-                                  child: ListView.builder(
-                                    reverse: true,
-                                    controller: _scrollController, // 👈 attach controller here
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: SizedBox(
+                                        height: 50,
+                                        child: ListView.builder(
+                                          reverse: true,
+                                          controller: _scrollController,
+                                          // 👈 attach controller here
 
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: overSummaries?.length,
-                                    itemBuilder: (context, index) {
-                                      return Padding(
-                                        padding: const EdgeInsets.only(right: 8.0),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                              height: 30,
-                                              width: 60,
-                                              decoration: BoxDecoration(
-                                                  color: Colors.grey,
-                                                  borderRadius:
-                                                  BorderRadius.all(
-                                                      Radius.circular(
-                                                          10))),
-                                              child: Padding(
-                                                padding:
-                                                const EdgeInsets.all(4.0),
-                                                child: Center(
-                                                  child: Text(
-                                                      "Over ${((overSummaries?[index].overNumber ?? 0) + 1)}",
-                                                      textAlign:
-                                                      TextAlign.center,
-                                                      style: TextStyle(
-                                                          color: Colors.black,
-                                                          fontSize: 12,
-                                                          fontWeight:
-                                                          FontWeight
-                                                              .w500)),
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 30,
-                                              // width: MediaQuery.of(context)
-                                              //     .size
-                                              //     .width,
-                                              child: ListView.builder(
-                                                shrinkWrap: true,
-                                                scrollDirection:
-                                                Axis.horizontal,
-                                                itemCount:
-                                                overSummaries?[index]
-                                                    .balls
-                                                    ?.length,
-                                                itemBuilder:
-                                                    (context, index1) {
-                                                  return Padding(
-                                                    padding:
-                                                    const EdgeInsets.only(
-                                                        left: 8.0),
-                                                    child: Container(
-                                                      height: 30,
-                                                      width: 30,
-                                                      decoration:
-                                                      BoxDecoration(
-                                                        border: Border.all(
-                                                            color:
-                                                            Colors.grey),
-                                                        shape:
-                                                        BoxShape.circle,
-                                                      ),
-                                                      child: Padding(
-                                                        padding:
-                                                        const EdgeInsets
-                                                            .all(4.0),
-                                                        child: Center(
-                                                          child: Text(
-                                                              "${overSummaries?[index].balls?[index1].toString() ?? ""}",
-                                                              textAlign:
-                                                              TextAlign
-                                                                  .center,
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontSize:
-                                                                  12,
-                                                                  fontWeight:
-                                                                  FontWeight
-                                                                      .w500)),
-                                                        ),
+                                          shrinkWrap: true,
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: overSummaries?.length,
+                                          itemBuilder: (context, index) {
+                                            return Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 8.0),
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  Container(
+                                                    height: 30,
+                                                    width: 60,
+                                                    decoration: BoxDecoration(
+                                                        color: Colors.grey,
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    10))),
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              4.0),
+                                                      child: Center(
+                                                        child: Text(
+                                                            "Over ${((overSummaries?[index].overNumber ?? 0) + 1)}",
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .black,
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500)),
                                                       ),
                                                     ),
-                                                  );
-                                                },
+                                                  ),
+                                                  SizedBox(
+                                                    height: 30,
+                                                    // width: MediaQuery.of(context)
+                                                    //     .size
+                                                    //     .width,
+                                                    child: ListView.builder(
+                                                      shrinkWrap: true,
+                                                      scrollDirection:
+                                                          Axis.horizontal,
+                                                      itemCount:
+                                                          overSummaries?[index]
+                                                              .balls
+                                                              ?.length,
+                                                      itemBuilder:
+                                                          (context, index1) {
+                                                        return Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                                  left: 8.0),
+                                                          child: Container(
+                                                            height: 30,
+                                                            width: 30,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              border: Border.all(
+                                                                  color: Colors
+                                                                      .grey),
+                                                              shape: BoxShape
+                                                                  .circle,
+                                                            ),
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(4.0),
+                                                              child: Center(
+                                                                child: Text(
+                                                                    "${overSummaries?[index].balls?[index1].toString() ?? ""}",
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        fontSize:
+                                                                            12,
+                                                                        fontWeight:
+                                                                            FontWeight.w500)),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        );
+                                                      },
+                                                    ),
+                                                  )
+                                                ],
                                               ),
-                                            )
-                                          ],
+                                            );
+                                          },
                                         ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              )
+                                      ),
+                                    )
                                   : SizedBox(),
                               SizedBox(
                                 height: 8.h,
@@ -828,22 +917,20 @@ class _FinishedMatchScorecardScreenState
                                                               children: [
                                                                 SizedBox(
                                                                     width: 4),
-                                                                batter
-                                                                            .isOut ==
+                                                                batter.isOut ==
                                                                         true
-                                                                    ? SizedBox( width: MediaQuery.of(
-                                                                    context)
-                                                                    .size
-                                                                    .width *
-                                                                    0.2,
-                                                                      child: Text(
+                                                                    ? SizedBox(
+                                                                        width: MediaQuery.of(context).size.width *
+                                                                            0.2,
+                                                                        child:
+                                                                            Text(
                                                                           batter
                                                                               .dismissal
                                                                               .toString(),
                                                                           style:
                                                                               TextStyle(fontSize: 12),
                                                                         ),
-                                                                    )
+                                                                      )
                                                                     : Icon(
                                                                         Icons
                                                                             .sports_cricket,
@@ -928,107 +1015,116 @@ class _FinishedMatchScorecardScreenState
                                               ],
                                             ),
                                           ),
-                                          yetToBat?.length!=0?   Container(
-                                            margin: const EdgeInsets.only(
-                                                left: 10.0, right: 10),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  "Yet to bat",
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.white),
-                                                ),
-                                                GridView.builder(
-                                                  shrinkWrap: true,
-                                                  gridDelegate:
-                                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                                          crossAxisCount: 2,
-                                                          crossAxisSpacing: 10,
-                                                          childAspectRatio:
-                                                              2.5),
-                                                  itemCount: yetToBat?.length,
-                                                  physics:
-                                                      NeverScrollableScrollPhysics(),
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    print("in the list");
-                                                    print(yetToBat?[index]
-                                                        .name
-                                                        .toString());
-                                                    return Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              6.0),
-                                                      child: Container(
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .all(Radius
-                                                                        .circular(
-                                                                            10)),
+                                          yetToBat?.length != 0
+                                              ? Container(
+                                                  margin: const EdgeInsets.only(
+                                                      left: 10.0, right: 10),
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        "Yet to bat",
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
                                                             color:
-                                                                Color.fromARGB(
-                                                                    255,
-                                                                    226,
-                                                                    226,
-                                                                    226)),
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: Row(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              ClipRRect(
-                                                                borderRadius: BorderRadius
-                                                                    .all(Radius
-                                                                        .circular(
-                                                                            20)),
-                                                                child: Image.asset(
-                                                                    "assets/images/iv_player_image.png"),
-                                                              ),
-                                                              SizedBox(
-                                                                width: 5,
-                                                              ),
-                                                              Center(
-                                                                child: SizedBox(
-                                                                  width: 100,
-                                                                  child: Text(
-                                                                    yetToBat?[index].name.toString() ==
-                                                                            "null"
-                                                                        ? '${yetToBat?[index].id}'
-                                                                        : '${yetToBat?[index].name}',
-                                                                    maxLines: 2,
-                                                                    // textAlign: TextAlign.center,
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      color: Colors
-                                                                          .black,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              )
-                                                            ],
-                                                          ),
-                                                        ),
+                                                                Colors.white),
                                                       ),
-                                                    );
-                                                  },
+                                                      GridView.builder(
+                                                        shrinkWrap: true,
+                                                        gridDelegate:
+                                                            SliverGridDelegateWithFixedCrossAxisCount(
+                                                                crossAxisCount:
+                                                                    2,
+                                                                crossAxisSpacing:
+                                                                    10,
+                                                                childAspectRatio:
+                                                                    2.5),
+                                                        itemCount:
+                                                            yetToBat?.length,
+                                                        physics:
+                                                            NeverScrollableScrollPhysics(),
+                                                        itemBuilder:
+                                                            (context, index) {
+                                                          print("in the list");
+                                                          print(yetToBat?[index]
+                                                              .name
+                                                              .toString());
+                                                          return Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(6.0),
+                                                            child: Container(
+                                                              decoration: BoxDecoration(
+                                                                  borderRadius:
+                                                                      BorderRadius.all(
+                                                                          Radius.circular(
+                                                                              10)),
+                                                                  color: Color
+                                                                      .fromARGB(
+                                                                          255,
+                                                                          226,
+                                                                          226,
+                                                                          226)),
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        8.0),
+                                                                child: Row(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
+                                                                  children: [
+                                                                    ClipRRect(
+                                                                      borderRadius:
+                                                                          BorderRadius.all(
+                                                                              Radius.circular(20)),
+                                                                      child: Image
+                                                                          .asset(
+                                                                              "assets/images/iv_player_image.png"),
+                                                                    ),
+                                                                    SizedBox(
+                                                                      width: 5,
+                                                                    ),
+                                                                    Center(
+                                                                      child:
+                                                                          SizedBox(
+                                                                        width:
+                                                                            100,
+                                                                        child:
+                                                                            Text(
+                                                                          yetToBat?[index].name.toString() == "null"
+                                                                              ? '${yetToBat?[index].id}'
+                                                                              : '${yetToBat?[index].name}',
+                                                                          maxLines:
+                                                                              2,
+                                                                          // textAlign: TextAlign.center,
+                                                                          style:
+                                                                              TextStyle(
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                            color:
+                                                                                Colors.black,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          );
+                                                        },
+                                                      )
+                                                    ],
+                                                  ),
                                                 )
-                                              ],
-                                            ),
-                                          ):SizedBox(),
+                                              : SizedBox(),
                                         ],
                                       )
                                     : SizedBox(),
@@ -1511,7 +1607,7 @@ class _FinishedMatchScorecardScreenState
                                                                 0.2,
                                                             child: commonText(
                                                                 data:
-                                                                    "${partnership.batsman2?.playerName.toString() == "Unknown Player" ? partnership.batsman2?.playerId.toString() : partnership.batsman1?.playerName.toString()}",
+                                                                    "${partnership.batsman2?.playerName.toString() == "Unknown Player" ? partnership.batsman2?.playerId.toString() : partnership.batsman2?.playerName.toString()}",
                                                                 fontSize: 14,
                                                                 color: Colors
                                                                     .black,
@@ -1631,8 +1727,10 @@ class _FinishedMatchScorecardScreenState
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: commonText(
-                                            data:
-                                                "${finishedMatchDetailsResponse.data?.teamBName.toString() ?? ""}",
+                                            data: finishedMatchDetailsResponse
+                                                    .data?.teamBName
+                                                    .toString() ??
+                                                "",
                                             fontSize: 14,
                                             fontWeight: FontWeight.w400,
                                             fontFamily: "Poppins",
@@ -1663,8 +1761,8 @@ class _FinishedMatchScorecardScreenState
                                         gridDelegate:
                                             SliverGridDelegateWithFixedCrossAxisCount(
                                                 crossAxisCount: 2,
-                                                childAspectRatio: 2.5,
-                                                crossAxisSpacing: 15),
+                                                childAspectRatio: 2.2,
+                                                crossAxisSpacing: 10),
                                         itemBuilder: (context, index) {
                                           print("line team index length");
                                           print(finishedMatchDetailsResponse
@@ -1703,7 +1801,7 @@ class _FinishedMatchScorecardScreenState
                                           }
 
                                           return Padding(
-                                            padding: const EdgeInsets.all(8.0),
+                                            padding: const EdgeInsets.all(6.0),
                                             child: Container(
                                               decoration: BoxDecoration(
                                                   borderRadius:
@@ -1714,7 +1812,24 @@ class _FinishedMatchScorecardScreenState
                                               child: Padding(
                                                 padding:
                                                     const EdgeInsets.all(8.0),
-                                                child:
+                                                child: Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  20)),
+                                                      child: Image.asset(
+                                                        "assets/images/iv_player_image.png",
+                                                        height: 50,
+                                                        width: 50,
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 10,
+                                                    ),
                                                     finishedMatchDetailsResponse
                                                                 .data
                                                                 ?.teamLineups?[
@@ -1723,42 +1838,117 @@ class _FinishedMatchScorecardScreenState
                                                                 .name ==
                                                             "Unknown Player"
                                                         ? Center(
-                                                            child: commonText(
-                                                              data:
-                                                                  "${finishedMatchDetailsResponse.data?.teamLineups?[teamAIndex].lineup?[index].id ?? ""}"
-                                                                  "${isCaptain ? " (C)" : ""}${isWicketKeeper ? " (WK)" : ""}",
-                                                              fontSize: 14,
-                                                              maxLines: 2,
-                                                              alignment:
-                                                                  TextAlign
-                                                                      .center,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400,
-                                                              fontFamily:
-                                                                  "Poppins",
-                                                              color:
-                                                                  Colors.black,
+                                                            child: SizedBox(
+                                                              width: 90,
+                                                              child: Column(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  commonText(
+                                                                    data:
+                                                                        "${finishedMatchDetailsResponse.data?.teamLineups?[teamAIndex].lineup?[index].id ?? ""}"
+                                                                        "${isCaptain ? " (C)" : ""}${isWicketKeeper ? " (WK)" : ""}",
+                                                                    fontSize:
+                                                                        14,
+                                                                    maxLines: 2,
+                                                                    alignment:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    fontFamily:
+                                                                        "Poppins",
+                                                                    color: Color
+                                                                        .fromRGBO(
+                                                                            0,
+                                                                            21,
+                                                                            72,
+                                                                            1),
+                                                                  ),
+                                                                  commonText(
+                                                                    data:
+                                                                        "${finishedMatchDetailsResponse.data?.teamLineups?[teamAIndex].lineup?[index].role.toString() == "Wicketkeeper" ? "Batsman" : finishedMatchDetailsResponse.data?.teamLineups?[teamAIndex].lineup?[index].role}",
+                                                                    fontSize:
+                                                                        13,
+                                                                    maxLines: 2,
+                                                                    alignment:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                    fontFamily:
+                                                                        "Poppins",
+                                                                    color: Color
+                                                                        .fromRGBO(
+                                                                            38,
+                                                                            57,
+                                                                            99,
+                                                                            1),
+                                                                  ),
+                                                                ],
+                                                              ),
                                                             ),
                                                           )
                                                         : Center(
-                                                            child: commonText(
-                                                              data:
-                                                                  "${finishedMatchDetailsResponse.data?.teamLineups?[teamAIndex].lineup?[index].name ?? ""}${isCaptain ? " (C)" : ""}",
-                                                              fontSize: 13,
-                                                              maxLines: 2,
-                                                              alignment:
-                                                                  TextAlign
-                                                                      .center,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400,
-                                                              fontFamily:
-                                                                  "Poppins",
-                                                              color:
-                                                                  Colors.black,
+                                                            child: SizedBox(
+                                                              width: 90,
+                                                              child: Column(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  commonText(
+                                                                    data:
+                                                                        "${finishedMatchDetailsResponse.data?.teamLineups?[teamAIndex].lineup?[index].name ?? ""}"
+                                                                        "${isCaptain ? " (C)" : ""}${isWicketKeeper ? " (WK)" : ""}",
+                                                                    fontSize:
+                                                                        13,
+                                                                    maxLines: 2,
+                                                                    alignment:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    fontFamily:
+                                                                        "Poppins",
+                                                                    color: Color
+                                                                        .fromRGBO(
+                                                                            0,
+                                                                            21,
+                                                                            72,
+                                                                            1),
+                                                                  ),
+                                                                  commonText(
+                                                                    data:
+                                                                        "${finishedMatchDetailsResponse.data?.teamLineups?[teamAIndex].lineup?[index].role.toString() == "WicketKeeper" ? "Batsman" : finishedMatchDetailsResponse.data?.teamLineups?[teamAIndex].lineup?[index].role}",
+                                                                    fontSize:
+                                                                        13,
+                                                                    maxLines: 2,
+                                                                    alignment:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                    fontFamily:
+                                                                        "Poppins",
+                                                                    color: Color
+                                                                        .fromRGBO(
+                                                                            38,
+                                                                            57,
+                                                                            99,
+                                                                            1),
+                                                                  ),
+                                                                ],
+                                                              ),
                                                             ),
                                                           ),
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           );
@@ -1783,8 +1973,8 @@ class _FinishedMatchScorecardScreenState
                                         gridDelegate:
                                             SliverGridDelegateWithFixedCrossAxisCount(
                                                 crossAxisCount: 2,
-                                                childAspectRatio: 2.5,
-                                                crossAxisSpacing: 15),
+                                                childAspectRatio: 2.2,
+                                                crossAxisSpacing: 10),
                                         itemBuilder: (context, index) {
                                           print("line team index length");
                                           print(finishedMatchDetailsResponse
@@ -1823,7 +2013,7 @@ class _FinishedMatchScorecardScreenState
                                           }
 
                                           return Padding(
-                                            padding: const EdgeInsets.all(8.0),
+                                            padding: const EdgeInsets.all(6.0),
                                             child: Container(
                                               decoration: BoxDecoration(
                                                   borderRadius:
@@ -1834,7 +2024,24 @@ class _FinishedMatchScorecardScreenState
                                               child: Padding(
                                                 padding:
                                                     const EdgeInsets.all(8.0),
-                                                child:
+                                                child: Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  20)),
+                                                      child: Image.asset(
+                                                        "assets/images/iv_player_image.png",
+                                                        height: 50,
+                                                        width: 50,
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 10,
+                                                    ),
                                                     finishedMatchDetailsResponse
                                                                 .data
                                                                 ?.teamLineups?[
@@ -1843,42 +2050,117 @@ class _FinishedMatchScorecardScreenState
                                                                 .name ==
                                                             "Unknown Player"
                                                         ? Center(
-                                                            child: commonText(
-                                                              data:
-                                                                  "${finishedMatchDetailsResponse.data?.teamLineups?[teamBIndex].lineup?[index].id ?? ""}"
-                                                                  "${isCaptain ? " (C)" : ""}${isWicketKeeper ? " (WK)" : ""}",
-                                                              fontSize: 14,
-                                                              maxLines: 2,
-                                                              alignment:
-                                                                  TextAlign
-                                                                      .center,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400,
-                                                              fontFamily:
-                                                                  "Poppins",
-                                                              color:
-                                                                  Colors.black,
+                                                            child: SizedBox(
+                                                              width: 90,
+                                                              child: Column(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  commonText(
+                                                                    data:
+                                                                        "${finishedMatchDetailsResponse.data?.teamLineups?[teamBIndex].lineup?[index].id ?? ""}"
+                                                                        "${isCaptain ? " (C)" : ""}${isWicketKeeper ? " (WK)" : ""}",
+                                                                    fontSize:
+                                                                        14,
+                                                                    maxLines: 2,
+                                                                    alignment:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    fontFamily:
+                                                                        "Poppins",
+                                                                    color: Color
+                                                                        .fromRGBO(
+                                                                            0,
+                                                                            21,
+                                                                            72,
+                                                                            1),
+                                                                  ),
+                                                                  commonText(
+                                                                    data:
+                                                                        "${finishedMatchDetailsResponse.data?.teamLineups?[teamBIndex].lineup?[index].role.toString() == "Wicketkeeper" ? "Batsman" : finishedMatchDetailsResponse.data?.teamLineups?[teamBIndex].lineup?[index].role}",
+                                                                    fontSize:
+                                                                        13,
+                                                                    maxLines: 2,
+                                                                    alignment:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                    fontFamily:
+                                                                        "Poppins",
+                                                                    color: Color
+                                                                        .fromRGBO(
+                                                                            38,
+                                                                            57,
+                                                                            99,
+                                                                            1),
+                                                                  ),
+                                                                ],
+                                                              ),
                                                             ),
                                                           )
                                                         : Center(
-                                                            child: commonText(
-                                                              data:
-                                                                  "${finishedMatchDetailsResponse.data?.teamLineups?[teamBIndex].lineup?[index].name ?? ""}${isCaptain ? " (C)" : ""}",
-                                                              fontSize: 13,
-                                                              maxLines: 2,
-                                                              alignment:
-                                                                  TextAlign
-                                                                      .center,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400,
-                                                              fontFamily:
-                                                                  "Poppins",
-                                                              color:
-                                                                  Colors.black,
+                                                            child: SizedBox(
+                                                              width: 90,
+                                                              child: Column(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  commonText(
+                                                                    data:
+                                                                        "${finishedMatchDetailsResponse.data?.teamLineups?[teamBIndex].lineup?[index].name ?? ""}"
+                                                                        "${isCaptain ? " (C)" : ""}${isWicketKeeper ? " (WK)" : ""}",
+                                                                    fontSize:
+                                                                        13,
+                                                                    maxLines: 2,
+                                                                    alignment:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    fontFamily:
+                                                                        "Poppins",
+                                                                    color: Color
+                                                                        .fromRGBO(
+                                                                            0,
+                                                                            21,
+                                                                            72,
+                                                                            1),
+                                                                  ),
+                                                                  commonText(
+                                                                    data:
+                                                                        "${finishedMatchDetailsResponse.data?.teamLineups?[teamBIndex].lineup?[index].role.toString() == "WicketKeeper" ? "Batsman" : finishedMatchDetailsResponse.data?.teamLineups?[teamBIndex].lineup?[index].role}",
+                                                                    fontSize:
+                                                                        13,
+                                                                    maxLines: 2,
+                                                                    alignment:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                    fontFamily:
+                                                                        "Poppins",
+                                                                    color: Color
+                                                                        .fromRGBO(
+                                                                            38,
+                                                                            57,
+                                                                            99,
+                                                                            1),
+                                                                  ),
+                                                                ],
+                                                              ),
                                                             ),
                                                           ),
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           );
@@ -1919,9 +2201,7 @@ class _FinishedMatchScorecardScreenState
 
         allInnings.add({
           // 'team': updatedMatch.teamAName ?? updatedMatch.teamAId.toString() ??'',
-          'team': finishedMatchDetailsResponse.data?.teamAName ??
-              finishedMatchDetailsResponse.data?.teamAId.toString() ??
-              '',
+          'team': teamAName,
           'runs': inning.battingTeam?.runs ?? "0",
           'wickets': inning.battingTeam?.wickets ?? "0",
           'overs': inning.battingTeam?.overs ?? '0.0',
@@ -1932,10 +2212,7 @@ class _FinishedMatchScorecardScreenState
         final inning = teamBInnings![i];
         allInnings.add({
           // 'team': updatedMatch.teamBName ?? updatedMatch.teamBId.toString() ?? '',
-          'team': finishedMatchDetailsResponse.data?.teamBName ??
-              finishedMatchDetailsResponse.data?.teamAId.toString() ??
-              '',
-
+          'team': teamBName,
           'runs': inning.battingTeam?.runs ?? "0",
           'wickets': inning.battingTeam?.wickets ?? "0",
           'overs': inning.battingTeam?.overs ?? '0.0',
@@ -1943,14 +2220,17 @@ class _FinishedMatchScorecardScreenState
         });
       }
     }
-    print("all innings length");
-    print(allInnings.length);
+    print("all innings length new");
+    print(allInnings);
     print(passingValue);
+    print(teamAName);
+    print(teamBName);
     // log(allInnings[0]['inningData']);
     // log(allInnings[2]['inningData']);
     // log(allInnings[3]['inningData']);
     final selectedInning = allInnings[selectedTabIndex]['inningData'];
     batters = selectedInning.batters ?? [];
+    bowlers = selectedInning.bowlers ?? [];
     print("batters names");
     print(jsonEncode(batters));
 
@@ -1997,7 +2277,7 @@ class _FinishedMatchScorecardScreenState
 
     print("updatedMatch.toString()");
     // print(jsonEncode(overSummaries));
-    debugPrint(jsonEncode(yetToBat), wrapWidth: 1024);
+    debugPrint(jsonEncode(partnerships), wrapWidth: 1024);
     debugPrint(jsonEncode(selectedInning), wrapWidth: 1024);
 
     setState(() {});
@@ -2015,9 +2295,7 @@ class _FinishedMatchScorecardScreenState
 
         allInnings.add({
           // 'team': updatedMatch.teamAName ?? updatedMatch.teamAId.toString() ??'',
-          'team': finishedMatchDetailsResponse.data?.teamAName ??
-              finishedMatchDetailsResponse.data?.teamAId.toString() ??
-              '',
+          'team': teamAName,
           'runs': inning.battingTeam?.runs ?? "0",
           'wickets': inning.battingTeam?.wickets ?? "0",
           'overs': inning.battingTeam?.overs ?? '0.0',
@@ -2028,9 +2306,7 @@ class _FinishedMatchScorecardScreenState
         final inning = teamBInnings![i];
         allInnings.add({
           // 'team': updatedMatch.teamBName ?? updatedMatch.teamBId.toString() ?? '',
-          'team': finishedMatchDetailsResponse.data?.teamBName ??
-              finishedMatchDetailsResponse.data?.teamAId.toString() ??
-              '',
+          'team': teamBName,
 
           'runs': inning.battingTeam?.runs ?? "0",
           'wickets': inning.battingTeam?.wickets ?? "0",
@@ -2070,7 +2346,6 @@ class _FinishedMatchScorecardScreenState
     // print(jsonEncode(yetToBat));
     // print(jsonEncode(overSummaries));
     debugPrint(jsonEncode(yetToBat), wrapWidth: 1024);
-
 
     // if (teamBInnings != null) {
     //   for (var inning in teamBInnings) {

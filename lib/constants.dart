@@ -1,3 +1,4 @@
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:kisma_livescore/responses/get_country_code_abd_flag_response.dart'
     as dfr;
 
@@ -8,6 +9,12 @@ const BASEURL =
 
     'http://34.238.14.72:8080/api';
 // 'http://34.238.14.72:8086';
+
+
+Future<bool> isInternetConnected() async {
+  bool result = await InternetConnectionChecker().hasConnection;
+  return result;
+}
 
 const TOKEN = 'token';
 const EMAIL_ID = 'emailId';

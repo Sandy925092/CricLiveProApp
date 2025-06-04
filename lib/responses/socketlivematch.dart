@@ -32,6 +32,7 @@ class Matches {
   final String? teamBName;
   final TossInfo? tossInfo;
   final List<Innings>? innings;
+  final Interruptions? interruptions;
   final Result? result;
   final List<TeamLineups>? teamLineups;
   final String? updatedAt;
@@ -47,6 +48,7 @@ class Matches {
     this.teamBName,
     this.tossInfo,
     this.innings,
+    this.interruptions,
     this.result,
     this.teamLineups,
     this.updatedAt,
@@ -63,7 +65,8 @@ class Matches {
         teamBName = json['teamBName'] as String?,
         tossInfo = (json['tossInfo'] as Map<String,dynamic>?) != null ? TossInfo.fromJson(json['tossInfo'] as Map<String,dynamic>) : null,
         innings = (json['innings'] as List?)?.map((dynamic e) => Innings.fromJson(e as Map<String,dynamic>)).toList(),
-        result = (json['result'] as Map<String,dynamic>?) != null ? Result.fromJson(json['result'] as Map<String,dynamic>) : null,
+        interruptions = (json['interruption'] as Map<String,dynamic>?) != null ? Interruptions.fromJson(json['interruption'] as Map<String,dynamic>) : null,
+      result = (json['result'] as Map<String,dynamic>?) != null ? Result.fromJson(json['result'] as Map<String,dynamic>) : null,
         teamLineups = (json['teamLineups'] as List?)?.map((dynamic e) => TeamLineups.fromJson(e as Map<String,dynamic>)).toList(),
         updatedAt = json['updatedAt'] as String?;
 
@@ -78,7 +81,9 @@ class Matches {
     'teamBName' : teamBName,
     'tossInfo' : tossInfo?.toJson(),
     'innings' : innings?.map((e) => e.toJson()).toList(),
+    'interruption' : interruptions?.toJson(),
     'result' : result?.toJson(),
+
     'teamLineups' : teamLineups?.map((e) => e.toJson()).toList(),
     'updatedAt' : updatedAt
   };
@@ -123,7 +128,7 @@ class Innings {
   final List<YetToBat>? yetToBat;
   final num? totalOvers;
   final List<dynamic>? powerplays;
-  final List<Interruptions>? interruptions;
+
   final List<OverSummaries>? overSummaries;
   final bool? ended;
   final num? legalBalls;
@@ -144,7 +149,6 @@ class Innings {
     this.yetToBat,
     this.totalOvers,
     this.powerplays,
-    this.interruptions,
     this.overSummaries,
     this.ended,
     this.legalBalls,
@@ -166,7 +170,6 @@ class Innings {
         yetToBat = (json['yetToBat'] as List?)?.map((dynamic e) => YetToBat.fromJson(e as Map<String,dynamic>)).toList(),
         totalOvers = json['totalOvers'] as num?,
         powerplays = json['powerplays'] as List?,
-        interruptions = (json['interruptions'] as List?)?.map((dynamic e) => Interruptions.fromJson(e as Map<String,dynamic>)).toList(),
         overSummaries = (json['overSummaries'] as List?)?.map((dynamic e) => OverSummaries.fromJson(e as Map<String,dynamic>)).toList(),
         ended = json['ended'] as bool?,
         legalBalls = json['legalBalls'] as num?;
@@ -184,9 +187,9 @@ class Innings {
     'fallOfWickets' : fallOfWickets?.map((e) => e.toJson()).toList(),
     'partnerships' : partnerships?.map((e) => e.toJson()).toList(),
     'maxOversPerDay' : maxOversPerDay?.map((e) => e.toJson()).toList(),
+    'yetToBat' : yetToBat?.map((e) => e.toJson()).toList(),
     'totalOvers' : totalOvers,
     'powerplays' : powerplays,
-    'interruptions' : interruptions?.map((e) => e.toJson()).toList(),
     'overSummaries' : overSummaries?.map((e) => e.toJson()).toList(),
     'ended' : ended,
     'legalBalls' : legalBalls
@@ -544,7 +547,7 @@ class YetToBat {
 
   YetToBat.fromJson(Map<String, dynamic> json)
       : id = json['id'] as num?,
-        name = json['day'] as String?,
+        name = json['name'] as String?,
         batOrder = json['batOrder'] as num?,
         role = json['role'] as String?,
         battingHandedness = json['battingHandedness'] as String?,
@@ -576,6 +579,7 @@ class Interruptions {
     this.sequenceNumber,
     this.timestamp,
   });
+
 
   Interruptions.fromJson(Map<String, dynamic> json)
       : inningNumber = json['inningNumber'] as num?,

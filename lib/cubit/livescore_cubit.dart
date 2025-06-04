@@ -123,10 +123,10 @@ class LiveScoreCubit extends Cubit<LiveScoreState> {
     }
   }
 
-  Future<void> getUpcomingSeries() async {
+  Future<void> getUpcomingSeries(String token, String pageNo) async {
     emit(state.copyWith(status: LiveScoreStatus.upcomingSeriesLoading));
     try {
-      ResponseData response = await repository.getUpcomingSeriesData();
+      ResponseData response = await repository.getUpcomingSeriesData(token, pageNo);
       emit(state.copyWith(
           status: LiveScoreStatus.upcomingSeriesSuccess,
           responseData: response));
@@ -143,12 +143,32 @@ class LiveScoreCubit extends Cubit<LiveScoreState> {
     }
   }
 
+  Future<void> getLikedMatch(String token, ) async {
+    emit(state.copyWith(status: LiveScoreStatus.getLikedMatchLoading));
+    try {
+      ResponseData response = await repository.getLikedMatch(token);
+      emit(state.copyWith(
+          status: LiveScoreStatus.getLikedMatchSuccess,
+          responseData: response));
+    } on ErrorData catch (errorData) {
+      emit(state.copyWith(
+          status: LiveScoreStatus.getLikedMatchError,
+          errorData: errorData,
+          error: null));
+    } catch (e) {
+      emit(state.copyWith(
+          status: LiveScoreStatus.getLikedMatchError,
+          error: e.toString(),
+          errorData: null));
+    }
+  }
+
     Future<void> getLiveMatchApiData() async {
     emit(state.copyWith(status: LiveScoreStatus.liveApiLoading));
     try {
       ResponseData response = await repository.getLiveMatch();
       emit(state.copyWith(
-          status: LiveScoreStatus.liveApiSuccess,
+            status: LiveScoreStatus.liveApiSuccess,
           responseData: response));
     } on ErrorData catch (errorData) {
       emit(state.copyWith(
@@ -162,6 +182,29 @@ class LiveScoreCubit extends Cubit<LiveScoreState> {
           errorData: null));
     }
   }
+
+
+
+  Future<void> getSearchMatches(String query) async {
+    emit(state.copyWith(status: LiveScoreStatus.searchMatchesLoading));
+    try {
+      ResponseData response = await repository.searchMatches(query);
+      emit(state.copyWith(
+          status: LiveScoreStatus.searchMatchesSuccess,
+          responseData: response));
+    } on ErrorData catch (errorData) {
+      emit(state.copyWith(
+          status: LiveScoreStatus.searchMatchesError,
+          errorData: errorData,
+          error: null));
+    } catch (e) {
+      emit(state.copyWith(
+          status: LiveScoreStatus.searchMatchesError,
+          error: e.toString(),
+          errorData: null));
+    }
+  }
+
 
 
 
@@ -400,6 +443,44 @@ class LiveScoreCubit extends Cubit<LiveScoreState> {
     } catch (e) {
       emit(state.copyWith(
           status: LiveScoreStatus.loginError,
+          error: e.toString(),
+          errorData: null));
+    }
+  }
+
+  Future<void> likeMatch(String token, Map<String, dynamic> likeMatchDetails) async {
+    emit(state.copyWith(status: LiveScoreStatus.likematchLoading));
+    try {
+      ResponseData responseData = await repository.likeMatch(token, likeMatchDetails);
+      emit(state.copyWith(
+          status: LiveScoreStatus.likematchSuccess, responseData: responseData));
+    } on ErrorData catch (errorData) {
+      emit(state.copyWith(
+          status: LiveScoreStatus.likematchError,
+          errorData: errorData,
+          error: null));
+    } catch (e) {
+      emit(state.copyWith(
+          status: LiveScoreStatus.likematchError,
+          error: e.toString(),
+          errorData: null));
+    }
+  }
+
+  Future<void> unLikeMatch(String token, String fixtureId) async {
+    emit(state.copyWith(status: LiveScoreStatus.unLikematchLoading));
+    try {
+      ResponseData responseData = await repository.unLikeMatch(token, fixtureId);
+      emit(state.copyWith(
+          status: LiveScoreStatus.unLikematchSuccess, responseData: responseData));
+    } on ErrorData catch (errorData) {
+      emit(state.copyWith(
+          status: LiveScoreStatus.unLikematchError,
+          errorData: errorData,
+          error: null));
+    } catch (e) {
+      emit(state.copyWith(
+          status: LiveScoreStatus.unLikematchError,
           error: e.toString(),
           errorData: null));
     }

@@ -248,7 +248,17 @@ class _SignUpState extends State<SignUp> {
                              "deviceToken": "abc123xyzDeviceToken"
                            };
                            print('signUpDetails:$signUpDetails');
-                          BlocProvider.of<LiveScoreCubit>(context).signUpCall(signUpDetails);
+
+                           isInternetConnected().then((value) {
+                             if (value == true) {
+                               BlocProvider.of<LiveScoreCubit>(context).signUpCall(signUpDetails);
+                             } else {
+                               showToast(
+                                   context: context,
+                                   message: notConnected);
+                             }
+                           });
+
 
                          }
                        },

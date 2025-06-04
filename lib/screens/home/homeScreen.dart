@@ -36,7 +36,8 @@ class _HomeScreenState extends State<HomeScreen> {
               leadingWidth: 130,
               centerTitle: false,
               actions: [
-                /* GestureDetector(
+
+                 GestureDetector(
                   onTap: () {
                     PersistentNavBarNavigator.pushNewScreen(
                       context,
@@ -50,7 +51,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: const EdgeInsets.only(right: 18.0),
                     child: Icon(Icons.search, color: buttonColors),
                   ),
-                )*/
+                )
+
               ],
               leading: Padding(
                 padding: const EdgeInsets.only(left: 10.0),

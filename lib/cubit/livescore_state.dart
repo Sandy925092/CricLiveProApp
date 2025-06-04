@@ -7,6 +7,10 @@ enum LiveScoreStatus {
   upcomingSeriesSuccess,
   upcomingSeriesError,
 
+  getLikedMatchLoading,
+  getLikedMatchSuccess,
+  getLikedMatchError,
+
   finishedSeriesLoading,
   finishedSeriesSuccess,
   finishedSeriesError,
@@ -14,6 +18,11 @@ enum LiveScoreStatus {
   liveApiLoading,
   liveApiSuccess,
   liveApiError,
+
+
+  searchMatchesLoading,
+  searchMatchesSuccess,
+  searchMatchesError,
 
   matchDetailsLoading,
   matchDetailsSuccess,
@@ -78,6 +87,16 @@ enum LiveScoreStatus {
   loginLoading,
   loginSuccess,
   loginError,
+
+  likematchLoading,
+  likematchSuccess,
+  likematchError,
+
+  unLikematchLoading,
+  unLikematchSuccess,
+  unLikematchError,
+
+
   liveMatchSocketUpdate
 }
 

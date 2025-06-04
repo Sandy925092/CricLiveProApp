@@ -43,6 +43,7 @@ class _LoginState extends State<Login> {
               print('loginResponse.data?.email.toString():${loginResponse.data?.email.toString()}');
               PreferenceManager.insertValue(key: EMAIL_ID, value: loginResponse.data?.email.toString());
               PreferenceManager.insertValue(key: USER_ID, value: loginResponse.data?.id.toString());
+              PreferenceManager.insertValue(key: "token", value: loginResponse.data?.token.toString());
               CustomNavigator.pushAndRemoveUntil(context: context, screen: Dashboard(menuScreenContext: context));
             }else{
              // CustomNavigator.push(context: context, screen:  OtpScreen(token:signInResponse.data?.token.toString(),email:emailPhoneController.text));
@@ -140,12 +141,22 @@ class _LoginState extends State<Login> {
                         RegExp emailRegExp = RegExp(emailPattern.trim());
                        if(emailController.text.isEmpty){
                           UiHelper.toastMessage("Please enter email id");
-                        }else if (!emailRegExp.hasMatch(emailController.text)) {
+                        } else if (!emailRegExp.hasMatch(emailController.text)) {
                           UiHelper.toastMessage("Please enter a valid email address");
-                        }else if(passwordController.text.isEmpty){
+                        } else if(passwordController.text.isEmpty){
                           UiHelper.toastMessage("Please enter your password");
-                        }else{
-                          BlocProvider.of<LiveScoreCubit>(context).loginCall(emailController.text.toString().toLowerCase(),passwordController.text);
+                        } else{
+
+                         isInternetConnected().then((value) {
+                           if (value == true) {
+                             BlocProvider.of<LiveScoreCubit>(context).loginCall(emailController.text.toString().toLowerCase(),passwordController.text);
+                           } else {
+                             showToast(
+                                 context: context,
+                                 message: notConnected);
+                           }
+                         });
+
                         }
                       },
                     ),
