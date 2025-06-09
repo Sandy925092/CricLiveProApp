@@ -49,10 +49,10 @@ class Matches {
   final String? homeTeam;
   final String? awayTeam;
   final bool? result;
-  final num? homeTeamRuns;
-  final num? homeTeamWickets;
-  final num? awayTeamRuns;
-  final num? awayTeamWickets;
+  final List<num>? homeTeamRuns;
+  final List<num>? homeTeamWickets;
+  final List<num>? awayTeamRuns;
+  final List<num>? awayTeamWickets;
   final String? winningTeamName;
   final String? startDateTime;
   final bool? upcoming;
@@ -76,10 +76,10 @@ class Matches {
         homeTeam = json['homeTeam'] as String?,
         awayTeam = json['awayTeam'] as String?,
         result = json['result'] as bool?,
-        homeTeamRuns = json['homeTeamRuns'] as num?,
-        homeTeamWickets = json['homeTeamWickets'] as num?,
-        awayTeamRuns = json['awayTeamRuns'] as num?,
-        awayTeamWickets = json['awayTeamWickets'] as num?,
+        homeTeamRuns = (json['homeTeamRuns'] as List?)?.map((dynamic e) => e as num).toList(),
+        homeTeamWickets = (json['homeTeamWickets'] as List?)?.map((dynamic e) => e as num).toList(),
+        awayTeamRuns = (json['awayTeamRuns'] as List?)?.map((dynamic e) => e as num).toList(),
+        awayTeamWickets = (json['awayTeamWickets'] as List?)?.map((dynamic e) => e as num).toList(),
         winningTeamName = json['winningTeamName'] as String?,
         startDateTime = json['startDateTime'] as String?,
         upcoming = json['upcoming'] as bool?;

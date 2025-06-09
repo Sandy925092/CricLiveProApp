@@ -23,7 +23,6 @@ class _SeriesScreenState extends State<SeriesScreen>
 
   void initState() {
     _controller = TabController(length: 3, vsync: this);
-    // TODO: implement initState
     super.initState();
   }
 

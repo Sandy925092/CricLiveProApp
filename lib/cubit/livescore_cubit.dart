@@ -228,6 +228,27 @@ class LiveScoreCubit extends Cubit<LiveScoreState> {
     }
   }
 
+
+  Future<void> seriesCategory(String pageno,) async {
+    emit(state.copyWith(status: LiveScoreStatus.seriesCategoryLoading));
+    try {
+      ResponseData response = await repository.seriesCategory(pageno);
+      emit(state.copyWith(
+          status: LiveScoreStatus.seriesCategorySuccess,
+          responseData: response));
+    } on ErrorData catch (errorData) {
+      emit(state.copyWith(
+          status: LiveScoreStatus.seriesCategoryError,
+          errorData: errorData,
+          error: null));
+    } catch (e) {
+      emit(state.copyWith(
+          status: LiveScoreStatus.seriesCategoryError,
+          error: e.toString(),
+          errorData: null));
+    }
+  }
+
   Future<void> getMatchDetails(String matchId,) async {
     emit(state.copyWith(status: LiveScoreStatus.matchDetailsLoading));
     try {
@@ -362,6 +383,46 @@ class LiveScoreCubit extends Cubit<LiveScoreState> {
     } catch (e) {
       emit(state.copyWith(
           status: LiveScoreStatus.verifyOtpError,
+          error: e.toString(),
+          errorData: null));
+    }
+  }
+
+  Future<void> getMyEvents(String date, String type, String pageNo) async {
+    emit(state.copyWith(status: LiveScoreStatus.myEventsLoading));
+    try {
+      ResponseData responseData = await repository.getMyEventsMatches(date, type, pageNo);
+      emit(state.copyWith(
+          status: LiveScoreStatus.myEventsSuccess,
+          responseData: responseData));
+    } on ErrorData catch (errorData) {
+      emit(state.copyWith(
+          status: LiveScoreStatus.myEventsError,
+          errorData: errorData,
+          error: null));
+    } catch (e) {
+      emit(state.copyWith(
+          status: LiveScoreStatus.myEventsError,
+          error: e.toString(),
+          errorData: null));
+    }
+  }
+
+  Future<void> seriesMatches(String id, String pageNo) async {
+    emit(state.copyWith(status: LiveScoreStatus.seriesMatchesLoading));
+    try {
+      ResponseData responseData = await repository.seriesMatches(id, pageNo);
+      emit(state.copyWith(
+          status: LiveScoreStatus.seriesMatchesSuccess,
+          responseData: responseData));
+    } on ErrorData catch (errorData) {
+      emit(state.copyWith(
+          status: LiveScoreStatus.seriesMatchesError,
+          errorData: errorData,
+          error: null));
+    } catch (e) {
+      emit(state.copyWith(
+          status: LiveScoreStatus.seriesMatchesError,
           error: e.toString(),
           errorData: null));
     }

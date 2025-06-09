@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:kisma_livescore/screens/events/myeventsdays.dart';
 import 'package:kisma_livescore/screens/home/homeScreen.dart';
 import 'package:kisma_livescore/commonwidget.dart';
 import 'package:kisma_livescore/screens/events/myevents.dart';
@@ -49,6 +50,7 @@ class _DashboardState extends State<Dashboard> {
 
     List<Widget> buildScreens() {
      return [const HomeScreen(), MyEventsScreen(), SeriesScreen(), SettingsScreen()];
+     // return [const HomeScreen(), MyEventsDaysScreen(), SeriesScreen(), SettingsScreen()];
     //   return [const HomeScreen(), SettingsScreen()];
     }
 
@@ -73,7 +75,7 @@ class _DashboardState extends State<Dashboard> {
         ),
         PersistentBottomNavBarItem(
           icon: const Icon(MyFlutterApp.calendar),
-          title: ("My Events"),
+          title: ("Matches"),
           textStyle: TextStyle(
             fontFamily: "Poppins",
             fontWeight: FontWeight.w600,

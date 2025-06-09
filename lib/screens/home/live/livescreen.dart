@@ -113,7 +113,7 @@ class _LiveScreenState extends State<LiveScreen>
               });
 
               print("📡 Live data from API");
-              print(liveData?[0].matches?[1].innings?[0].yetToBat?.length);
+              // print(liveData?[0].matches?[1].innings?[0].yetToBat?.length);
               // debugPrint(jsonEncode(liveData?[0].matches?[1].innings?[0].yetToBat?[0].id.toString()), wrapWidth: 1024);
             } else {
               print("📦 Data updated from API (UI not visible)");

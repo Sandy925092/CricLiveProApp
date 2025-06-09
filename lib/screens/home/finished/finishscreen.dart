@@ -43,7 +43,7 @@ class _FinishedScreenState extends State<FinishedScreen> {
   List<SeriesName> seriesName = [];
   List<MatchData> matchData = [];
   int? expandedIndex;
-  late final PagingController<int, SeriesName> _pagingController;
+      late final PagingController<int, SeriesName> _pagingController;
 
   Future<void> getFinished({bool isLoadMore = false}) async {
     if (isLoadMore) {
@@ -69,7 +69,6 @@ class _FinishedScreenState extends State<FinishedScreen> {
       _fetchPage(pageKey);
     });
   }
-
 
   @override
   void initState() {
@@ -131,31 +130,31 @@ class _FinishedScreenState extends State<FinishedScreen> {
         body: BlocConsumer<LiveScoreCubit, LiveScoreState>(
             listener: (context, state) {
           print(state.status.toString() + " this is status");
-          if (state.status == LiveScoreStatus.finishedSeriesSuccess) {
-            finishedSeriesResponse =
-                state.responseData?.response as FinishedSeriesResponse;
-            Loader.hide();
+            if (state.status == LiveScoreStatus.finishedSeriesSuccess) {
+              finishedSeriesResponse =
+                  state.responseData?.response as FinishedSeriesResponse;
+              Loader.hide();
 
-            if (finishedSeriesResponse.data?.content?.length != 0) {
-              // seriesName.addAll(finishedSeriesResponse.data?.content ?? []);
+              if (finishedSeriesResponse.data?.content?.length != 0) {
+                // seriesName.addAll(finishedSeriesResponse.data?.content ?? []);
 
-              final newItems = finishedSeriesResponse.data?.content ?? [];
-              final isLastPage = finishedSeriesResponse.data?.last ?? true;
+                final newItems = finishedSeriesResponse.data?.content ?? [];
+                final isLastPage = finishedSeriesResponse.data?.last ?? true;
 
-              if (isLastPage) {
-                _pagingController.appendLastPage(newItems);
-              } else {
-                final nextPageKey =
-                    (finishedSeriesResponse.data?.number ?? 0) + 1;
-                pageNo = (finishedSeriesResponse.data?.number ?? 0) + 1;
-                _pagingController.appendPage(newItems, nextPageKey);
+                if (isLastPage) {
+                  _pagingController.appendLastPage(newItems);
+                } else {
+                  final nextPageKey =
+                      (finishedSeriesResponse.data?.number ?? 0) + 1;
+                  pageNo = (finishedSeriesResponse.data?.number ?? 0) + 1;
+                  _pagingController.appendPage(newItems, nextPageKey);
+                }
+                seriesName.addAll(newItems);
+
+                print("seriesLength");
+                print(seriesName.length);
               }
-              seriesName.addAll(newItems);
-
-              print("seriesLength");
-              print(seriesName.length);
             }
-          }
 
           if (state.status == LiveScoreStatus.finishedMatchSuccess) {
             FinishedMatchResponse finishedMatchResponse =
@@ -169,8 +168,7 @@ class _FinishedScreenState extends State<FinishedScreen> {
             if (finishedMatchResponse.data?.length != 0) {
               matchData.clear();
               matchData.addAll(finishedMatchResponse.data ?? []);
-            }
-            else{
+            } else {
               matchData.clear();
             }
           }
@@ -323,9 +321,8 @@ class _FinishedScreenState extends State<FinishedScreen> {
                                         onExpansionChanged: (expanded) async {
                                           expandedIndex =
                                               expanded ? index : null;
-                                          print("Tapped index: $index, expanded: ${seriesName[index]
-                                              .id2
-                                              .toString()}");
+                                          print(
+                                              "Tapped index: $index, expanded: ${seriesName[index].id2.toString()}");
                                           await BlocProvider.of<LiveScoreCubit>(
                                                   context)
                                               .getFinishMatch(
@@ -415,29 +412,51 @@ class _FinishedScreenState extends State<FinishedScreen> {
                                               Column(
                                                 children: matchData
                                                     .map(
-                                                      (items) => GestureDetector(
-                                                        onTap: (){
-                                                          if(items.result== true){
-                                                            Navigator.push(context, MaterialPageRoute(builder: (context) {
-                                                              return FinishedMatchScorecardScreen(matchId:items.fixtureId.toString()??"", winningTeam:items.winningTeamName.toString()??"");
-                                                            },));
-                                                          }
-                                                          else{
-                                                            showToast(context: context, message: "Result not found");
+                                                      (items) =>
+                                                          GestureDetector(
+                                                        onTap: () {
+                                                          if (items.result ==
+                                                              true) {
+                                                            Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                              builder:
+                                                                  (context) {
+                                                                return FinishedMatchScorecardScreen(
+                                                                    matchId: items
+                                                                            .fixtureId
+                                                                            .toString() ??
+                                                                        "",
+                                                                    winningTeam:
+                                                                        items.winningTeamName.toString() ??
+                                                                            "");
+                                                              },
+                                                            ));
+                                                          } else {
+                                                            showToast(
+                                                                context:
+                                                                    context,
+                                                                message:
+                                                                    "Result not found");
                                                           }
                                                         },
                                                         child: Container(
                                                           margin:
-                                                              EdgeInsets.only(left: 15, right: 15, top: 0, bottom: 10),
+                                                              EdgeInsets.only(
+                                                                  left: 15,
+                                                                  right: 15,
+                                                                  top: 0,
+                                                                  bottom: 10),
                                                           decoration:
                                                               BoxDecoration(
                                                             color: Colors.white,
                                                             border: Border.all(
-                                                                color:
-                                                                    Colors.white),
+                                                                color: Colors
+                                                                    .white),
                                                             borderRadius:
                                                                 BorderRadius
-                                                                    .circular(7),
+                                                                    .circular(
+                                                                        7),
                                                           ),
                                                           child: Padding(
                                                             padding:
@@ -465,10 +484,8 @@ class _FinishedScreenState extends State<FinishedScreen> {
                                                                               CrossAxisAlignment.start,
                                                                           children: [
                                                                             SizedBox(
-                                                                              width:
-                                                                                  MediaQuery.of(context).size.width * 0.25,
-                                                                              child:
-                                                                                  commonText(
+                                                                              width: MediaQuery.of(context).size.width * 0.25,
+                                                                              child: commonText(
                                                                                 data: items.homeTeam ?? "N/A",
                                                                                 fontSize: 14,
                                                                                 fontWeight: FontWeight.w400,
@@ -476,18 +493,24 @@ class _FinishedScreenState extends State<FinishedScreen> {
                                                                                 color: Colors.black,
                                                                               ),
                                                                             ),
-                                                                            SizedBox(
-                                                                                height: 20),
-                                                                            items.homeTeamRuns != null
-                                                                                ? commonText(
-                                                                                    data: "${items.homeTeamRuns ?? "N/A"}/${items.homeTeamWickets ?? "N/A"}",
-                                                                                    fontSize: 14,
-                                                                                    fontWeight: FontWeight.w500,
-                                                                                    fontFamily: "Poppins",
-                                                                                    color: Colors.black,
-                                                                                  )
+                                                                            SizedBox(height: 20),
+                                                                            items.homeTeamRuns!.isNotEmpty
+                                                                                ? Column(
+                                                                              children: List.generate(
+                                                                                items.homeTeamRuns?.length ?? 0,
+                                                                                    (index) => commonText(
+                                                                                  data: "${items.homeTeamRuns![index]}/${items.homeTeamWickets![index]}",
+                                                                                  fontSize: 14,
+                                                                                  fontWeight: FontWeight.w500,
+                                                                                  fontFamily: "Poppins",
+                                                                                  color: Colors.black,
+                                                                                ),
+                                                                              ),
+                                                                            )
+                                                                            // optional else case
+
                                                                                 : commonText(
-                                                                                    data: "Not found",
+                                                                                    data: "N/A",
                                                                                     fontSize: 14,
                                                                                     fontWeight: FontWeight.w500,
                                                                                     fontFamily: "Poppins",
@@ -502,15 +525,15 @@ class _FinishedScreenState extends State<FinishedScreen> {
                                                                           alignment:
                                                                               TextAlign.center,
                                                                           data:
-                                                                              "${"${items.winningTeamName} won"??"N/A"}",
+                                                                              "${"${items.winningTeamName} won" ?? "N/A"}",
                                                                           fontSize:
                                                                               10,
                                                                           fontWeight:
                                                                               FontWeight.w700,
                                                                           fontFamily:
                                                                               "Poppins",
-                                                                          color: Colors
-                                                                              .black,
+                                                                          color:
+                                                                              Colors.black,
                                                                         ),
                                                                       ),
                                                                       Flexible(
@@ -520,8 +543,7 @@ class _FinishedScreenState extends State<FinishedScreen> {
                                                                               CrossAxisAlignment.start,
                                                                           children: [
                                                                             SizedBox(
-                                                                              width:
-                                                                                  MediaQuery.of(context).size.width * 0.25,
+                                                                              width: MediaQuery.of(context).size.width * 0.25,
                                                                               child: items.awayTeam != null
                                                                                   ? commonText(
                                                                                       data: items.awayTeam ?? "N/A",
@@ -538,23 +560,29 @@ class _FinishedScreenState extends State<FinishedScreen> {
                                                                                       color: Colors.black,
                                                                                     ),
                                                                             ),
-                                                                            SizedBox(
-                                                                                height: 20),
-                                                                            items.awayTeamRuns != null
-                                                                                ? commonText(
-                                                                                    data: "${items.awayTeamRuns ?? "N/A"}/${items.awayTeamWickets ?? "N/A"}",
-                                                                                    fontSize: 14,
-                                                                                    fontWeight: FontWeight.w500,
-                                                                                    fontFamily: "Poppins",
-                                                                                    color: Colors.black,
-                                                                                  )
+                                                                            SizedBox(height: 20),
+                                                                            items.awayTeamRuns!.isNotEmpty
+                                                                                ? Column(
+                                                                              children: List.generate(
+                                                                                items.awayTeamRuns?.length ?? 0,
+                                                                                    (index) => commonText(
+                                                                                  data: "${items.awayTeamRuns![index]}/${items.awayTeamWickets![index]}",
+                                                                                  fontSize: 14,
+                                                                                  fontWeight: FontWeight.w500,
+                                                                                  fontFamily: "Poppins",
+                                                                                  color: Colors.black,
+                                                                                ),
+                                                                              ),
+                                                                            )
+                                                                            // optional else case
+
                                                                                 : commonText(
-                                                                                    data: "Not found",
-                                                                                    fontSize: 14,
-                                                                                    fontWeight: FontWeight.w500,
-                                                                                    fontFamily: "Poppins",
-                                                                                    color: Colors.black,
-                                                                                  ),
+                                                                              data: "N/A",
+                                                                              fontSize: 14,
+                                                                              fontWeight: FontWeight.w500,
+                                                                              fontFamily: "Poppins",
+                                                                              color: Colors.black,
+                                                                            ),
                                                                           ],
                                                                         ),
                                                                       ),

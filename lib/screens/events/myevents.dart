@@ -41,7 +41,7 @@ class _MyEventsScreenState extends State<MyEventsScreen> {
                           height: 30,
                           child: Center(
                             child: Text(
-                              'Days',
+                              'Matches',
                               style: TextStyle(
                                 color: activePageIndex == 0
                                     ? neonColor
@@ -123,7 +123,7 @@ class _MyEventsScreenState extends State<MyEventsScreen> {
               flex: 2,
               child: PageView(
                 controller: _pageController,
-                physics: const ClampingScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 scrollDirection: Axis.horizontal,
                 onPageChanged: (int i) {
                   FocusScope.of(context).requestFocus(FocusNode());

@@ -12,12 +12,16 @@ import 'package:kisma_livescore/responses/live_score_response.dart';
 import 'package:kisma_livescore/responses/login_response.dart';
 import 'package:kisma_livescore/responses/privacy_policy_response.dart';
 import 'package:kisma_livescore/responses/searchResponse.dart';
+import 'package:kisma_livescore/responses/seriescategory.dart';
 import 'package:kisma_livescore/responses/sign_up_response.dart';
 import 'package:kisma_livescore/responses/socketlivematch.dart';
 import 'package:kisma_livescore/responses/terms_and_conditions_response.dart';
 import 'package:kisma_livescore/responses/upcoming_series_response.dart';
 import 'package:kisma_livescore/utils/response_status.dart';
 import 'package:kisma_livescore/utils/shared_preference.dart';
+
+import '../responses/myevents.dart';
+import '../responses/seriesmatches.dart';
 
 class LiveScoreRepository {
   String? token;
@@ -173,8 +177,8 @@ class LiveScoreRepository {
   Future<ResponseData> searchMatches(String query) async {
     try {
       final response = await ApiService().sendRequest.get(
-        "http://34.238.14.72:8080/api/matches/completed/search?query=${query}");
-          // "/matches/completed/search?query=${query}");
+        // "http://34.238.14.72:8080/api/matches/completed/search?query=${query}");
+          "/matches/completed/search?query=${query}");
 
       return ResponseData(
           statusCode: response.statusCode,
@@ -200,6 +204,26 @@ class LiveScoreRepository {
       return ResponseData(
           statusCode: response.statusCode,
           response: FinishedSeriesResponse.fromJson(response.data));
+      // response: FinishedMatchResponse.fromJson(response.data));
+    } on DioException catch (e) {
+      throw ErrorData(
+          message: e.response!.data['message'], code: e.response!.statusCode);
+    } on Exception catch (_) {
+      rethrow;
+    }
+  }
+
+
+  Future<ResponseData> seriesCategory(
+      String pageno,
+      ) async {
+    try {
+      final response = await ApiService()
+          .sendRequest
+          .get("/series/all?page=${pageno}&size=10");
+      return ResponseData(
+          statusCode: response.statusCode,
+          response: SeriesCategoryResponse.fromJson(response.data));
       // response: FinishedMatchResponse.fromJson(response.data));
     } on DioException catch (e) {
       throw ErrorData(
@@ -290,6 +314,41 @@ class LiveScoreRepository {
       return ResponseData(
         statusCode: response.statusCode,
         response: response.data["message"],
+      );
+    } on DioException catch (e) {
+      throw ErrorData(
+          message: e.response!.data['message'], code: e.response!.statusCode);
+    } on Exception catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<ResponseData> getMyEventsMatches(String date, String type, String pageNo) async {
+    try {
+      final response = await ApiService().sendRequest.get(
+        "/matches/by-series-type?date=${date}&seriesType=${type}&page=${pageNo}&size=10",
+      );
+      return ResponseData(
+        statusCode: response.statusCode,
+        response:  MyEventsResponse.fromJson(response.data)
+      );
+    } on DioException catch (e) {
+      throw ErrorData(
+          message: e.response!.data['message'], code: e.response!.statusCode);
+    } on Exception catch (_) {
+      rethrow;
+    }
+  }
+
+
+  Future<ResponseData> seriesMatches(String id, String pageNo) async {
+    try {
+      final response = await ApiService().sendRequest.get(
+        "/matches/by-series-id?seriesId=${id}&page=${pageNo}&size=10",
+      );
+      return ResponseData(
+          statusCode: response.statusCode,
+          response:  SeriesMatchesResponse.fromJson(response.data)
       );
     } on DioException catch (e) {
       throw ErrorData(

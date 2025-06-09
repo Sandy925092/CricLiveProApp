@@ -15,6 +15,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 //test
 
 bool loginValue = false;
+String selectedDate = "";
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();

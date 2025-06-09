@@ -139,13 +139,13 @@ class _FinishedMatchScorecardScreenState
 
                 if (finishedMatchDetailsResponse.data != null) {
                   teamAId = finishedMatchDetailsResponse.data?.teamAId ?? 0;
-                  teamBId = finishedMatchDetailsResponse.data?.teamBId;
+                  teamBId = finishedMatchDetailsResponse.data?.teamBId??0;
 
                   teamAInnings = finishedMatchDetailsResponse.data?.innings
-                      ?.where((inning) => inning.inningNumber == 1)
+                      ?.where((inning) => inning.inningNumber==1)
                       .toList();
 
-                  if (teamAInnings != null) {
+                  if (teamAInnings!= null) {
                     for (var inning in teamAInnings!) {
                       if (inning.battingTeam.teamId == teamAId) {
                         teamAName = finishedMatchDetailsResponse.data?.teamAName
@@ -176,7 +176,7 @@ class _FinishedMatchScorecardScreenState
                   }
 
                   teamBInnings = finishedMatchDetailsResponse.data?.innings
-                      ?.where((inning) => inning.inningNumber == 2)
+                      ?.where((inning) => inning.inningNumber==2)
                       .toList();
 
                   if (teamBInnings != null) {
@@ -188,7 +188,8 @@ class _FinishedMatchScorecardScreenState
                         teamBName = finishedMatchDetailsResponse.data?.teamBName
                                 .toString() ??
                             "";
-                      } else {
+                      }
+                      else {
                         teamBName = finishedMatchDetailsResponse.data?.teamAName
                                 .toString() ??
                             "";
@@ -203,10 +204,13 @@ class _FinishedMatchScorecardScreenState
                         partnerships?.addAll(inning.partnerships!);
                       }
                       if (inning.extras != null) {
+
                         teamBExtras = inning.extras;
+
                       }
                     }
                   }
+
 
                   // teamAInnings = finishedMatchDetailsResponse.data?.innings
                   //     ?.where((inning) => inning.battingTeam?.teamId == teamAId)
@@ -262,6 +266,8 @@ class _FinishedMatchScorecardScreenState
                   final teamAId1 = finishedMatchDetailsResponse.data?.teamAId;
                   final teamBId2 = finishedMatchDetailsResponse.data?.teamBId;
 
+
+
                   teamAIndex = finishedMatchDetailsResponse.data?.teamLineups
                           ?.indexWhere((lineup) => lineup.teamId == teamAId1) ??
                       -1;
@@ -270,8 +276,7 @@ class _FinishedMatchScorecardScreenState
                       -1;
 
                   print("jsonEncode(teamALineUp)");
-                  print(jsonEncode(
-                      finishedMatchDetailsResponse.data?.teamLineups));
+                  print(jsonEncode(teamAInnings));
                   print(teamAName);
                   print(teamBName);
 
@@ -576,7 +581,7 @@ class _FinishedMatchScorecardScreenState
                           ),
                         ],
                       ),
-                    ),
+                    ), 
                     isScoreCardSelected
                         ? Column(
                             children: [
@@ -864,7 +869,7 @@ class _FinishedMatchScorecardScreenState
                                               ],
                                             ),
                                           ),
-                                          Card(
+                                          batters?.length!=0?  Card(
                                             color: Colors.white,
                                             margin: EdgeInsets.all(10),
                                             child: Table(
@@ -982,7 +987,7 @@ class _FinishedMatchScorecardScreenState
                                                 }),
                                               ],
                                             ),
-                                          ),
+                                          ):SizedBox(),
                                           Container(
                                             margin: const EdgeInsets.only(
                                                 left: 10.0, right: 10),
@@ -1869,7 +1874,7 @@ class _FinishedMatchScorecardScreenState
                                                                   ),
                                                                   commonText(
                                                                     data:
-                                                                        "${finishedMatchDetailsResponse.data?.teamLineups?[teamAIndex].lineup?[index].role.toString() == "Wicketkeeper" ? "Batsman" : finishedMatchDetailsResponse.data?.teamLineups?[teamAIndex].lineup?[index].role}",
+                                                                        "${finishedMatchDetailsResponse.data?.teamLineups?[teamAIndex].lineup?[index].role.toString() == "Wicketkeeper" ? "WK-Batsman" : finishedMatchDetailsResponse.data?.teamLineups?[teamAIndex].lineup?[index].role}",
                                                                     fontSize:
                                                                         13,
                                                                     maxLines: 2,
@@ -1924,7 +1929,7 @@ class _FinishedMatchScorecardScreenState
                                                                   ),
                                                                   commonText(
                                                                     data:
-                                                                        "${finishedMatchDetailsResponse.data?.teamLineups?[teamAIndex].lineup?[index].role.toString() == "WicketKeeper" ? "Batsman" : finishedMatchDetailsResponse.data?.teamLineups?[teamAIndex].lineup?[index].role}",
+                                                                        "${finishedMatchDetailsResponse.data?.teamLineups?[teamAIndex].lineup?[index].role.toString() == "WicketKeeper" ? "WK-Batsman" : finishedMatchDetailsResponse.data?.teamLineups?[teamAIndex].lineup?[index].role}",
                                                                     fontSize:
                                                                         13,
                                                                     maxLines: 2,
@@ -2081,7 +2086,7 @@ class _FinishedMatchScorecardScreenState
                                                                   ),
                                                                   commonText(
                                                                     data:
-                                                                        "${finishedMatchDetailsResponse.data?.teamLineups?[teamBIndex].lineup?[index].role.toString() == "Wicketkeeper" ? "Batsman" : finishedMatchDetailsResponse.data?.teamLineups?[teamBIndex].lineup?[index].role}",
+                                                                        "${finishedMatchDetailsResponse.data?.teamLineups?[teamBIndex].lineup?[index].role.toString() == "Wicketkeeper" ? "WK-Batsman" : finishedMatchDetailsResponse.data?.teamLineups?[teamBIndex].lineup?[index].role}",
                                                                     fontSize:
                                                                         13,
                                                                     maxLines: 2,
@@ -2136,7 +2141,7 @@ class _FinishedMatchScorecardScreenState
                                                                   ),
                                                                   commonText(
                                                                     data:
-                                                                        "${finishedMatchDetailsResponse.data?.teamLineups?[teamBIndex].lineup?[index].role.toString() == "WicketKeeper" ? "Batsman" : finishedMatchDetailsResponse.data?.teamLineups?[teamBIndex].lineup?[index].role}",
+                                                                        "${finishedMatchDetailsResponse.data?.teamLineups?[teamBIndex].lineup?[index].role.toString() == "WicketKeeper" ? "WK-Batsman" : finishedMatchDetailsResponse.data?.teamLineups?[teamBIndex].lineup?[index].role}",
                                                                     fontSize:
                                                                         13,
                                                                     maxLines: 2,
@@ -2321,31 +2326,36 @@ class _FinishedMatchScorecardScreenState
     // log(allInnings[0]['inningData']);
     // log(allInnings[2]['inningData']);
     // log(allInnings[3]['inningData']);
-    final selectedInning = allInnings[selectedTabIndex]['inningData'];
-    batters = selectedInning.batters ?? [];
-    bowlers = selectedInning.bowlers ?? [];
-    print("batters names");
-    print(jsonEncode(batters));
 
-    if (selectedInning.fallOfWickets.length != 0) {
-      fallOfWicketsteamA = selectedInning.fallOfWickets ?? [];
-    }
-    if (selectedInning.partnerships.length != 0) {
-      partnerships = selectedInning.partnerships ?? [];
+    if(allInnings.length!=0){
+      final selectedInning = allInnings[selectedTabIndex]['inningData'];
+      batters = selectedInning.batters ?? [];
+      bowlers = selectedInning.bowlers ?? [];
+      print("batters names");
+      print(jsonEncode(batters));
+
+      if (selectedInning.fallOfWickets.length != 0) {
+        fallOfWicketsteamA = selectedInning.fallOfWickets ?? [];
+      }
+      if (selectedInning.partnerships.length != 0) {
+        partnerships = selectedInning.partnerships ?? [];
+      }
+
+      teamAExtras = selectedInning.extras;
+      if (selectedInning.yetToBat != null) {
+        yetToBat = selectedInning.yetToBat ?? [];
+      }
+      if (selectedInning.overSummaries != null) {
+        overSummaries = (selectedInning.overSummaries ?? []).reversed.toList();
+      }
+
+      print("updatedMatch 2.toString()");
+      // print(jsonEncode(yetToBat));
+      // print(jsonEncode(overSummaries));
+      debugPrint(jsonEncode(yetToBat), wrapWidth: 1024);
+      updateTabController();
     }
 
-    teamAExtras = selectedInning.extras;
-    if (selectedInning.yetToBat != null) {
-      yetToBat = selectedInning.yetToBat ?? [];
-    }
-    if (selectedInning.overSummaries != null) {
-      overSummaries = (selectedInning.overSummaries ?? []).reversed.toList();
-    }
-
-    print("updatedMatch 2.toString()");
-    // print(jsonEncode(yetToBat));
-    // print(jsonEncode(overSummaries));
-    debugPrint(jsonEncode(yetToBat), wrapWidth: 1024);
 
     // if (teamBInnings != null) {
     //   for (var inning in teamBInnings) {
@@ -2371,6 +2381,6 @@ class _FinishedMatchScorecardScreenState
 
     // }
 
-    updateTabController();
+
   }
 }

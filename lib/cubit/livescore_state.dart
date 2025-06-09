@@ -15,6 +15,11 @@ enum LiveScoreStatus {
   finishedSeriesSuccess,
   finishedSeriesError,
 
+
+  seriesCategoryLoading,
+  seriesCategorySuccess,
+  seriesCategoryError,
+
   liveApiLoading,
   liveApiSuccess,
   liveApiError,
@@ -71,6 +76,15 @@ enum LiveScoreStatus {
   verifyOtpLoading,
   verifyOtpSuccess,
   verifyOtpError,
+
+  myEventsLoading,
+  myEventsSuccess,
+  myEventsError,
+
+
+  seriesMatchesLoading,
+  seriesMatchesSuccess,
+  seriesMatchesError,
 
   forgotPasswordLoading,
   forgotPasswordSuccess,

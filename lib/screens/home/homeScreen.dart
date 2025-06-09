@@ -79,8 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
               preferredSize:
                   const Size.fromHeight(.0), // Adjust the height here
               child: TabBar(
-                tabAlignment: TabAlignment.start,
-                isScrollable: true,
+                // Remove tabAlignment and isScrollable
                 indicatorColor: buttonColors,
                 labelColor: buttonColors,
                 unselectedLabelColor: disableColors,
@@ -88,61 +87,51 @@ class _HomeScreenState extends State<HomeScreen> {
                 dividerColor: buttonColors,
                 tabs: [
                   Tab(
-                      child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      commonText(
+                    child: Center(
+                      child: commonText(
                         data: "Live",
-                        fontSize: 18,
+                        fontSize: 14,
                         fontWeight: FontWeight.w500,
                         fontFamily: "Poppins",
                       ),
-                      //  1.w.widthBox,
-                      //   Container(
-                      //     width: 5.w,
-                      //     decoration: BoxDecoration(
-                      //         shape: BoxShape.circle, color: buttonColors),
-                      //     child: Center(
-                      //       child: commonText(
-                      //         data: "1",
-                      //         fontSize: 13,
-                      //         fontWeight: FontWeight.w700,
-                      //         fontFamily: "Poppins",
-                      //         color: black,
-                      //       ),
-                      //     ),
-                      //   ).p(2)
-                    ],
-                  )), // Changed from icon to text
-
+                    ),
+                  ),
                   Tab(
+                    child: Center(
                       child: commonText(
-                    data: "For You",
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: "Poppins",
-                  )),
-
+                        data: "For You",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: "Poppins",
+                      ),
+                    ),
+                  ),
                   Tab(
+                    child: Center(
                       child: commonText(
-                    overflow: TextOverflow.ellipsis,
-                    data: "Upcoming",
-                    fontSize: 14,
-                    maxLines: 1,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: "Poppins",
-                  )),
-
+                        overflow: TextOverflow.ellipsis,
+                        data: "Upcoming",
+                        fontSize: 14,
+                        maxLines: 1,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: "Poppins",
+                      ),
+                    ),
+                  ),
                   Tab(
+                    child: Center(
                       child: commonText(
-                    data: "Finished",
-                    fontSize: 14,
-                    maxLines: 1,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: "Poppins",
-                  )),
+                        data: "Finished",
+                        fontSize: 14,
+                        maxLines: 1,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: "Poppins",
+                      ),
+                    ),
+                  ),
                 ],
-              ),
+              )
+
             ),
           ),
           body: const TabBarView(
