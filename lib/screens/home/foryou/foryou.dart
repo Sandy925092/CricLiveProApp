@@ -90,6 +90,7 @@ class _ForYouState extends State<ForYou> {
                       ?.removeAt(selectedIndex);
                 }
               });
+
               showToast(
                   context: context, message: "Match removed from wishlist");
             }
@@ -508,13 +509,16 @@ class _ForYouState extends State<ForYou> {
                               },
                             );
                           })
-                      : Center(
-                          child: mediumText14(context, 'No Liked Match yet',
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              textAlign: TextAlign.center,
-                              textColor: const Color(0xffFFFFFF)),
-                        ),
+                      : SizedBox(
+                    height: MediaQuery.of(context).size.height*0.7,
+                        child: Center(
+                            child: mediumText14(context, 'No Liked Match Yet',
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                textAlign: TextAlign.center,
+                                textColor: const Color(0xffFFFFFF)),
+                          ),
+                      ),
                   2.h.heightBox,
                   // ExpandedTile(
                   //   trailing: Icon(

@@ -512,7 +512,6 @@ Widget dashboardTextField({
     onTap: onTap,
     onChanged:onChanged,
     enabled: isEnabled,
-
     decoration: InputDecoration(
       prefixIcon: Padding(
         padding: const EdgeInsets.only(left: 12,right: 14),
@@ -531,7 +530,7 @@ Widget dashboardTextField({
       hintText: hintText,
       hintStyle: GoogleFonts.inter(
         fontWeight: hintFontWeight, fontSize: hintFontSize,
-        color: hintFontColor,),
+        color: Colors.black,),
       border: const OutlineInputBorder(
         borderSide: BorderSide.none,
       ),

@@ -108,7 +108,9 @@ class _UpcomingMatchScreenState extends State<UpcomingMatchScreen> {
             setState(() {
               fixtures[selectedIndex].liked = true;
             });
-            showToast(context: context, message: "Match added to wishlist");
+            UiHelper.toastMessage(
+                "Match added to wishlist" ?? '');
+            // showToast(context: context, message: "Match added to wishlist");
           }
 
           if (state.status == LiveScoreStatus.unLikematchSuccess) {
@@ -220,7 +222,6 @@ class _UpcomingMatchScreenState extends State<UpcomingMatchScreen> {
                                     itemBuilder: (context, item, index) {
                                       final isExpanded = expandedIndex == index;
                                       return ExpansionTile(
-
                                         key: PageStorageKey(
                                             'expansion_tile_$index'),
                                         initiallyExpanded: isExpanded,
@@ -318,7 +319,7 @@ class _UpcomingMatchScreenState extends State<UpcomingMatchScreen> {
                                                   ),
                                                 ),
                                               )
-                                            else if (seriesName.length==0)
+                                            else if (seriesName.length == 0)
                                               Center(
                                                 child: mediumText14(
                                                   context,
@@ -326,221 +327,194 @@ class _UpcomingMatchScreenState extends State<UpcomingMatchScreen> {
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.w500,
                                                   textAlign: TextAlign.center,
-                                                  textColor:
-                                                      Colors.red,
+                                                  textColor: Colors.red,
                                                 ),
                                               )
                                             else
-                                              fixtures.length!=0
-                                          ?Column(
-                                                children: fixtures
-                                                    .asMap()
-                                                    .entries
-                                                    .map(
-                                                  (entry) {
-                                                    final index1 = entry.key;
-                                                    final items = entry.value;
+                                              fixtures.length != 0
+                                                  ? Column(
+                                                      children: fixtures
+                                                          .asMap()
+                                                          .entries
+                                                          .map(
+                                                        (entry) {
+                                                          final index1 =
+                                                              entry.key;
+                                                          final items =
+                                                              entry.value;
 
-                                                    return GestureDetector(
-                                                      onTap: () {
-                                                        print(
-                                                            "Tapped fixture index: $index1");
+                                                          return GestureDetector(
+                                                            onTap: () {
+                                                              print(
+                                                                  "Tapped fixture index: $index1");
 
-                                                        // Example: Navigate or show toast
-                                                        // if (items.fixtures == true) {
-                                                        //   Navigator.push(context, MaterialPageRoute(builder: (context) {
-                                                        //     return FinishedMatchScorecardScreen(
-                                                        //       matchId: items.fixtureId?.toString() ?? "",
-                                                        //       winningTeam: items.winningTeamName?.toString() ?? "",
-                                                        //     );
-                                                        //   }));
-                                                        // } else {
-                                                        //   showToast(context: context, message: "Result not found");
-                                                        // }
-                                                      },
-                                                      child: Container(
-                                                        margin:
-                                                            EdgeInsets.all(10),
-                                                        decoration: BoxDecoration(
-                                                            color: Colors.white
-                                                                .withOpacity(
-                                                                    0.2),
-                                                            border: Border.all(
-                                                                color:
-                                                                    disableColors),
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        7)),
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(1.0),
-                                                          child: Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .only(
-                                                                        right:
-                                                                            10.0,
-                                                                        top: 5),
-                                                                child: Align(
-                                                                  alignment:
-                                                                      Alignment
-                                                                          .centerRight,
-                                                                  child: state.status ==
-                                                                              LiveScoreStatus
-                                                                                  .likematchLoading &&
-                                                                          selectedIndex == index1 || state.status ==
-                                                                      LiveScoreStatus.unLikematchLoading && selectedIndex ==
-                                                                          index1
-                                                                      ? SizedBox(
-                                                                          height: 20,
-                                                                      width: 20,
-                                                                          child: CircularProgressIndicator(color:
-                                                                            Colors.blue,))
-                                                                      : GestureDetector(
-                                                                          onTap:
-                                                                              () {
-                                                                            if (items.liked ==
-                                                                                true) {
-                                                                              isInternetConnected().then((value) {
-                                                                                if (value == true) {
-                                                                                  selectedIndex = index1;
-
-                                                                                  BlocProvider.of<LiveScoreCubit>(context).unLikeMatch(token, items.fixtureId.toString() ?? "");
-                                                                                } else {
-                                                                                  showToast(context: context, message: notConnected);
-                                                                                }
-                                                                              });
-                                                                            } else {
-                                                                              isInternetConnected().then((value) {
-                                                                                if (value == true) {
-
-                                                                                  print("series id index");
-                                                                                  print(index);
-                                                                                  print(index1);
-                                                                                  Map<String, dynamic> matchDetails = {
-                                                                                    "seriesId": upcomingSeriesResponse.data?.content![index].seriesId?.toString() ?? "",
-                                                                                    "seriesName": upcomingSeriesResponse.data?.content![index].seriesName?.toString() ?? "",
-                                                                                    "fixtureId": items.fixtureId?.toString() ?? "",
-                                                                                    "teamAName": items.homeTeam?.name?.toString() ?? "",
-                                                                                    "teamBName": items.awayTeam?.name?.toString() ?? "",
-                                                                                    "matchStatus": "Upcoming",
-                                                                                    "matchDate": items.startTimes?.first.date?.toString() ?? "",
-                                                                                  };
-
-                                                                                  selectedIndex = index1;
-
-                                                                                  print(matchDetails);
-
-                                                                                  BlocProvider.of<LiveScoreCubit>(context).likeMatch(token, matchDetails);
-                                                                                } else {
-                                                                                  showToast(context: context, message: notConnected);
-                                                                                }
-                                                                              });
-                                                                            }
-                                                                          },
-                                                                          child:
-                                                                              Icon(
-                                                                            items.liked == true
-                                                                                ? Icons.favorite
-                                                                                : Icons.favorite_outline_rounded,
-                                                                            color: items.liked == true
-                                                                                ? Colors.red
-                                                                                : Colors.grey,
-                                                                          ),
-                                                                        ),
-                                                                ),
-                                                              ),
-                                                              Padding(
+                                                              // Example: Navigate or show toast
+                                                              // if (items.fixtures == true) {
+                                                              //   Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                                              //     return FinishedMatchScorecardScreen(
+                                                              //       matchId: items.fixtureId?.toString() ?? "",
+                                                              //       winningTeam: items.winningTeamName?.toString() ?? "",
+                                                              //     );
+                                                              //   }));
+                                                              // } else {
+                                                              //   showToast(context: context, message: "Result not found");
+                                                              // }
+                                                            },
+                                                            child: Container(
+                                                              margin: EdgeInsets
+                                                                  .all(10),
+                                                              decoration: BoxDecoration(
+                                                                  color: Colors
+                                                                      .white
+                                                                      .withOpacity(
+                                                                          0.2),
+                                                                  border: Border
+                                                                      .all(
+                                                                          color:
+                                                                              disableColors),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              7)),
+                                                              child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
                                                                         .all(
-                                                                        12.0),
-                                                                child: Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .spaceBetween,
+                                                                        1.0),
+                                                                child: Column(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
                                                                   children: [
-                                                                    Flexible(
+                                                                    Padding(
+                                                                      padding: const EdgeInsets
+                                                                          .only(
+                                                                          right:
+                                                                              10.0,
+                                                                          top:
+                                                                              5),
                                                                       child:
-                                                                          SizedBox(
-                                                                        width: MediaQuery.of(context).size.width *
-                                                                            0.25,
-                                                                        child:
-                                                                            commonText(
-                                                                          data: items.homeTeam?.name?.toString() ??
-                                                                              "Not available",
-                                                                          fontSize:
-                                                                              14,
-                                                                          fontWeight:
-                                                                              FontWeight.w400,
-                                                                          fontFamily:
-                                                                              "Poppins",
-                                                                          color:
-                                                                              Colors.black,
-                                                                        ),
+                                                                          Align(
+                                                                        alignment:
+                                                                            Alignment.centerRight,
+                                                                        child: state.status == LiveScoreStatus.likematchLoading && selectedIndex == index1 ||
+                                                                                state.status == LiveScoreStatus.unLikematchLoading && selectedIndex == index1
+                                                                            ? SizedBox(
+                                                                                height: 20,
+                                                                                width: 20,
+                                                                                child: CircularProgressIndicator(
+                                                                                  color: Colors.blue,
+                                                                                ))
+                                                                            : GestureDetector(
+                                                                                onTap: () {
+                                                                                  if (items.liked == true) {
+                                                                                    isInternetConnected().then((value) {
+                                                                                      if (value == true) {
+                                                                                        selectedIndex = index1;
+
+                                                                                        BlocProvider.of<LiveScoreCubit>(context).unLikeMatch(token, items.fixtureId.toString() ?? "");
+                                                                                      } else {
+                                                                                        showToast(context: context, message: notConnected);
+                                                                                      }
+                                                                                    });
+                                                                                  } else {
+                                                                                    isInternetConnected().then((value) {
+                                                                                      if (value == true) {
+                                                                                        print("series id index");
+                                                                                        print(index);
+                                                                                        print(index1);
+                                                                                        Map<String, dynamic> matchDetails = {
+                                                                                          "seriesId": upcomingSeriesResponse.data?.content![index].seriesId?.toString() ?? "",
+                                                                                          "seriesName": upcomingSeriesResponse.data?.content![index].seriesName?.toString() ?? "",
+                                                                                          "fixtureId": items.fixtureId?.toString() ?? "",
+                                                                                          "teamAName": items.homeTeam?.name?.toString() ?? "",
+                                                                                          "teamBName": items.awayTeam?.name?.toString() ?? "",
+                                                                                          "matchStatus": "Upcoming",
+                                                                                          "matchDate": items.startTimes?.first.date?.toString() ?? "",
+                                                                                        };
+
+                                                                                        selectedIndex = index1;
+
+                                                                                        print(matchDetails);
+
+                                                                                        BlocProvider.of<LiveScoreCubit>(context).likeMatch(token, matchDetails);
+                                                                                      } else {
+                                                                                        showToast(context: context, message: notConnected);
+                                                                                      }
+                                                                                    });
+                                                                                  }
+                                                                                },
+                                                                                child: Icon(
+                                                                                  items.liked == true ? Icons.favorite : Icons.favorite_outline_rounded,
+                                                                                  color: items.liked == true ? Colors.red : Colors.grey,
+                                                                                ),
+                                                                              ),
                                                                       ),
                                                                     ),
-                                                                    Container(
-                                                                      width:
-                                                                          25.w,
-                                                                      padding: EdgeInsets.symmetric(
-                                                                          horizontal:
-                                                                              10,
-                                                                          vertical:
-                                                                              3),
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(20.0),
-                                                                        color:
-                                                                            buttonColors,
-                                                                      ),
+                                                                    Padding(
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          12.0),
                                                                       child:
-                                                                          Center(
-                                                                        child:
-                                                                            commonText(
-                                                                          alignment:
-                                                                              TextAlign.center,
-                                                                          data:
-                                                                              "Starting on\n ${DateFormat("d/M/yy").format(DateTime.parse(items.startTimes?.first.date ?? "2025-04-04T10:00:00"))}",
-                                                                          fontSize:
-                                                                              10,
-                                                                          fontWeight:
-                                                                              FontWeight.w700,
-                                                                          fontFamily:
-                                                                              "Poppins",
-                                                                          color:
-                                                                              black,
-                                                                        ),
-                                                                      ),
-                                                                    ).pOnly(
-                                                                        left:
-                                                                            32,
-                                                                        right:
-                                                                            32),
-                                                                    Flexible(
-                                                                      child:
-                                                                          Column(
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.start,
+                                                                          Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceBetween,
                                                                         children: [
-                                                                          SizedBox(
-                                                                            width:
-                                                                                MediaQuery.of(context).size.width * 0.25,
+                                                                          Flexible(
                                                                             child:
-                                                                                commonText(
-                                                                              data: items.awayTeam?.name?.toString() ?? "Not available",
-                                                                              fontSize: 14,
-                                                                              fontWeight: FontWeight.w400,
-                                                                              fontFamily: "Poppins",
-                                                                              color: Colors.black,
+                                                                                SizedBox(
+                                                                              width: MediaQuery.of(context).size.width * 0.25,
+                                                                              child: commonText(
+                                                                                data: items.homeTeam?.name?.toString() ?? "Not available",
+                                                                                fontSize: 14,
+                                                                                fontWeight: FontWeight.w400,
+                                                                                fontFamily: "Poppins",
+                                                                                color: Colors.black,
+                                                                                overflow: TextOverflow.ellipsis,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          Container(
+                                                                            width:
+                                                                                25.w,
+                                                                            padding:
+                                                                                EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              borderRadius: BorderRadius.circular(20.0),
+                                                                              color: buttonColors,
+                                                                            ),
+                                                                            child:
+                                                                                Center(
+                                                                              child: commonText(
+                                                                                alignment: TextAlign.center,
+                                                                                data: "Starting on\n ${DateFormat("d/M/yy").format(DateTime.parse(items.startTimes?.first.date ?? "2025-04-04T10:00:00"))}",
+                                                                                fontSize: 10,
+                                                                                fontWeight: FontWeight.w700,
+                                                                                fontFamily: "Poppins",
+                                                                                color: black,
+                                                                              ),
+                                                                            ),
+                                                                          ).pOnly(
+                                                                              left: 32,
+                                                                              right: 32),
+                                                                          Flexible(
+                                                                            child:
+                                                                                Column(
+                                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                                              children: [
+                                                                                SizedBox(
+                                                                                  width: MediaQuery.of(context).size.width * 0.25,
+                                                                                  child: commonText(
+                                                                                    data: items.awayTeam?.name?.toString() ?? "Not available",
+                                                                                    fontSize: 14,
+                                                                                    fontWeight: FontWeight.w400,
+                                                                                    fontFamily: "Poppins",
+                                                                                    color: Colors.black,
+                                                                                    overflow: TextOverflow.ellipsis,
+                                                                                  ),
+                                                                                ),
+                                                                              ],
                                                                             ),
                                                                           ),
                                                                         ],
@@ -549,24 +523,23 @@ class _UpcomingMatchScreenState extends State<UpcomingMatchScreen> {
                                                                   ],
                                                                 ),
                                                               ),
-                                                            ],
-                                                          ),
-                                                        ),
+                                                            ),
+                                                          );
+                                                        },
+                                                      ).toList(),
+                                                    )
+                                                  : Center(
+                                                      child: mediumText14(
+                                                        context,
+                                                        'No match found',
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        textColor: Colors.white,
                                                       ),
-                                                    );
-                                                  },
-                                                ).toList(),
-                                              ): Center(
-                                                child: mediumText14(
-                                                  context,
-                                                  'No match found',
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w500,
-                                                  textAlign: TextAlign.center,
-                                                  textColor:
-                                                  Colors.white,
-                                                ),
-                                              )
+                                                    )
                                         ],
                                       );
                                     },

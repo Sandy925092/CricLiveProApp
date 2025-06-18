@@ -91,11 +91,20 @@ class _MyEventsSeriesScreenState extends State<MyEventsSeriesScreen> {
           }
         },
         builder: (context, state) {
+          if (seriesCategoryList.isEmpty && isLoading) {
+            return const Center(
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: Colors.white,
+              ),
+            );
+          }
+
           return Column(
             children: [
-              const SizedBox(height: 10),
+              const SizedBox(height: 80),
 
-              // Horizontal scroll list with manual pagination
+              // Horizontal scroll list
               SizedBox(
                 height: 40,
                 child: ListView.builder(
@@ -104,14 +113,17 @@ class _MyEventsSeriesScreenState extends State<MyEventsSeriesScreen> {
                   itemCount: seriesCategoryList.length + (hasMore ? 1 : 0),
                   itemBuilder: (context, index) {
                     if (index == seriesCategoryList.length) {
-                      // Loading indicator at the end
+                      // Loader at end during pagination
                       return const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16),
                         child: Center(
                           child: SizedBox(
                             width: 24,
                             height: 24,
-                            child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white,),
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       );
@@ -139,9 +151,9 @@ class _MyEventsSeriesScreenState extends State<MyEventsSeriesScreen> {
                         child: Center(
                           child: Text(
                             item.name ?? "Unnamed",
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 14,
-                              color:  Colors.black,
+                              color: Colors.black,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -154,7 +166,7 @@ class _MyEventsSeriesScreenState extends State<MyEventsSeriesScreen> {
 
               const SizedBox(height: 10),
 
-              // Dynamic content for selected item
+              // Show dynamic content for selected category
               Expanded(
                 child: seriesCategoryList.isNotEmpty
                     ? SeriesEventScreen(
@@ -165,7 +177,7 @@ class _MyEventsSeriesScreenState extends State<MyEventsSeriesScreen> {
               ),
             ],
           );
-        },
+        }
       ),
     );
   }

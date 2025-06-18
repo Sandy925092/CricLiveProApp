@@ -15,6 +15,7 @@ import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../../../constants.dart';
 import '../../../cubit/livescore_cubit.dart';
 import '../../../utils/custom_widgets.dart';
 import '../../../utils/ui_helper.dart';
@@ -433,11 +434,9 @@ class _FinishedScreenState extends State<FinishedScreen> {
                                                               },
                                                             ));
                                                           } else {
-                                                            showToast(
-                                                                context:
-                                                                    context,
-                                                                message:
-                                                                    "Result not found");
+                                                            UiHelper.toastMessage(
+                                                                resultNotfound ?? '');
+
                                                           }
                                                         },
                                                         child: Container(
@@ -491,8 +490,11 @@ class _FinishedScreenState extends State<FinishedScreen> {
                                                                                 fontWeight: FontWeight.w400,
                                                                                 fontFamily: "Poppins",
                                                                                 color: Colors.black,
+                                                                                maxLines: 1,
+                                                                                overflow: TextOverflow.ellipsis,
                                                                               ),
                                                                             ),
+
                                                                             SizedBox(height: 20),
                                                                             items.homeTeamRuns!.isNotEmpty
                                                                                 ? Column(
@@ -519,21 +521,25 @@ class _FinishedScreenState extends State<FinishedScreen> {
                                                                           ],
                                                                         ),
                                                                       ),
-                                                                      Center(
-                                                                        child:
-                                                                            commonText(
-                                                                          alignment:
-                                                                              TextAlign.center,
-                                                                          data:
-                                                                              "${"${items.winningTeamName} won" ?? "N/A"}",
-                                                                          fontSize:
-                                                                              10,
-                                                                          fontWeight:
-                                                                              FontWeight.w700,
-                                                                          fontFamily:
-                                                                              "Poppins",
-                                                                          color:
-                                                                              Colors.black,
+                                                                      items.winningTeamName != null
+                                                                          ? Center(
+                                                                        child: commonText(
+                                                                          alignment: TextAlign.center,
+                                                                          data: "${items.winningTeamName} won" ?? "N/A",
+                                                                          fontSize: 10,
+                                                                          fontWeight: FontWeight.w700,
+                                                                          fontFamily: "Poppins",
+                                                                          color: Colors.black,
+                                                                        ),
+                                                                      )
+                                                                          : Center(
+                                                                        child: commonText(
+                                                                          alignment: TextAlign.center,
+                                                                          data: "N/A",
+                                                                          fontSize: 10,
+                                                                          fontWeight: FontWeight.w700,
+                                                                          fontFamily: "Poppins",
+                                                                          color: Colors.black,
                                                                         ),
                                                                       ),
                                                                       Flexible(
@@ -551,6 +557,7 @@ class _FinishedScreenState extends State<FinishedScreen> {
                                                                                       fontWeight: FontWeight.w400,
                                                                                       fontFamily: "Poppins",
                                                                                       color: Colors.black,
+                                                                                overflow: TextOverflow.ellipsis,
                                                                                     )
                                                                                   : commonText(
                                                                                       data: "Not available",

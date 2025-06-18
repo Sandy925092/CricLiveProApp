@@ -195,7 +195,7 @@ class _SignUpState extends State<SignUp> {
                          ),
                        ),
                      ),
-                     const SizedBox(height: 24,),
+                     const SizedBox(height: 50,),
                      commonButton(
                        context: context,
                        labelText: 'Sign Up',fontSize: 18,fontWeight: FontWeight.w600,height: 45,
@@ -213,23 +213,23 @@ class _SignUpState extends State<SignUp> {
                          RegExp passwordRegExp = RegExp(passwordPattern.trim());
                          if(nameController.text.isEmpty){
                            UiHelper.toastMessage("Please enter Name");
-                         } else if(emailController.text.isEmpty){
+                         } else if(emailController.text.trim().isEmpty){
                            UiHelper.toastMessage("Please enter Email ID");
                          }else if (!emailRegExp.hasMatch(emailController.text)) {
                            UiHelper.toastMessage("Please enter a valid email address");
                          }else if (countryController.text.isEmpty) {
                            UiHelper.toastMessage("Please select country");
                          }
-                         else if (passwordController.text.isEmpty) {
+                         else if (passwordController.text.trim().isEmpty) {
                            UiHelper.toastMessage(EMPTY_PASSWORD_VALIDATION ?? '');
-                         }else if (passwordController.text.length < 8 ||
+                         }else if (passwordController.text.trim().length < 8 ||
                              passwordController.text.length > 16) {
                            snackBarMessage(context,
                                'Password should be Between 8-16 characters long and it should contain Atleast One Number, One Special Character, One Uppercase and One Lowercase.');
                          } else if (!passwordRegExp
-                             .hasMatch(passwordController.text)) {
+                             .hasMatch(passwordController.text.trim())) {
                            snackBarMessage(context, PASSWORD_LENGTH_VALIDATION);
-                         } else if (confirmPasswordController.text.isEmpty) {
+                         } else if (confirmPasswordController.text.trim().isEmpty) {
                            UiHelper.toastMessage(
                                EMPTY_CONFIRM_PASSWORD_VALIDATION ?? '');
                          } else if (passwordController.text !=

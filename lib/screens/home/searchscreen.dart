@@ -417,11 +417,13 @@ class _SearchScreenState extends State<SearchScreen> {
                                                 margin: EdgeInsets.only(
                                                   top: 10,
                                                 ),
+
                                                 decoration: BoxDecoration(
-                                                    color: Colors.white
-                                                        .withOpacity(0.2),
-                                                    border: Border.all(
-                                                        color: disableColors),
+                                                    color: Colors.white,
+                                                    // color: Colors.white
+                                                    //     .withOpacity(0.2),
+                                                    // border: Border.all(
+                                                    //     color: disableColors),
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             7)),

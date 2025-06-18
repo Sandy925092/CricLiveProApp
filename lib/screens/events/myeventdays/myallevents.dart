@@ -108,7 +108,7 @@ class _MyAllEventsScreenState extends State<MyAllEventsScreen> {
               listener: (context, state) {
                 if (state.status == LiveScoreStatus.myEventsSuccess) {
                   myEventsResponse =
-                  state.responseData?.response as MyEventsResponse;
+                      state.responseData?.response as MyEventsResponse;
                   // Loader.hide();
 
                   final newItems = myEventsResponse.data?.content ?? [];
@@ -129,13 +129,14 @@ class _MyAllEventsScreenState extends State<MyAllEventsScreen> {
                       _pagingController.appendPage(newItems, pageNo + 1);
                     }
                   }
-                } else if (state.status == LiveScoreStatus.myEventsLoading && pageNo == 0) {
+                } else if (state.status == LiveScoreStatus.myEventsLoading &&
+                    pageNo == 0) {
                   // Loader.show(context);
-
                 }
               },
               builder: (context, state) {
-                if (state.status == LiveScoreStatus.myEventsLoading && pageNo == 0) {
+                if (state.status == LiveScoreStatus.myEventsLoading &&
+                    pageNo == 0) {
                   return const Center(
                     child: CircularProgressIndicator(color: Colors.white),
                   );
@@ -219,7 +220,8 @@ class _MyAllEventsScreenState extends State<MyAllEventsScreen> {
                     ),
                     Container(
                       width: 25.w,
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 3),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20.0),
                         color: buttonColors,
@@ -227,7 +229,8 @@ class _MyAllEventsScreenState extends State<MyAllEventsScreen> {
                       child: Center(
                         child: commonText(
                           alignment: TextAlign.center,
-                          data: "Starting on\n ${DateFormat("d/M/yy").format(DateTime.parse(item.matchDateTime ?? "2025-04-04T10:00:00"))}",
+                          data:
+                              "Starting on\n ${DateFormat("d/M/yy").format(DateTime.parse(item.matchDateTime ?? "2025-04-04T10:00:00"))}",
                           fontSize: 10,
                           fontWeight: FontWeight.w700,
                           fontFamily: "Poppins",
@@ -267,30 +270,17 @@ class _MyAllEventsScreenState extends State<MyAllEventsScreen> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: GestureDetector(
-        onTap: (){
-          if (item.result ==
-              true) {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder:
-                      (context) {
-                    return FinishedMatchScorecardScreen(
-                        matchId: item
-                            .fixtureId
-                            .toString() ??
-                            "",
-                        winningTeam:
-                        item.winningTeamName.toString() ??
-                            "");
-                  },
-                ));
+        onTap: () {
+          if (item.result == true) {
+            Navigator.push(context, MaterialPageRoute(
+              builder: (context) {
+                return FinishedMatchScorecardScreen(
+                    matchId: item.fixtureId.toString() ?? "",
+                    winningTeam: item.winningTeamName.toString() ?? "");
+              },
+            ));
           } else {
-            showToast(
-                context:
-                context,
-                message:
-                "Result not found");
+            showToast(context: context, message: "Result not found");
           }
         },
         child: Container(
@@ -337,8 +327,9 @@ class _MyAllEventsScreenState extends State<MyAllEventsScreen> {
                               Column(
                                 children: List.generate(
                                   item.homeTeamRuns!.length,
-                                      (i) => commonText(
-                                    data: "${item.homeTeamRuns![i]}/${item.homeTeamWickets![i]}",
+                                  (i) => commonText(
+                                    data:
+                                        "${item.homeTeamRuns![i]}/${item.homeTeamWickets![i]}",
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
                                     fontFamily: "Poppins",
@@ -357,10 +348,21 @@ class _MyAllEventsScreenState extends State<MyAllEventsScreen> {
                           ],
                         ),
                       ),
-                      Center(
+                      item.winningTeamName != null
+                          ? Center(
+                              child: commonText(
+                                alignment: TextAlign.center,
+                                data: "${item.winningTeamName} won" ?? "N/A",
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: "Poppins",
+                                color: Colors.black,
+                              ),
+                            )
+                          : Center(
                         child: commonText(
                           alignment: TextAlign.center,
-                          data: "${item.winningTeamName} won" ?? "N/A",
+                          data: "N/A",
                           fontSize: 10,
                           fontWeight: FontWeight.w700,
                           fontFamily: "Poppins",
@@ -386,8 +388,9 @@ class _MyAllEventsScreenState extends State<MyAllEventsScreen> {
                               Column(
                                 children: List.generate(
                                   item.awayTeamRuns!.length,
-                                      (i) => commonText(
-                                    data: "${item.awayTeamRuns![i]}/${item.awayTeamWickets![i]}",
+                                  (i) => commonText(
+                                    data:
+                                        "${item.awayTeamRuns![i]}/${item.awayTeamWickets![i]}",
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
                                     fontFamily: "Poppins",

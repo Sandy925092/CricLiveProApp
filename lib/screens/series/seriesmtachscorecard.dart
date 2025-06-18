@@ -18,8 +18,14 @@ import '../../responses/socketlivematch.dart';
 
 class SeriesMatchScorecardScreen extends StatefulWidget {
   final Matches matchList;
+  String teamAName = "";
+  String teamBName = "";
 
-  SeriesMatchScorecardScreen({super.key, required this.matchList});
+  SeriesMatchScorecardScreen(
+      {super.key,
+      required this.matchList,
+      required this.teamAName,
+      required this.teamBName});
 
   @override
   State<SeriesMatchScorecardScreen> createState() =>
@@ -73,6 +79,9 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
   List<YetToBat>? yetToBat = [];
   List<OverSummaries>? overSummaries = [];
 
+  String teamAName = "";
+  String teamBName = "";
+
   void initState() {
     print("selected match");
     // log(widget.matchList);
@@ -86,8 +95,15 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
 
     teamAId = widget.matchList.teamAId;
     teamBId = widget.matchList.teamBId;
+
+    teamAName = widget.teamAName;
+    teamBName = widget.teamBName;
+    // teamAInnings = widget.matchList.innings
+    //     ?.where((inning) => inning.battingTeam?.teamId == teamAId)
+    //     .toList();
+
     teamAInnings = widget.matchList.innings
-        ?.where((inning) => inning.battingTeam?.teamId == teamAId)
+        ?.where((inning) => inning.inningNumber == 1)
         .toList();
 
     if (teamAInnings != null) {
@@ -99,13 +115,17 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
           partnerships?.addAll(inning.partnerships!);
         }
         if (inning.extras != null) {
-          teamAExtras = inning.extras;
+          teamAExtras = inning.extras!;
         }
       }
     }
 
+    // teamBInnings = widget.matchList.innings
+    //     ?.where((inning) => inning.battingTeam?.teamId == teamBId)
+    //     .toList();
+
     teamBInnings = widget.matchList.innings
-        ?.where((inning) => inning.battingTeam?.teamId == teamBId)
+        ?.where((inning) => inning.inningNumber == 2)
         .toList();
     if (teamBInnings != null) {
       for (var inning in teamBInnings) {
@@ -224,13 +244,44 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
 
               teamAId = updatedMatch.teamAId;
               teamBId = updatedMatch.teamBId;
+              // teamAInnings = updatedMatch.innings
+              //     ?.where((inning) => inning.battingTeam?.teamId == teamAId)
+              //     .toList();
+
+              // teamBInnings = updatedMatch.innings
+              //     ?.where((inning) => inning.battingTeam?.teamId == teamBId)
+              //     .toList();
+
               teamAInnings = updatedMatch.innings
-                  ?.where((inning) => inning.battingTeam?.teamId == teamAId)
+                  ?.where((inning) => inning.inningNumber == 1 && inning.battingTeam?.teamId != null)
                   .toList();
 
               teamBInnings = updatedMatch.innings
-                  ?.where((inning) => inning.battingTeam?.teamId == teamBId)
+                  ?.where((inning) => inning.inningNumber == 2 && inning.battingTeam?.teamId != null)
                   .toList();
+              //
+              // final inningsList =
+              //     updatedMatch.innings ??
+              //         [];
+
+              // for (var inning in inningsList) {
+              //   final teamId = inning.battingTeam?.teamId;
+              //
+              //   if (inning.inningNumber == 1) {
+              //     if (teamId == match?.teamAId) {
+              //       teamAName =
+              //           match?.teamAName.toString() ?? "";
+              //     } else if (teamId == match?.teamBId) {
+              //       teamAName = match?.teamBName ?? "";
+              //     }
+              //   } else if (inning.inningNumber == 2) {
+              //     if (teamId == match?.teamAId) {
+              //       teamBName = match?.teamAName ?? "";
+              //     } else if (teamId == match?.teamBId) {
+              //       teamBName = match?.teamBName ?? "";
+              //     }
+              //   }
+              // }
 
               // 1. Combine and label innings from both teams
 
@@ -295,7 +346,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
               print("updatedMatch.toString()");
               print(updatedMatch?.teamAName);
               print(allInnings.toString());
-              print(widget.matchList.teamLineups?[0].lineup?.length);
+              // print(widget.matchList.teamLineups?[0].lineup?.length);
               print(teamBIndex);
               return Column(
                 children: [
@@ -328,10 +379,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                       child: commonText(
                                         alignment: TextAlign.center,
                                         // data: updatedMatch?.teamAName ?? updatedMatch?.teamAId.toString() ?? '',
-                                        data: widget.matchList.teamAName ??
-                                            widget.matchList.teamAId
-                                                .toString() ??
-                                            '',
+                                        data: widget.teamAName ?? '',
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
                                         fontFamily: "Poppins",
@@ -422,10 +470,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                       child: commonText(
                                         alignment: TextAlign.center,
                                         // data: updatedMatch?.teamAName ?? updatedMatch?.teamAId.toString() ?? '',
-                                        data: widget.matchList.teamBName ??
-                                            widget.matchList.teamBId
-                                                .toString() ??
-                                            '',
+                                        data: widget.teamBName.toString() ?? '',
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
                                         fontFamily: "Poppins",
@@ -524,11 +569,12 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                   child: Container(
                                     width: 100,
                                     decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.all(Radius.circular(10)),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10)),
                                         color: isScoreCardSelected
                                             ? neonColor
-                                            : Color.fromARGB(255, 226, 226, 226)),
+                                            : Color.fromARGB(
+                                                255, 226, 226, 226)),
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: commonText(
@@ -590,7 +636,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                           fontWeight: FontWeight.w700)),
                                   Spacer(),
                                   requiredRunRate != null
-                                      ? Text('CRR: ${requiredRunRate}',
+                                      ? Text('RRR: ${requiredRunRate}',
                                           style: TextStyle(
                                               color: Colors.black,
                                               fontSize: 10,
@@ -1076,7 +1122,12 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .bold,
-                                                                    color: Color.fromRGBO(0, 21, 72, 1),
+                                                                    color: Color
+                                                                        .fromRGBO(
+                                                                            0,
+                                                                            21,
+                                                                            72,
+                                                                            1),
                                                                   ),
                                                                 ),
                                                               ),
@@ -1749,349 +1800,450 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                               ),
                             ),
                             lineUpTeamA
-                                ? SizedBox(
-                                    height: (widget
+                                ? widget.matchList.teamLineups?.length != 0
+                                    ? SizedBox(
+                                        height: (widget
+                                                    .matchList
+                                                    .teamLineups?[teamAIndex]
+                                                    .lineup
+                                                    ?.length ??
+                                                0) *
+                                            50.0,
+                                        child: GridView.builder(
+                                          itemCount: widget
+                                              .matchList
+                                              .teamLineups?[teamAIndex]
+                                              .lineup
+                                              ?.length,
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          gridDelegate:
+                                              SliverGridDelegateWithFixedCrossAxisCount(
+                                                  crossAxisCount: 2,
+                                                  childAspectRatio: 2.2,
+                                                  crossAxisSpacing: 10),
+                                          itemBuilder: (context, index) {
+                                            print("line team index length");
+                                            print(widget
                                                 .matchList
                                                 .teamLineups?[teamAIndex]
                                                 .lineup
-                                                ?.length ??
-                                            0) *
-                                        50.0,
-                                    child: GridView.builder(
-                                      itemCount: widget
-                                          .matchList
-                                          .teamLineups?[teamAIndex]
-                                          .lineup
-                                          ?.length,
-                                      physics: NeverScrollableScrollPhysics(),
-                                      gridDelegate:
-                                          SliverGridDelegateWithFixedCrossAxisCount(
-                                              crossAxisCount: 2,
-                                              childAspectRatio: 2.2,
-                                              crossAxisSpacing: 10),
-                                      itemBuilder: (context, index) {
-                                        print("line team index length");
-                                        print(widget
-                                            .matchList
-                                            .teamLineups?[teamAIndex]
-                                            .lineup
-                                            ?.length);
-                                        bool isCaptain = false;
-                                        bool isWicketKeeper = false;
+                                                ?.length);
+                                            bool isCaptain = false;
+                                            bool isWicketKeeper = false;
 
-                                        if (widget
-                                                .matchList
-                                                .teamLineups?[teamAIndex]
-                                                .captainId ==
-                                            widget
-                                                .matchList
-                                                .teamLineups?[teamAIndex]
-                                                .lineup?[index]
-                                                .id) {
-                                          isCaptain = true;
-                                        } else {
-                                          isCaptain = false;
-                                        }
-                                        if (widget
-                                                .matchList
-                                                .teamLineups?[teamAIndex]
-                                                .wicketKeeperId ==
-                                            widget
-                                                .matchList
-                                                .teamLineups?[teamAIndex]
-                                                .lineup?[index]
-                                                .id) {
-                                          isWicketKeeper = true;
-                                        } else {
-                                          isWicketKeeper = false;
-                                        }
+                                            if (widget
+                                                    .matchList
+                                                    .teamLineups?[teamAIndex]
+                                                    .captainId ==
+                                                widget
+                                                    .matchList
+                                                    .teamLineups?[teamAIndex]
+                                                    .lineup?[index]
+                                                    .id) {
+                                              isCaptain = true;
+                                            } else {
+                                              isCaptain = false;
+                                            }
+                                            if (widget
+                                                    .matchList
+                                                    .teamLineups?[teamAIndex]
+                                                    .wicketKeeperId ==
+                                                widget
+                                                    .matchList
+                                                    .teamLineups?[teamAIndex]
+                                                    .lineup?[index]
+                                                    .id) {
+                                              isWicketKeeper = true;
+                                            } else {
+                                              isWicketKeeper = false;
+                                            }
 
-                                        return Padding(
-                                          padding: const EdgeInsets.all(6.0),
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(10)),
-                                                color: Color.fromARGB(
-                                                    255, 226, 226, 226)),
-                                            child: Padding(
+                                            return Padding(
                                               padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  ClipRRect(
+                                                  const EdgeInsets.all(6.0),
+                                              child: Container(
+                                                decoration: BoxDecoration(
                                                     borderRadius:
                                                         BorderRadius.all(
                                                             Radius.circular(
-                                                                20)),
-                                                    child: Image.asset(
-                                                        "assets/images/iv_player_image.png", height: 50,width: 50,),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  widget
-                                                              .matchList
-                                                              .teamLineups?[
-                                                                  teamAIndex]
-                                                              .lineup?[index]
-                                                              .name ==
-                                                          "Unknown Player"
-                                                      ? Center(
-                                                          child: SizedBox(
-                                                            width: 90,
-                                                            child: Column(
-                                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                                              children: [
-                                                                commonText(
-                                                                  data:
-                                                                      "${widget.matchList.teamLineups?[teamAIndex].lineup?[index].id ?? ""}"
-                                                                      "${isCaptain ? " (C)" : ""}${isWicketKeeper ? " (WK)" : ""}",
-                                                                  fontSize: 14,
-                                                                  maxLines: 2,
-                                                                  alignment: TextAlign
-                                                                      .start,
-                                                                  fontWeight:
-                                                                      FontWeight.w600,
-                                                                  fontFamily:
-                                                                      "Poppins",
-                                                                  color: Color.fromRGBO(0, 21, 72, 1),
-                                                                ),
-                                                                commonText(
-                                                                  data:
-                                                                  "${widget.matchList.teamLineups?[teamAIndex].lineup?[index].role.toString()=="Wicketkeeper" ?"WK-Batsman":widget.matchList.teamLineups?[teamAIndex].lineup?[index].role}",
-                                                                  fontSize: 13,
-                                                                  maxLines: 2,
-                                                                  alignment: TextAlign
-                                                                      .start,
-                                                                  fontWeight:
-                                                                  FontWeight.w400,
-                                                                  fontFamily:
-                                                                  "Poppins",
-                                                                  color: Color.fromRGBO(38, 57, 99, 1),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        )
-                                                      : Center(
-                                                          child: SizedBox(
-                                                            width: 90,
-                                                            child: Column(
-                                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                                              children: [
-                                                                commonText(
-                                                                  data:
-                                                                      "${widget.matchList.teamLineups?[teamAIndex].lineup?[index].name ?? ""}"
-                                                                      "${isCaptain ? " (C)" : ""}${isWicketKeeper ? " (WK)" : ""}",
-                                                                  fontSize: 13,
-                                                                  maxLines: 2,
-                                                                  alignment: TextAlign
-                                                                      .start,
-                                                                  fontWeight:
-                                                                      FontWeight.w600,
-                                                                  fontFamily:
-                                                                      "Poppins",
-                                                                  color: Color.fromRGBO(0, 21, 72, 1),
-                                                                ),
-                                                                commonText(
-                                                                  data:
-                                                                  "${widget.matchList.teamLineups?[teamAIndex].lineup?[index].role.toString()=="WicketKeeper" ?"WK-Batsman":widget.matchList.teamLineups?[teamAIndex].lineup?[index].role}",
-                                                                  fontSize: 13,
-                                                                  maxLines: 2,
-                                                                  alignment: TextAlign
-                                                                      .start,
-                                                                  fontWeight:
-                                                                  FontWeight.w400,
-                                                                  fontFamily:
-                                                                  "Poppins",
-                                                                  color: Color.fromRGBO(38, 57, 99, 1),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
+                                                                10)),
+                                                    color: Color.fromARGB(
+                                                        255, 226, 226, 226)),
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    20)),
+                                                        child: Image.asset(
+                                                          "assets/images/iv_player_image.png",
+                                                          height: 50,
+                                                          width: 50,
                                                         ),
-                                                ],
+                                                      ),
+                                                      SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      widget
+                                                                  .matchList
+                                                                  .teamLineups?[
+                                                                      teamAIndex]
+                                                                  .lineup?[
+                                                                      index]
+                                                                  .name ==
+                                                              "Unknown Player"
+                                                          ? Center(
+                                                              child: SizedBox(
+                                                                width: 90,
+                                                                child: Column(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
+                                                                  children: [
+                                                                    commonText(
+                                                                      data:
+                                                                          "${widget.matchList.teamLineups?[teamAIndex].lineup?[index].id ?? ""}"
+                                                                          "${isCaptain ? " (C)" : ""}${isWicketKeeper ? " (WK)" : ""}",
+                                                                      fontSize:
+                                                                          14,
+                                                                      maxLines:
+                                                                          2,
+                                                                      alignment:
+                                                                          TextAlign
+                                                                              .start,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w600,
+                                                                      fontFamily:
+                                                                          "Poppins",
+                                                                      color: Color
+                                                                          .fromRGBO(
+                                                                              0,
+                                                                              21,
+                                                                              72,
+                                                                              1),
+                                                                    ),
+                                                                    commonText(
+                                                                      data:
+                                                                          "${widget.matchList.teamLineups?[teamAIndex].lineup?[index].role.toString() == "Wicketkeeper" ? "WK-Batsman" : widget.matchList.teamLineups?[teamAIndex].lineup?[index].role}",
+                                                                      fontSize:
+                                                                          13,
+                                                                      maxLines:
+                                                                          2,
+                                                                      alignment:
+                                                                          TextAlign
+                                                                              .start,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w400,
+                                                                      fontFamily:
+                                                                          "Poppins",
+                                                                      color: Color
+                                                                          .fromRGBO(
+                                                                              38,
+                                                                              57,
+                                                                              99,
+                                                                              1),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            )
+                                                          : widget
+                                                                      .matchList
+                                                                      .teamLineups
+                                                                      ?.length !=
+                                                                  0
+                                                              ? Center(
+                                                                  child:
+                                                                      SizedBox(
+                                                                    width: 90,
+                                                                    child:
+                                                                        Column(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .start,
+                                                                      children: [
+                                                                        commonText(
+                                                                          data:
+                                                                              "${widget.matchList.teamLineups?[teamAIndex].lineup?[index].name ?? ""}"
+                                                                              "${isCaptain ? " (C)" : ""}${isWicketKeeper ? " (WK)" : ""}",
+                                                                          fontSize:
+                                                                              13,
+                                                                          maxLines:
+                                                                              2,
+                                                                          alignment:
+                                                                              TextAlign.start,
+                                                                          fontWeight:
+                                                                              FontWeight.w600,
+                                                                          fontFamily:
+                                                                              "Poppins",
+                                                                          color: Color.fromRGBO(
+                                                                              0,
+                                                                              21,
+                                                                              72,
+                                                                              1),
+                                                                        ),
+                                                                        commonText(
+                                                                          data:
+                                                                              "${widget.matchList.teamLineups?[teamAIndex].lineup?[index].role.toString() == "WicketKeeper" ? "WK-Batsman" : widget.matchList.teamLineups?[teamAIndex].lineup?[index].role}",
+                                                                          fontSize:
+                                                                              13,
+                                                                          maxLines:
+                                                                              2,
+                                                                          alignment:
+                                                                              TextAlign.start,
+                                                                          fontWeight:
+                                                                              FontWeight.w400,
+                                                                          fontFamily:
+                                                                              "Poppins",
+                                                                          color: Color.fromRGBO(
+                                                                              38,
+                                                                              57,
+                                                                              99,
+                                                                              1),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                )
+                                                              : SizedBox(),
+                                                    ],
+                                                  ),
+                                                ),
                                               ),
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  )
-                                : SizedBox(
-                                    height: (widget
+                                            );
+                                          },
+                                        ),
+                                      )
+                                    : SizedBox()
+                                : widget.matchList.teamLineups?.length != 0
+                                    ? SizedBox(
+                                        height: (widget
+                                                    .matchList
+                                                    .teamLineups?[teamBIndex]
+                                                    .lineup
+                                                    ?.length ??
+                                                0) *
+                                            50.0,
+                                        child: GridView.builder(
+                                          itemCount: widget
+                                              .matchList
+                                              .teamLineups?[teamBIndex]
+                                              .lineup
+                                              ?.length,
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          gridDelegate:
+                                              SliverGridDelegateWithFixedCrossAxisCount(
+                                                  crossAxisCount: 2,
+                                                  childAspectRatio: 2.2,
+                                                  crossAxisSpacing: 10),
+                                          itemBuilder: (context, index) {
+                                            print("line team index length");
+                                            print(widget
                                                 .matchList
                                                 .teamLineups?[teamBIndex]
                                                 .lineup
-                                                ?.length ??
-                                            0) *
-                                        50.0,
-                                    child: GridView.builder(
-                                      itemCount: widget
-                                          .matchList
-                                          .teamLineups?[teamBIndex]
-                                          .lineup
-                                          ?.length,
-                                      physics: NeverScrollableScrollPhysics(),
-                                      gridDelegate:
-                                          SliverGridDelegateWithFixedCrossAxisCount(
-                                              crossAxisCount: 2,
-                                              childAspectRatio: 2.2,
-                                              crossAxisSpacing: 10),
-                                      itemBuilder: (context, index) {
-                                        print("line team index length");
-                                        print(widget
-                                            .matchList
-                                            .teamLineups?[teamBIndex]
-                                            .lineup
-                                            ?.length);
-                                        bool isCaptain = false;
-                                        bool isWicketKeeper = false;
+                                                ?.length);
+                                            bool isCaptain = false;
+                                            bool isWicketKeeper = false;
 
-                                        if (widget
-                                                .matchList
-                                                .teamLineups?[teamBIndex]
-                                                .captainId ==
-                                            widget
-                                                .matchList
-                                                .teamLineups?[teamBIndex]
-                                                .lineup?[index]
-                                                .id) {
-                                          isCaptain = true;
-                                        } else {
-                                          isCaptain = false;
-                                        }
-                                        if (widget
-                                                .matchList
-                                                .teamLineups?[teamBIndex]
-                                                .wicketKeeperId ==
-                                            widget
-                                                .matchList
-                                                .teamLineups?[teamBIndex]
-                                                .lineup?[index]
-                                                .id) {
-                                          isWicketKeeper = true;
-                                        } else {
-                                          isWicketKeeper = false;
-                                        }
+                                            if (widget
+                                                    .matchList
+                                                    .teamLineups?[teamBIndex]
+                                                    .captainId ==
+                                                widget
+                                                    .matchList
+                                                    .teamLineups?[teamBIndex]
+                                                    .lineup?[index]
+                                                    .id) {
+                                              isCaptain = true;
+                                            } else {
+                                              isCaptain = false;
+                                            }
+                                            if (widget
+                                                    .matchList
+                                                    .teamLineups?[teamBIndex]
+                                                    .wicketKeeperId ==
+                                                widget
+                                                    .matchList
+                                                    .teamLineups?[teamBIndex]
+                                                    .lineup?[index]
+                                                    .id) {
+                                              isWicketKeeper = true;
+                                            } else {
+                                              isWicketKeeper = false;
+                                            }
 
-                                        return Padding(
-                                          padding: const EdgeInsets.all(6.0),
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(10)),
-                                                color: Color.fromARGB(
-                                                    255, 226, 226, 226)),
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(8.0),
-                                              child: Row(
-                                                crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                                children: [
-                                                  ClipRRect(
+                                            return Padding(
+                                              padding:
+                                                  const EdgeInsets.all(6.0),
+                                              child: Container(
+                                                decoration: BoxDecoration(
                                                     borderRadius:
-                                                    BorderRadius.all(
-                                                        Radius.circular(
-                                                            20)),
-                                                    child: Image.asset(
-                                                      "assets/images/iv_player_image.png", height: 50,width: 50,),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  widget
-                                                      .matchList
-                                                      .teamLineups?[
-                                                  teamBIndex]
-                                                      .lineup?[index]
-                                                      .name ==
-                                                      "Unknown Player"
-                                                      ? Center(
-                                                    child: SizedBox(
-                                                      width: 90,
-                                                      child: Column(
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                        children: [
-                                                          commonText(
-                                                            data:
-                                                            "${widget.matchList.teamLineups?[teamBIndex].lineup?[index].id ?? ""}"
-                                                                "${isCaptain ? " (C)" : ""}${isWicketKeeper ? " (WK)" : ""}",
-                                                            fontSize: 14,
-                                                            maxLines: 2,
-                                                            alignment: TextAlign
-                                                                .start,
-                                                            fontWeight:
-                                                            FontWeight.w600,
-                                                            fontFamily:
-                                                            "Poppins",
-                                                            color: Color.fromRGBO(0, 21, 72, 1),
-                                                          ),
-                                                          commonText(
-                                                            data:
-                                                            "${widget.matchList.teamLineups?[teamBIndex].lineup?[index].role.toString()=="Wicketkeeper" ?"WK-Batsman":widget.matchList.teamLineups?[teamBIndex].lineup?[index].role}",
-                                                            fontSize: 13,
-                                                            maxLines: 2,
-                                                            alignment: TextAlign
-                                                                .start,
-                                                            fontWeight:
-                                                            FontWeight.w400,
-                                                            fontFamily:
-                                                            "Poppins",
-                                                            color: Color.fromRGBO(38, 57, 99, 1),
-                                                          ),
-                                                        ],
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                10)),
+                                                    color: Color.fromARGB(
+                                                        255, 226, 226, 226)),
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    20)),
+                                                        child: Image.asset(
+                                                          "assets/images/iv_player_image.png",
+                                                          height: 50,
+                                                          width: 50,
+                                                        ),
                                                       ),
-                                                    ),
-                                                  )
-                                                      : Center(
-                                                    child: SizedBox(
-                                                      width: 90,
-                                                      child: Column(
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                        children: [
-                                                          commonText(
-                                                            data:
-                                                            "${widget.matchList.teamLineups?[teamBIndex].lineup?[index].name ?? ""}"
-                                                                "${isCaptain ? " (C)" : ""}${isWicketKeeper ? " (WK)" : ""}",
-                                                            fontSize: 13,
-                                                            maxLines: 2,
-                                                            alignment: TextAlign
-                                                                .start,
-                                                            fontWeight:
-                                                            FontWeight.w600,
-                                                            fontFamily:
-                                                            "Poppins",
-                                                            color: Colors.black,
-                                                          ),
-                                                          commonText(
-                                                            data:
-                                                            "${widget.matchList.teamLineups?[teamBIndex].lineup?[index].role.toString()=="WicketKeeper" ?"WK-Batsman":widget.matchList.teamLineups?[teamBIndex].lineup?[index].role}",
-                                                            fontSize: 13,
-                                                            maxLines: 2,
-                                                            alignment: TextAlign
-                                                                .start,
-                                                            fontWeight:
-                                                            FontWeight.w400,
-                                                            fontFamily:
-                                                            "Poppins",
-                                                            color: Color.fromRGBO(38, 57, 99, 1),
-                                                          ),
-                                                        ],
+                                                      SizedBox(
+                                                        width: 10,
                                                       ),
-                                                    ),
+                                                      widget
+                                                                  .matchList
+                                                                  .teamLineups?[
+                                                                      teamBIndex]
+                                                                  .lineup?[
+                                                                      index]
+                                                                  .name ==
+                                                              "Unknown Player"
+                                                          ? Center(
+                                                              child: SizedBox(
+                                                                width: 90,
+                                                                child: Column(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
+                                                                  children: [
+                                                                    commonText(
+                                                                      data:
+                                                                          "${widget.matchList.teamLineups?[teamBIndex].lineup?[index].id ?? ""}"
+                                                                          "${isCaptain ? " (C)" : ""}${isWicketKeeper ? " (WK)" : ""}",
+                                                                      fontSize:
+                                                                          14,
+                                                                      maxLines:
+                                                                          2,
+                                                                      alignment:
+                                                                          TextAlign
+                                                                              .start,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w600,
+                                                                      fontFamily:
+                                                                          "Poppins",
+                                                                      color: Color
+                                                                          .fromRGBO(
+                                                                              0,
+                                                                              21,
+                                                                              72,
+                                                                              1),
+                                                                    ),
+                                                                    commonText(
+                                                                      data:
+                                                                          "${widget.matchList.teamLineups?[teamBIndex].lineup?[index].role.toString() == "Wicketkeeper" ? "WK-Batsman" : widget.matchList.teamLineups?[teamBIndex].lineup?[index].role}",
+                                                                      fontSize:
+                                                                          13,
+                                                                      maxLines:
+                                                                          2,
+                                                                      alignment:
+                                                                          TextAlign
+                                                                              .start,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w400,
+                                                                      fontFamily:
+                                                                          "Poppins",
+                                                                      color: Color
+                                                                          .fromRGBO(
+                                                                              38,
+                                                                              57,
+                                                                              99,
+                                                                              1),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            )
+                                                          : Center(
+                                                              child: SizedBox(
+                                                                width: 90,
+                                                                child: Column(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
+                                                                  children: [
+                                                                    commonText(
+                                                                      data:
+                                                                          "${widget.matchList.teamLineups?[teamBIndex].lineup?[index].name ?? ""}"
+                                                                          "${isCaptain ? " (C)" : ""}${isWicketKeeper ? " (WK)" : ""}",
+                                                                      fontSize:
+                                                                          13,
+                                                                      maxLines:
+                                                                          2,
+                                                                      alignment:
+                                                                          TextAlign
+                                                                              .start,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w600,
+                                                                      fontFamily:
+                                                                          "Poppins",
+                                                                      color: Colors
+                                                                          .black,
+                                                                    ),
+                                                                    commonText(
+                                                                      data:
+                                                                          "${widget.matchList.teamLineups?[teamBIndex].lineup?[index].role.toString() == "WicketKeeper" ? "WK-Batsman" : widget.matchList.teamLineups?[teamBIndex].lineup?[index].role}",
+                                                                      fontSize:
+                                                                          13,
+                                                                      maxLines:
+                                                                          2,
+                                                                      alignment:
+                                                                          TextAlign
+                                                                              .start,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w400,
+                                                                      fontFamily:
+                                                                          "Poppins",
+                                                                      color: Color
+                                                                          .fromRGBO(
+                                                                              38,
+                                                                              57,
+                                                                              99,
+                                                                              1),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                    ],
                                                   ),
-                                                ],
+                                                ),
                                               ),
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  )
+                                            );
+                                          },
+                                        ),
+                                      )
+                                    : SizedBox()
                           ],
                         )
                 ],
@@ -2119,9 +2271,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
 
         allInnings.add({
           // 'team': updatedMatch.teamAName ?? updatedMatch.teamAId.toString() ??'',
-          'team': widget.matchList.teamAName ??
-              widget.matchList.teamAId.toString() ??
-              '',
+          'team': widget.teamAName,
           'runs': inning.battingTeam?.runs ?? "0",
           'wickets': inning.battingTeam?.wickets ?? "0",
           'overs': inning.battingTeam?.overs ?? '0.0',
@@ -2132,9 +2282,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
         final inning = teamBInnings![i];
         allInnings.add({
           // 'team': updatedMatch.teamBName ?? updatedMatch.teamBId.toString() ?? '',
-          'team': widget.matchList.teamBName ??
-              widget.matchList.teamAId.toString() ??
-              '',
+          'team': widget.teamBName,
 
           'runs': inning.battingTeam?.runs ?? "0",
           'wickets': inning.battingTeam?.wickets ?? "0",
@@ -2198,7 +2346,6 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
           requiredRunRate = secondInning.requiredRunRate;
           print("✅ Used values from 2nd inning.");
         } else {
-
           // Fallback to available values
 
           if (secondInning?.currentRunRate != null &&

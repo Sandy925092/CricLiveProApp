@@ -15,7 +15,6 @@ enum LiveScoreStatus {
   finishedSeriesSuccess,
   finishedSeriesError,
 
-
   seriesCategoryLoading,
   seriesCategorySuccess,
   seriesCategoryError,

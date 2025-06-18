@@ -223,225 +223,449 @@ class _LiveScreenState extends State<LiveScreen>
           }
           return RefreshIndicator(
             onRefresh: againConnectToSocket,
-            child: ExpandedTileList.builder(
-                itemCount: liveData!.length.toInt(),
-                shrinkWrap: true,
-                // padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                itemBuilder: (context, index, con) {
-                  return ExpandedTile(
-                    trailing: Icon(
-                      Icons.arrow_forward_ios_outlined,
-                      color: Color(0xff96A0B7),
-                    ).rotate90(),
-                    contentseparator: 3.0,
-                    trailingRotation: 180,
-                    theme: const ExpandedTileThemeData(
-                      headerPadding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 20),
-                      headerColor: bgColor,
-                      headerSplashColor: transparent,
-                      contentBackgroundColor: bgColor,
-                    ),
-                    controller: _controller,
-                    title: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
+            child: liveData!.length != 0
+                ? ExpandedTileList.builder(
+                    itemCount: liveData!.length.toInt(),
+                    shrinkWrap: true,
+                    // padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    itemBuilder: (context, index, con) {
+                      return ExpandedTile(
+                        trailing: Icon(
+                          Icons.arrow_forward_ios_outlined,
+                          color: Color(0xff96A0B7),
+                        ).rotate90(),
+                        contentseparator: 3.0,
+                        trailingRotation: 180,
+                        theme: const ExpandedTileThemeData(
+                          headerPadding: EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
+                          contentPadding: EdgeInsets.symmetric(horizontal: 20),
+                          headerColor: bgColor,
+                          headerSplashColor: transparent,
+                          contentBackgroundColor: bgColor,
+                        ),
+                        controller: _controller,
+                        title: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _controller.isExpanded
-                                ? Image.asset(
-                                    "assets/images/doticon.png",
-                                    height: 25,
-                                    width: 25,
-                                  )
-                                : SizedBox(),
-                            2.w.widthBox,
-                            Flexible(
-                              flex: 20,
-                              child: commonText(
-                                  data: liveData?[index].seriesName ??
-                                      liveData![index].seriesId.toString(),
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                  fontFamily: "Poppins",
-                                  color: white,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                _controller.isExpanded
+                                    ? Image.asset(
+                                        "assets/images/doticon.png",
+                                        height: 25,
+                                        width: 25,
+                                      )
+                                    : SizedBox(),
+                                2.w.widthBox,
+                                Flexible(
+                                  flex: 20,
+                                  child: commonText(
+                                      data: liveData?[index].seriesName ??
+                                          liveData![index].seriesId.toString(),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700,
+                                      fontFamily: "Poppins",
+                                      color: white,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis),
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 12.0, right: 12.0),
+                              child: Divider(
+                                thickness: 1.0,
+                                color: buttonColors,
+                              ),
                             ),
                           ],
                         ),
-                        Padding(
-                          padding:
-                              const EdgeInsets.only(left: 12.0, right: 12.0),
-                          child: Divider(
-                            thickness: 1.0,
-                            color: buttonColors,
-                          ),
-                        ),
-                      ],
-                    ),
-                    content: liveData?[index].matches?.length == 0
-                        ? Center(
-                            child: mediumText14(context, 'No match found',
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                textAlign: TextAlign.center,
-                                textColor: const Color(0xffFFFFFF)),
-                          )
-                        : ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: liveData?[index].matches?.length,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, i) {
-
-                              print("All interupptions");
-                              print(liveData?[index].matches?[i].interruptions?.reason.toString());
-                              final teamAId =
-                                  liveData?[index].matches?[i].teamAId;
-                              final teamBId =
-                                  liveData?[index].matches?[i].teamBId;
-                              final teamAInnings = liveData?[index]
-                                  .matches?[i]
-                                  .innings
-                                  ?.where((inning) =>
-                                      inning.battingTeam?.teamId == teamAId)
-                                  .toList();
-
-                              final teamBInnings = liveData?[index]
-                                  .matches?[i]
-                                  .innings
-                                  ?.where((inning) =>
-                                      inning.battingTeam?.teamId == teamBId)
-                                  .toList();
-
-                              final tossWinnerTeamId = liveData?[index]
+                        content: liveData?[index].matches?.length == 0
+                            ? Center(
+                                child: mediumText14(context, 'No match found',
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    textAlign: TextAlign.center,
+                                    textColor: const Color(0xffFFFFFF)),
+                              )
+                            : ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: liveData?[index].matches?.length,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, i) {
+                                  print("All interupptions");
+                                  print(liveData?[index]
                                       .matches?[i]
-                                      .tossInfo
-                                      ?.tossWinnerTeamId ??
-                                  0;
-                              final tossDecision = liveData?[index]
-                                      .matches?[i]
-                                      .tossInfo
-                                      ?.decision ??
-                                  "";
+                                      .interruptions
+                                      ?.reason
+                                      .toString());
+                                  // final teamAId =
+                                  //     liveData?[index].matches?[i].teamAId;
+                                  // final teamBId =
+                                  //     liveData?[index].matches?[i].teamBId;
+                                  // final teamAInnings = liveData?[index]
+                                  //     .matches?[i]
+                                  //     .innings
+                                  //     ?.where((inning) =>
+                                  //         inning.battingTeam?.teamId == teamAId)
+                                  //     .toList();
+                                  //
+                                  // final teamBInnings = liveData?[index]
+                                  //     .matches?[i]
+                                  //     .innings
+                                  //     ?.where((inning) =>
+                                  //         inning.battingTeam?.teamId == teamBId)
+                                  //     .toList();
 
-                              String tossWinningTeamName = "Unknown";
-                              if (tossWinnerTeamId != null) {
-                                if (tossWinnerTeamId == teamAId) {
-                                  tossWinningTeamName =
-                                      liveData?[index].matches?[i].teamAName ??
-                                          "Unknown";
-                                } else if (tossWinnerTeamId == teamBId) {
-                                  tossWinningTeamName =
-                                      liveData?[index].matches?[i].teamBName ??
-                                          "Unknown";
-                                }
-                              }
+                                  final inningsList =
+                                      liveData?[index].matches?[i].innings ??
+                                          [];
 
-                              print(
-                                  "Toss winner team$tossWinningTeamName and chose to $tossDecision");
-                              print(
-                                  "Toss winner team$teamAInnings and chose to $teamBInnings");
+                                  String teamAName = "";
+                                  String teamAId = "";
+                                  String teamBName = "";
+                                  String teamBId = "";
+                                  int tossWinnerTeamId = 0;
+                                  String tossDecision = "";
+                                  String tossWinningTeamName = "";
 
-                              return GestureDetector(
-                                onTap: () {
+                                  List teamAInnings = inningsList
+                                      .where((inning) =>
+                                  inning.inningNumber == 1 &&
+                                      inning.battingTeam?.teamId != null)
+                                      .toList();
+
+                                  List teamBInnings = inningsList
+                                      .where((inning) =>
+                                  inning.inningNumber == 2 &&
+                                      inning.battingTeam?.teamId != null)
+                                      .toList();
+
                                   final match = liveData?[index].matches?[i];
 
-                                  if (match != null) {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            SeriesMatchScorecardScreen(
-                                                matchList: match),
-                                      ),
-                                    );
-                                    // Navigator.push(context, MaterialPageRoute(builder: (context) => SeriesMatchApiScorecardScreen(matchList: match),),);
+// Check if all innings have null teamId
+                                  final allInningsTeamIdNull = inningsList.every((inning) => inning.battingTeam?.teamId == null);
+
+                                  if (inningsList.isEmpty || allInningsTeamIdNull) {
+                                    // Fallback: No innings or no valid teamId in innings
+                                    teamAName = match?.teamAName ?? "";
+                                    teamAId = match?.teamAId.toString() ?? "";
+                                    teamBName = match?.teamBName ?? "";
+                                    teamBId = match?.teamBId.toString() ?? "";
+                                  } else {
+
+                                  for (var inning in inningsList) {
+                                    final teamId = inning.battingTeam?.teamId;
+
+                                    if (inning.inningNumber == 1) {
+                                      if (teamId == match?.teamAId) {
+                                        teamAName = match?.teamAName ?? "";
+                                        teamAId = match?.teamAId.toString() ?? "";
+                                      } else if (teamId == match?.teamBId) {
+                                        teamAName = match?.teamBName ?? "";
+                                        teamAId = match?.teamBId.toString() ?? "";
+                                      } else if (teamId == null) {
+                                        // Fallback if teamId is null
+                                        teamAName = match?.teamAName ?? "";
+                                      }
+                                    } else if (inning.inningNumber == 2) {
+                                      if (teamId == match?.teamAId) {
+                                        teamBName = match?.teamAName ?? "";
+                                        teamBId = match?.teamAName ?? "";
+                                      } else if (teamId == match?.teamBId) {
+                                        teamBName = match?.teamBName ?? "";
+                                        teamBId = match?.teamBId.toString() ?? "";
+                                      } else if (teamId == null) {
+                                        // Fallback if teamId is null
+                                        teamBName = match?.teamBName ?? "";
+                                      }
+                                    }
                                   }
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.only(top: 8.0),
-                                  child: Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    margin: EdgeInsets.all(0),
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        border: Border.all(color: Colors.white),
-                                        borderRadius: BorderRadius.circular(7)),
+                                }
+
+
+                                  print("team Innings");
+                                  print(teamAName);
+                                  print(teamBName);
+
+                                  if(match?.tossInfo!=null){
+                                     tossWinnerTeamId =
+                                        match?.tossInfo?.tossWinnerTeamId??0;
+                                     tossDecision =
+                                        match?.tossInfo?.decision ?? "";
+
+
+                                    if (tossWinnerTeamId == match?.teamAId) {
+                                      tossWinningTeamName =
+                                          match?.teamAName ?? "Unknown";
+                                    } else if (tossWinnerTeamId ==
+                                        match?.teamBId) {
+                                      tossWinningTeamName =
+                                          match?.teamBName ?? "Unknown";
+                                    }
+                                  }
+
+
+
+
+                                  print(
+                                    "Toss winner team$tossWinnerTeamId and chose to $tossDecision");
+                                  // print(
+                                  //     "Toss winner team$teamAInnings and chose to $teamBInnings");
+
+                                  return GestureDetector(
+                                    onTap: () {
+                                      final match =
+                                          liveData?[index].matches?[i];
+
+                                      if (match != null) {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                SeriesMatchScorecardScreen(
+                                                    matchList: match, teamAName:teamAName,teamBName:teamBName),
+                                          ),
+                                        );
+                                        // Navigator.push(context, MaterialPageRoute(builder: (context) => SeriesMatchApiScorecardScreen(matchList: match),),);
+                                      }
+                                    },
                                     child: Padding(
-                                      padding: const EdgeInsets.all(1.0),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(5.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            commonText(
-                                              data:
-                                                  "$tossWinningTeamName won the toss and chose to $tossDecision",
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w400,
-                                              fontFamily: "Poppins",
-                                              color: Colors.black,
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: Container(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        margin: EdgeInsets.all(0),
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            border:
+                                                Border.all(color: Colors.white),
+                                            borderRadius:
+                                                BorderRadius.circular(7)),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(1.0),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(5.0),
+                                            child: Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                Column(
+                                                commonText(
+                                                  data:
+                                                      "$tossWinningTeamName won the toss and chose to $tossDecision",
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w400,
+                                                  fontFamily: "Poppins",
+                                                  color: Colors.black,
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
                                                   crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
+                                                      CrossAxisAlignment.start,
                                                   children: [
-                                                    SizedBox(
-                                                      width: 25.w,
-                                                      child: commonText(
-                                                        alignment:
-                                                            TextAlign.center,
-                                                        data: liveData?[index]
+                                                    Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        SizedBox(
+                                                          width: 25.w,
+                                                          child: commonText(
+                                                            alignment: TextAlign.center,
+                                                            data: (teamAName == null || teamAName.trim().isEmpty) &&
+                                                                (teamAId == null || teamAId.toString().trim().isEmpty)
+                                                                ? "Not available"
+                                                                : (teamAName == "Unknown Team" ? "$teamAId" : "$teamAName"),
+                                                            fontSize: 14,
+                                                            fontWeight: FontWeight.w500,
+                                                            fontFamily: "Poppins",
+                                                            color: Colors.black,
+                                                          ),
+                                                        ),
+
+                                                        SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        teamAInnings?.length !=
+                                                                0
+                                                            ? Column(
+                                                                children: [
+                                                                  SizedBox(
+                                                                    height: teamAInnings?.length !=
+                                                                            null
+                                                                        ? teamAInnings!.length *
+                                                                            40.0
+                                                                        : 40,
+                                                                    width: MediaQuery.of(context)
+                                                                            .size
+                                                                            .width *
+                                                                        0.30,
+                                                                    child: ListView
+                                                                        .builder(
+                                                                      itemCount:
+                                                                          teamAInnings?.length ??
+                                                                              0,
+                                                                      physics:
+                                                                          NeverScrollableScrollPhysics(),
+                                                                      itemBuilder:
+                                                                          (context,
+                                                                              inningIndex) {
+                                                                        final inning =
+                                                                            teamAInnings![inningIndex];
+                                                                        return Container(
+                                                                          margin:
+                                                                              EdgeInsets.only(bottom: 5),
+                                                                          width:
+                                                                              90,
+                                                                          height:
+                                                                              30,
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            color:
+                                                                                Colors.green,
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(10),
+                                                                          ),
+                                                                          child:
+                                                                              Row(
+                                                                            mainAxisAlignment:
+                                                                                MainAxisAlignment.center,
+                                                                            children: [
+                                                                              commonText(
+                                                                                data: "${inning.battingTeam?.runs ?? 'N/A'}",
+                                                                                fontSize: 14,
+                                                                                fontWeight: FontWeight.w400,
+                                                                                fontFamily: "Poppins",
+                                                                                color: Colors.black,
+                                                                              ),
+                                                                              commonText(
+                                                                                data: "/",
+                                                                                fontSize: 14,
+                                                                                fontWeight: FontWeight.w400,
+                                                                                fontFamily: "Poppins",
+                                                                                color: Colors.black,
+                                                                              ),
+                                                                              commonText(
+                                                                                data: "${inning.battingTeam?.wickets ?? 'N/A'}",
+                                                                                fontSize: 14,
+                                                                                fontWeight: FontWeight.w400,
+                                                                                fontFamily: "Poppins",
+                                                                                color: Colors.black,
+                                                                              ),
+                                                                              commonText(
+                                                                                data: " (${inning.battingTeam?.overs ?? 'N/A'} ov)",
+                                                                                fontSize: 12,
+                                                                                fontWeight: FontWeight.w400,
+                                                                                fontFamily: "Poppins",
+                                                                                color: Colors.black,
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        );
+                                                                      },
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              )
+                                                            : Text(
+                                                                "Yet to bat"),
+                                                      ],
+                                                    ),
+                                                    // SizedBox(
+                                                    //   width: 40,
+                                                    // ),
+
+                                                    Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        commonText(
+                                                          data: "• Live",
+                                                          fontSize: 15,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          fontFamily: "Poppins",
+                                                          color: Colors.red,
+                                                        ),
+                                                        liveData?[index]
                                                                     .matches?[i]
-                                                                    .teamAName
-                                                                    .toString() ==
-                                                                "Unknown Team"
-                                                            ? "${liveData?[index].matches?[i].teamAId.toString()}"
-                                                            : "${liveData?[index].matches?[i].teamAName.toString()}",
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontFamily: "Poppins",
-                                                        color: Colors.black,
-                                                      ),
+                                                                    .interruptions !=
+                                                                null
+                                                            ? SizedBox(
+                                                                width: 100,
+                                                                child:
+                                                                    commonText(
+                                                                  data:
+                                                                      "${liveData?[index].matches?[i].interruptions?.reason.toString()}",
+                                                                  fontSize: 14,
+                                                                  alignment:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400,
+                                                                  fontFamily:
+                                                                      "Poppins",
+                                                                  color: Colors
+                                                                          .grey[
+                                                                      700],
+                                                                ),
+                                                              )
+                                                            : SizedBox()
+                                                      ],
                                                     ),
-                                                    SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    teamAInnings?.length != 0
-                                                        ? Column(
-                                                            children: [
-                                                              SizedBox(
-                                                                height: teamAInnings
-                                                                            ?.length !=
-                                                                        null
-                                                                    ? teamAInnings!
-                                                                            .length *
-                                                                        40.0
-                                                                    : 40,
+
+                                                    Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .end,
+                                                      children: [
+                                                        SizedBox(
+                                                          width: 25.w,
+                                                          child: commonText(
+                                                            alignment: TextAlign.center,
+                                                            data: (teamBName.trim().isEmpty) &&
+                                                                (teamBId.toString().trim().isEmpty)
+                                                                ? "Not available"
+                                                                : (teamBName == "Unknown Team" ? "$teamBId" : "$teamBName"),
+                                                            fontSize: 14,
+                                                            fontWeight: FontWeight.w500,
+                                                            fontFamily: "Poppins",
+                                                            color: Colors.black,
+                                                          ),
+                                                        ),
+
+                                                        SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        teamBInnings?.length !=
+                                                                0
+                                                            ? SizedBox(
                                                                 width: MediaQuery.of(
                                                                             context)
                                                                         .size
                                                                         .width *
                                                                     0.3,
+                                                                height: teamBInnings
+                                                                            ?.length !=
+                                                                        null
+                                                                    ? teamBInnings!
+                                                                            .length *
+                                                                        40.0
+                                                                    : 40,
                                                                 child: ListView
                                                                     .builder(
                                                                   itemCount:
-                                                                      teamAInnings
+                                                                      teamBInnings
                                                                               ?.length ??
                                                                           0,
                                                                   physics:
@@ -450,7 +674,7 @@ class _LiveScreenState extends State<LiveScreen>
                                                                       (context,
                                                                           inningIndex) {
                                                                     final inning =
-                                                                        teamAInnings![
+                                                                        teamBInnings![
                                                                             inningIndex];
                                                                     return Container(
                                                                       margin: EdgeInsets.only(
@@ -524,204 +748,47 @@ class _LiveScreenState extends State<LiveScreen>
                                                                     );
                                                                   },
                                                                 ),
-                                                              ),
-                                                            ],
-                                                          )
-                                                        : Text("Yet to bat"),
-                                                  ],
-                                                ),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    commonText(
-                                                      data: "• Live",
-                                                      fontSize: 15,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontFamily: "Poppins",
-                                                      color: Colors.red,
+                                                              )
+                                                            :
+                                                        Padding(
+                                                          padding: const EdgeInsets.only(right: 20.0),
+                                                          child: Text(
+                                                                  "Yet to bat"),
+                                                        ),
+                                                      ],
                                                     ),
-
-                                                    liveData?[index].matches?[i].interruptions!=null?
-
-                                                    SizedBox(
-                                                      width: 100,
-                                                      child: commonText(
-                                                        data: "${liveData?[index].matches?[i].interruptions?.reason.toString()}",
-                                                        fontSize: 14,
-                                                        alignment: TextAlign.center,
-                                                        fontWeight: FontWeight.w400,
-                                                        fontFamily: "Poppins",
-                                                        color: Colors.grey[700],
-                                                      ),
-                                                    )
-                                                        :SizedBox()
                                                   ],
-                                                ),
-                                                Column(
-                                                  // crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    SizedBox(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width *
-                                                              0.3,
-                                                      child: commonText(
-                                                        alignment:
-                                                            TextAlign.center,
-                                                        data: liveData?[index]
-                                                                    .matches?[i]
-                                                                    .teamBName
-                                                                    .toString() ==
-                                                                "Unknown Team"
-                                                            ? "${liveData?[index].matches?[i].teamBId.toString()}"
-                                                            : "${liveData?[index].matches?[i].teamBName.toString()}",
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontFamily: "Poppins",
-                                                        color: Colors.black,
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    teamBInnings?.length != 0
-                                                        ? SizedBox(
-                                                            width: MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .width *
-                                                                0.3,
-                                                            height: teamBInnings
-                                                                        ?.length !=
-                                                                    null
-                                                                ? teamBInnings!
-                                                                        .length *
-                                                                    40.0
-                                                                : 40,
-                                                            child: ListView
-                                                                .builder(
-                                                              itemCount:
-                                                                  teamBInnings
-                                                                          ?.length ??
-                                                                      0,
-                                                              physics:
-                                                                  NeverScrollableScrollPhysics(),
-                                                              itemBuilder: (context,
-                                                                  inningIndex) {
-                                                                final inning =
-                                                                    teamBInnings![
-                                                                        inningIndex];
-                                                                return Container(
-                                                                  margin: EdgeInsets
-                                                                      .only(
-                                                                          bottom:
-                                                                              5),
-                                                                  width: 90,
-                                                                  height: 30,
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                    color: Colors
-                                                                        .green,
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            10),
-                                                                  ),
-                                                                  child: Row(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .center,
-                                                                    children: [
-                                                                      commonText(
-                                                                        data:
-                                                                            "${inning.battingTeam?.runs ?? 'N/A'}",
-                                                                        fontSize:
-                                                                            14,
-                                                                        fontWeight:
-                                                                            FontWeight.w400,
-                                                                        fontFamily:
-                                                                            "Poppins",
-                                                                        color: Colors
-                                                                            .black,
-                                                                      ),
-                                                                      commonText(
-                                                                        data:
-                                                                            "/",
-                                                                        fontSize:
-                                                                            14,
-                                                                        fontWeight:
-                                                                            FontWeight.w400,
-                                                                        fontFamily:
-                                                                            "Poppins",
-                                                                        color: Colors
-                                                                            .black,
-                                                                      ),
-                                                                      commonText(
-                                                                        data:
-                                                                            "${inning.battingTeam?.wickets ?? 'N/A'}",
-                                                                        fontSize:
-                                                                            14,
-                                                                        fontWeight:
-                                                                            FontWeight.w400,
-                                                                        fontFamily:
-                                                                            "Poppins",
-                                                                        color: Colors
-                                                                            .black,
-                                                                      ),
-                                                                      commonText(
-                                                                        data:
-                                                                            " (${inning.battingTeam?.overs ?? 'N/A'} ov)",
-                                                                        fontSize:
-                                                                            12,
-                                                                        fontWeight:
-                                                                            FontWeight.w400,
-                                                                        fontFamily:
-                                                                            "Poppins",
-                                                                        color: Colors
-                                                                            .black,
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                );
-                                                              },
-                                                            ),
-                                                          )
-                                                        : Text("Yet to bat"),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: 10,
                                                 ),
                                               ],
                                             ),
-                                          ],
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                              );
-                            }),
-                    onTap: () {
-                      if (_controller.isExpanded == true) {
-                        setState(() {
-                          isTrue = _controller.isExpanded;
-                        });
-                      } else {
-                        setState(() {
-                          isTrue = false;
-                        });
-                      }
-                      debugPrint("tapped!!");
-                    },
-                    onLongTap: () {
-                      debugPrint("long tapped!!");
-                    },
-                  );
-                }),
+                                  );
+                                }),
+                        onTap: () {
+                          if (_controller.isExpanded == true) {
+                            setState(() {
+                              isTrue = _controller.isExpanded;
+                            });
+                          } else {
+                            setState(() {
+                              isTrue = false;
+                            });
+                          }
+                          debugPrint("tapped!!");
+                        },
+                        onLongTap: () {
+                          debugPrint("long tapped!!");
+                        },
+                      );
+                    })
+                : Center(
+                    child: commonText(
+                        data: "No live match",
+                        fontSize: 14,
+                        color: Colors.white)),
           );
         },
       ),
@@ -776,8 +843,7 @@ class _LiveScreenState extends State<LiveScreen>
                   }
                 } else {
                   print(
-                      "❌ Expected a list of JSON objects but got: ${jsonData
-                          .runtimeType}");
+                      "❌ Expected a list of JSON objects but got: ${jsonData.runtimeType}");
                 }
 
                 // final jsonData = json.decode(message);
@@ -807,7 +873,7 @@ class _LiveScreenState extends State<LiveScreen>
             },
           );
         }
-      }else{
+      } else {
         showToast(context: context, message: notConnected);
       }
     });

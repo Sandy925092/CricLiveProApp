@@ -54,7 +54,7 @@ class _MyEventsDaysScreenState extends State<MyEventsDaysScreen>
       body: Column(
         children: [
           SizedBox(
-            height: 50,
+            height: 100,
             child: AppBar(
               backgroundColor: const Color(0xff263963),
               bottom: ButtonsTabBar(

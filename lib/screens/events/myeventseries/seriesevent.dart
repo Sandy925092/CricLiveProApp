@@ -331,10 +331,21 @@ class _SeriesEventScreenState extends State<SeriesEventScreen> {
                           ],
                         ),
                       ),
-                      Center(
+                      item.winningTeamName != null
+                          ? Center(
                         child: commonText(
                           alignment: TextAlign.center,
                           data: "${item.winningTeamName} won" ?? "N/A",
+                          fontSize: 10,
+                          fontWeight: FontWeight.w700,
+                          fontFamily: "Poppins",
+                          color: Colors.black,
+                        ),
+                      )
+                          : Center(
+                        child: commonText(
+                          alignment: TextAlign.center,
+                          data: "N/A",
                           fontSize: 10,
                           fontWeight: FontWeight.w700,
                           fontFamily: "Poppins",

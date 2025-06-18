@@ -5,10 +5,9 @@ import 'package:kisma_livescore/responses/get_country_code_abd_flag_response.dar
 /// URL PATH
 //const BASEURL = 'http://172.16.100.163:8080/api'
 const BASEURL =
-   // 'http://192.168.5.134:8080/api';
-
-    'http://34.238.14.72:8080/api';
-// 'http://34.238.14.72:8086';
+     // Prod Url
+    'http://34.238.14.72:8091/api';
+    // 'http://34.238.14.72:8080/api';
 
 
 Future<bool> isInternetConnected() async {
@@ -33,8 +32,8 @@ const PASSWORD_LENGTH_VALIDATION =
 const EMPTY_CONFIRM_PASSWORD_VALIDATION = 'Please Enter Confirm Password';
 const EMPTY_NEW_PASSWORD_VALIDATION = 'Please Enter New Password';
 const EMPTY_PASSWORD_VALIDATION = 'Please Enter Password';
-const MATCHING_PASSWORD_VALIDATION =
-    'Password And Confirm Password Should Match';
+const MATCHING_PASSWORD_VALIDATION = 'Password And Confirm Password Should Match';
+const resultNotfound = 'Result not found';
 
 class AppConstants {
   static const String fontFamily = "Poppins";

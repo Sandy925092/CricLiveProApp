@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:kisma_livescore/screens/events/myeventsdays.dart';
+import 'package:kisma_livescore/screens/events/myeventsseries.dart';
 import 'package:kisma_livescore/screens/home/homeScreen.dart';
 import 'package:kisma_livescore/commonwidget.dart';
 import 'package:kisma_livescore/screens/events/myevents.dart';
@@ -49,8 +50,8 @@ class _DashboardState extends State<Dashboard> {
     double width = MediaQuery.of(context).size.width;
 
     List<Widget> buildScreens() {
-     return [const HomeScreen(), MyEventsScreen(), SeriesScreen(), SettingsScreen()];
-     // return [const HomeScreen(), MyEventsDaysScreen(), SeriesScreen(), SettingsScreen()];
+     // return [const HomeScreen(), MyEventsScreen(), SeriesScreen(), SettingsScreen()];
+     return [const HomeScreen(), MyEventsDaysScreen(), MyEventsSeriesScreen(), SettingsScreen()];
     //   return [const HomeScreen(), SettingsScreen()];
     }
 

@@ -14,7 +14,7 @@ class StompWebSocketService {
   bool _isConnected = false;
 
   // ✅ Use `ws://` and add `/websocket` if backend uses SockJS
-  final String _webSocketUrl = 'ws://34.238.14.72:8080/ws/websocket';
+  final String _webSocketUrl = 'ws://34.238.14.72:8091/ws/websocket';
 
   StompWebSocketService._internal();
 
