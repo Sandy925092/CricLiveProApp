@@ -52,6 +52,8 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
 
   List<Map<String, dynamic>> orderedInnings = [];
   int selectedTabIndex = 0;
+  Map<String, int> teamInningCounts = {};
+
 
   dynamic teamAId;
   dynamic teamBId;
@@ -86,6 +88,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
     print("selected match");
     // log(widget.matchList);
     print(widget.matchList);
+    print(widget.teamAName);
     // updatedMatch = state.socketLiveData
     //     ?.expand((e) => e.matches ?? [])
     //     .firstWhere(
@@ -103,7 +106,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
     //     .toList();
 
     teamAInnings = widget.matchList.innings
-        ?.where((inning) => inning.inningNumber == 1)
+        ?.where((inning) => inning.inningNumber!%2 == 1)
         .toList();
 
     if (teamAInnings != null) {
@@ -125,7 +128,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
     //     .toList();
 
     teamBInnings = widget.matchList.innings
-        ?.where((inning) => inning.inningNumber == 2)
+        ?.where((inning) => inning.inningNumber!%2 == 0)
         .toList();
     if (teamBInnings != null) {
       for (var inning in teamBInnings) {
@@ -208,15 +211,15 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
           elevation: 0.0,
           leadingWidth: 30,
           centerTitle: false,
-          title: commonText(
+          title:widget.teamAName.toString().isNotEmpty && widget.teamAName.toString().isNotEmpty? commonText(
                   data:
-                      "${widget.matchList.teamAName.toString()} vs ${widget.matchList.teamBName.toString()}",
+                      "${widget.teamAName.toString()} vs ${widget.teamBName.toString()}",
                   // data: "dsads",
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   fontFamily: "Poppins",
                   color: Colors.white)
-              .p(10),
+              .p(10):SizedBox(),
           leading: Padding(
             padding: const EdgeInsets.only(left: 10.0),
             child: Image.asset(
@@ -253,11 +256,11 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
               //     .toList();
 
               teamAInnings = updatedMatch.innings
-                  ?.where((inning) => inning.inningNumber == 1 && inning.battingTeam?.teamId != null)
+                  ?.where((inning) => inning.inningNumber%2 == 1 && inning.battingTeam?.teamId != null)
                   .toList();
 
               teamBInnings = updatedMatch.innings
-                  ?.where((inning) => inning.inningNumber == 2 && inning.battingTeam?.teamId != null)
+                  ?.where((inning) => inning.inningNumber%2 == 0 && inning.battingTeam?.teamId != null)
                   .toList();
               //
               // final inningsList =
@@ -782,6 +785,15 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                   tabs:
                                       List.generate(allInnings.length, (index) {
                                     final inning = allInnings[index];
+
+                                    final String team = inning['team'];
+                                    final String teamId = inning['inningData']?.battingTeam?.teamId?.toString() ?? '';
+
+                                    // Count how many times this team has already appeared
+                                    teamInningCounts[teamId] = (teamInningCounts[teamId] ?? 0) + 1;
+
+                                    final inningLabel = '${team} (${ordinal(teamInningCounts[teamId]!)} Innings)';
+
                                     return Container(
                                       height: 50,
                                       padding: EdgeInsets.symmetric(
@@ -1020,18 +1032,19 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                           teamAExtras.total == 0
                                               ? '${teamAExtras.total}'
                                               : '${teamAExtras.total} '
-                                                  '('
-                                                  '${teamAExtras.byes != 0 ? 'b ${teamAExtras.byes} ' : ''}'
-                                                  '${teamAExtras.legByes != 0 ? ', lb ${teamAExtras.legByes}' : ''}'
-                                                  '${teamAExtras.wides != 0 ? ', w ${teamAExtras.wides}' : ''}'
-                                                  '${teamAExtras.noBalls != 0 ? ', nb ${teamAExtras.noBalls}' : ''}'
-                                                  '${teamAExtras.penalty != 0 ? ', p ${teamAExtras.penalty}' : ''}'
-                                                  ')',
+                                              '(${[
+                                            if (teamAExtras.byes != 0) 'b ${teamAExtras.byes}',
+                                            if (teamAExtras.legByes != 0) 'lb ${teamAExtras.legByes}',
+                                            if (teamAExtras.wides != 0) 'w ${teamAExtras.wides}',
+                                            if (teamAExtras.noBalls != 0) 'nb ${teamAExtras.noBalls}',
+                                            if (teamAExtras.penalty != 0) 'p ${teamAExtras.penalty}',
+                                          ].join(', ')})',
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white,
                                           ),
                                         )
+
                                       ],
                                     ),
                                   ),
@@ -2299,8 +2312,8 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
       batters = selectedInning.batters ?? [];
       bowlers = selectedInning.bowlers ?? [];
       print("batters names");
-      print(jsonEncode(widget.matchList.innings?[0].yetToBat));
-      print(jsonEncode(widget.matchList.innings?[1].yetToBat));
+      // print(jsonEncode(widget.matchList.innings?[0].yetToBat));
+      // print(jsonEncode(widget.matchList.innings?[1].yetToBat));
 
       if (selectedInning.fallOfWickets.length != 0) {
         fallOfWicketsteamA = selectedInning.fallOfWickets ?? [];
@@ -2466,5 +2479,12 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
     updateTabController();
 
     setState(() {});
+  }
+
+  String ordinal(int number) {
+    if (number == 1) return '1st';
+    if (number == 2) return '2nd';
+    if (number == 3) return '3rd';
+    return '${number}th';
   }
 }

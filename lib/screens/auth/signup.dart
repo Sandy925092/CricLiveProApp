@@ -72,7 +72,7 @@ class _SignUpState extends State<SignUp> {
                  child: Column(
                    children: [
                      SizedBox(height: screenHeight*0.20,),
-                     Image.asset('assets/images/kisma_logo.png',width: 277,height: 57,),
+                     Image.asset('assets/images/appicon.png',width: 277,height: 57,),
                      const SizedBox(height: 100,),
                      largeText16(context, 'Sign Up',fontSize: 32,fontWeight: FontWeight.w700,textColor:buttonColors),
                      const SizedBox(height: 16,),

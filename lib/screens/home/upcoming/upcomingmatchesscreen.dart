@@ -108,8 +108,7 @@ class _UpcomingMatchScreenState extends State<UpcomingMatchScreen> {
             setState(() {
               fixtures[selectedIndex].liked = true;
             });
-            UiHelper.toastMessage(
-                "Match added to wishlist" ?? '');
+            UiHelper.toastMessage("Match added to wishlist" ?? '');
             // showToast(context: context, message: "Match added to wishlist");
           }
 
@@ -424,17 +423,18 @@ class _UpcomingMatchScreenState extends State<UpcomingMatchScreen> {
                                                                                         print(index);
                                                                                         print(index1);
                                                                                         Map<String, dynamic> matchDetails = {
-                                                                                          "seriesId": upcomingSeriesResponse.data?.content![index].seriesId?.toString() ?? "",
-                                                                                          "seriesName": upcomingSeriesResponse.data?.content![index].seriesName?.toString() ?? "",
+                                                                                          "seriesId": upcomingSeriesResponse.data?.content![index1].seriesId?.toString() ?? "",
+                                                                                          "seriesName": upcomingSeriesResponse.data?.content![index1].seriesName?.toString() ?? "",
                                                                                           "fixtureId": items.fixtureId?.toString() ?? "",
-                                                                                          "teamAName": items.homeTeam?.name?.toString() ?? "",
-                                                                                          "teamBName": items.awayTeam?.name?.toString() ?? "",
+                                                                                          "teamAName": items.homeTeam?.name?.toString() ?? "Team ${items.homeTeam?.id?.toString()}",
+                                                                                          "teamBName": items.awayTeam?.name?.toString() ?? "Team ${items.awayTeam?.id?.toString()}",
                                                                                           "matchStatus": "Upcoming",
                                                                                           "matchDate": items.startTimes?.first.date?.toString() ?? "",
                                                                                         };
 
                                                                                         selectedIndex = index1;
 
+                                                                                        print("matchDetails");
                                                                                         print(matchDetails);
 
                                                                                         BlocProvider.of<LiveScoreCubit>(context).likeMatch(token, matchDetails);
@@ -463,10 +463,11 @@ class _UpcomingMatchScreenState extends State<UpcomingMatchScreen> {
                                                                           Flexible(
                                                                             child:
                                                                                 SizedBox(
-                                                                              width: MediaQuery.of(context).size.width * 0.25,
+                                                                              width: MediaQuery.of(context).size.width * 0.4,
                                                                               child: commonText(
-                                                                                data: items.homeTeam?.name?.toString() ?? "Not available",
+                                                                                data: items.homeTeam?.name != null ? items.homeTeam?.name?.toString() ?? "Not available" : " Team ${items.homeTeam?.id.toString()}" ?? "",
                                                                                 fontSize: 14,
+                                                                                maxLines: 2,
                                                                                 fontWeight: FontWeight.w400,
                                                                                 fontFamily: "Poppins",
                                                                                 color: Colors.black,
@@ -504,10 +505,11 @@ class _UpcomingMatchScreenState extends State<UpcomingMatchScreen> {
                                                                               crossAxisAlignment: CrossAxisAlignment.start,
                                                                               children: [
                                                                                 SizedBox(
-                                                                                  width: MediaQuery.of(context).size.width * 0.25,
+                                                                                  width: MediaQuery.of(context).size.width * 0.4,
                                                                                   child: commonText(
-                                                                                    data: items.awayTeam?.name?.toString() ?? "Not available",
+                                                                                    data: items.awayTeam?.name != null ? items.awayTeam?.name?.toString() ?? "Not available" : " Team ${items.awayTeam?.id.toString()}" ?? "",
                                                                                     fontSize: 14,
+                                                                                    maxLines: 2,
                                                                                     fontWeight: FontWeight.w400,
                                                                                     fontFamily: "Poppins",
                                                                                     color: Colors.black,

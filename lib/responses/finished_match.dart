@@ -30,6 +30,7 @@ class MatchData {
   final List<num>? awayTeamRuns;
   final List<num>? awayTeamWickets;
   final String? winningTeamName;
+  final String? resultType;
   final bool? result;
 
   MatchData({
@@ -41,6 +42,7 @@ class MatchData {
     this.awayTeamRuns,
     this.awayTeamWickets,
     this.winningTeamName,
+    this.resultType,
     this.result,
   });
 
@@ -53,6 +55,7 @@ class MatchData {
         awayTeamRuns = (json['awayTeamRuns'] as List?)?.map((dynamic e) => e as num).toList(),
         awayTeamWickets = (json['awayTeamWickets'] as List?)?.map((dynamic e) => e as num).toList(),
         winningTeamName = json['winningTeamName'] as String?,
+        resultType = json['resultType'] as String?,
         result = json['result'] as bool?;
 
   Map<String, dynamic> toJson() => {
@@ -64,6 +67,7 @@ class MatchData {
     'awayTeamRuns' : awayTeamRuns,
     'awayTeamWickets' : awayTeamWickets,
     'winningTeamName' : winningTeamName,
+    'resultType' : resultType,
     'result' : result
   };
 }

@@ -70,13 +70,12 @@ flutter_native_splash:
   image_ios: assets/images/splashIos.png
   android: true
   ios: true
-  fullscreen : true
   android_gravity: center
   #  android_fullscreen: true
   android_12:
-    color: "#001648"
-    image: "assets/images/splash_logo.png"
-    #image: "assets/images/appicon.png"
+    color : "#001648"
+#    image: "assets/images/appicon.png"
+#    image_dark : "assets/images/appicon.png"
 
 
 dev_dependencies:

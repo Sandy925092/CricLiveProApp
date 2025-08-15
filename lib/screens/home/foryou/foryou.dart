@@ -401,7 +401,7 @@ class _ForYouState extends State<ForYou> {
                                                                         .matchStatus ==
                                                                     "Upcoming"
                                                                 ? Container(
-                                                                    width: 25.w,
+                                                                    width: 20.w,
                                                                     padding: EdgeInsets.only(
                                                                         left:
                                                                             10,
@@ -459,7 +459,7 @@ class _ForYouState extends State<ForYou> {
 
                                                             Flexible(
                                                               child: SizedBox(
-                                                                width: 25.w,
+                                                                width: 30.w,
                                                                 child:
                                                                     commonText(
                                                                   data: likedMatch[
@@ -469,9 +469,11 @@ class _ForYouState extends State<ForYou> {
                                                                       .teamBName
                                                                       .toString(),
                                                                   fontSize: 14,
+                                                                  maxLines: 2,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w400,
+                                                                  alignment: TextAlign.center,
                                                                   fontFamily:
                                                                       "Poppins",
                                                                   color: Colors

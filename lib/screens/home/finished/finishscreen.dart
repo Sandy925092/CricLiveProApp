@@ -53,8 +53,16 @@ class _FinishedScreenState extends State<FinishedScreen> {
       });
     }
 
-    await BlocProvider.of<LiveScoreCubit>(context)
-        .getFinishedSeries(pageNo.toString());
+    isInternetConnected().then((value) async {
+      if (value == true) {
+        await BlocProvider.of<LiveScoreCubit>(context)
+            .getFinishedSeries(pageNo.toString());
+      } else {
+        showToast(context: context, message: notConnected);
+      }
+    });
+
+
   }
 
   Future<void> _refreshPage() async {
@@ -95,8 +103,14 @@ class _FinishedScreenState extends State<FinishedScreen> {
   Future<void> _fetchPage(int pageKey) async {
     print(pageKey.toString() + "this is page key");
     try {
-      await BlocProvider.of<LiveScoreCubit>(context)
-          .getFinishedSeries(pageKey.toString());
+      isInternetConnected().then((value) async {
+        if (value == true) {
+          await BlocProvider.of<LiveScoreCubit>(context)
+              .getFinishedSeries(pageNo.toString());
+        } else {
+          showToast(context: context, message: notConnected);
+        }
+      });
 
       // if (response.responseData != null) {
       //   final smileGalleryProResponse =
@@ -290,7 +304,7 @@ class _FinishedScreenState extends State<FinishedScreen> {
                   finishedSeriesResponse.data?.content?.length == null &&
                           finishedSeriesResponse.data?.content?.length == 0
                       ? Center(
-                          child: mediumText14(context, 'No Upcoming Series',
+                          child: mediumText14(context, 'No Finished Series',
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
                               textAlign: TextAlign.center,
@@ -480,17 +494,18 @@ class _FinishedScreenState extends State<FinishedScreen> {
                                                                         child:
                                                                             Column(
                                                                           crossAxisAlignment:
-                                                                              CrossAxisAlignment.start,
+                                                                              CrossAxisAlignment.center,
                                                                           children: [
                                                                             SizedBox(
-                                                                              width: MediaQuery.of(context).size.width * 0.25,
+                                                                              width: MediaQuery.of(context).size.width * 0.35,
                                                                               child: commonText(
                                                                                 data: items.homeTeam ?? "N/A",
                                                                                 fontSize: 14,
+                                                                                alignment: TextAlign.center,
                                                                                 fontWeight: FontWeight.w400,
                                                                                 fontFamily: "Poppins",
                                                                                 color: Colors.black,
-                                                                                maxLines: 1,
+                                                                                maxLines: 2,
                                                                                 overflow: TextOverflow.ellipsis,
                                                                               ),
                                                                             ),
@@ -503,6 +518,7 @@ class _FinishedScreenState extends State<FinishedScreen> {
                                                                                     (index) => commonText(
                                                                                   data: "${items.homeTeamRuns![index]}/${items.homeTeamWickets![index]}",
                                                                                   fontSize: 14,
+                                                                                      alignment: TextAlign.center,
                                                                                   fontWeight: FontWeight.w500,
                                                                                   fontFamily: "Poppins",
                                                                                   color: Colors.black,
@@ -513,6 +529,7 @@ class _FinishedScreenState extends State<FinishedScreen> {
 
                                                                                 : commonText(
                                                                                     data: "N/A",
+                                                                              alignment: TextAlign.center,
                                                                                     fontSize: 14,
                                                                                     fontWeight: FontWeight.w500,
                                                                                     fontFamily: "Poppins",
@@ -521,17 +538,20 @@ class _FinishedScreenState extends State<FinishedScreen> {
                                                                           ],
                                                                         ),
                                                                       ),
-                                                                      items.winningTeamName != null
+                                                                      items.resultType != null
                                                                           ? Center(
                                                                         child: commonText(
                                                                           alignment: TextAlign.center,
-                                                                          data: "${items.winningTeamName} won" ?? "N/A",
+                                                                          data: (items.resultType?.toString() == "Won")
+                                                                              ? "${items.winningTeamName.toString()} Won"
+                                                                              : (items.resultType?.toString() ?? "N/A"),
                                                                           fontSize: 10,
                                                                           fontWeight: FontWeight.w700,
                                                                           fontFamily: "Poppins",
                                                                           color: Colors.black,
                                                                         ),
                                                                       )
+
                                                                           : Center(
                                                                         child: commonText(
                                                                           alignment: TextAlign.center,
@@ -542,21 +562,25 @@ class _FinishedScreenState extends State<FinishedScreen> {
                                                                           color: Colors.black,
                                                                         ),
                                                                       ),
+                                                                      SizedBox(width: 10,),
+
                                                                       Flexible(
                                                                         child:
                                                                             Column(
                                                                           crossAxisAlignment:
-                                                                              CrossAxisAlignment.start,
+                                                                              CrossAxisAlignment.center,
                                                                           children: [
                                                                             SizedBox(
-                                                                              width: MediaQuery.of(context).size.width * 0.25,
+                                                                              width: MediaQuery.of(context).size.width * 0.35,
                                                                               child: items.awayTeam != null
                                                                                   ? commonText(
                                                                                       data: items.awayTeam ?? "N/A",
                                                                                       fontSize: 14,
+                                                                                      maxLines: 2,
                                                                                       fontWeight: FontWeight.w400,
                                                                                       fontFamily: "Poppins",
                                                                                       color: Colors.black,
+                                                                                alignment: TextAlign.center,
                                                                                 overflow: TextOverflow.ellipsis,
                                                                                     )
                                                                                   : commonText(
@@ -609,16 +633,19 @@ class _FinishedScreenState extends State<FinishedScreen> {
                                     },
                                   )),
                             )
-                          : Center(
-                              child: mediumText14(
-                                context,
-                                'No Finished Series',
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                textAlign: TextAlign.center,
-                                textColor: const Color(0xffFFFFFF),
+                          : SizedBox(
+                    height: MediaQuery.of(context).size.height*0.7,
+                            child: Center(
+                                child: mediumText14(
+                                  context,
+                                  'No Finished Series',
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  textAlign: TextAlign.center,
+                                  textColor: const Color(0xffFFFFFF),
+                                ),
                               ),
-                            ),
+                          ),
                 ],
               ),
             ),

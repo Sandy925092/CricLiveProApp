@@ -36,8 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
               leadingWidth: 130,
               centerTitle: false,
               actions: [
-
-                 GestureDetector(
+                GestureDetector(
                   onTap: () {
                     PersistentNavBarNavigator.pushNewScreen(
                       context,
@@ -52,7 +51,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Icon(Icons.search, color: buttonColors),
                   ),
                 )
-
               ],
               leading: Padding(
                 padding: const EdgeInsets.only(left: 10.0),
@@ -76,66 +74,64 @@ class _HomeScreenState extends State<HomeScreen> {
           appBar: AppBar(
             backgroundColor: primaryColors,
             bottom: PreferredSize(
-              preferredSize:
-                  const Size.fromHeight(.0), // Adjust the height here
-              child: TabBar(
-                // Remove tabAlignment and isScrollable
-                indicatorColor: buttonColors,
-                labelColor: buttonColors,
-                unselectedLabelColor: disableColors,
-                indicatorWeight: 3.0,
-                dividerColor: buttonColors,
-                tabs: [
-                  Tab(
-                    child: Center(
-                      child: commonText(
-                        data: "Live",
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: "Poppins",
+                preferredSize:
+                    const Size.fromHeight(.0), // Adjust the height here
+                child: TabBar(
+                  // Remove tabAlignment and isScrollable
+                  indicatorColor: buttonColors,
+                  labelColor: buttonColors,
+                  unselectedLabelColor: disableColors,
+                  indicatorWeight: 3.0,
+                  dividerColor: buttonColors,
+                  tabs: [
+                    Tab(
+                      child: Center(
+                        child: commonText(
+                          data: "Live",
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: "Poppins",
+                        ),
                       ),
                     ),
-                  ),
-                  Tab(
-                    child: Center(
-                      child: commonText(
-                        data: "For You",
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: "Poppins",
+                    Tab(
+                      child: Center(
+                        child: commonText(
+                          data: "For You",
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: "Poppins",
+                        ),
                       ),
                     ),
-                  ),
-                  Tab(
-                    child: Center(
-                      child: commonText(
-                        overflow: TextOverflow.ellipsis,
-                        data: "Upcoming",
-                        fontSize: 14,
-                        maxLines: 1,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: "Poppins",
+                    Tab(
+                      child: Center(
+                        child: commonText(
+                          overflow: TextOverflow.ellipsis,
+                          data: "Upcoming",
+                          fontSize: 14,
+                          maxLines: 1,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: "Poppins",
+                        ),
                       ),
                     ),
-                  ),
-                  Tab(
-                    child: Center(
-                      child: commonText(
-                        data: "Finished",
-                        fontSize: 14,
-                        maxLines: 1,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: "Poppins",
+                    Tab(
+                      child: Center(
+                        child: commonText(
+                          data: "Finished",
+                          fontSize: 14,
+                          maxLines: 1,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: "Poppins",
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              )
-
-            ),
+                  ],
+                )),
           ),
           body: const TabBarView(
-            physics:  NeverScrollableScrollPhysics(),
+            physics: NeverScrollableScrollPhysics(),
             children: [
               LiveScreen(),
               ForYou(),

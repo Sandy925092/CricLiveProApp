@@ -280,33 +280,39 @@ class _SearchScreenState extends State<SearchScreen> {
                                                                 .spaceBetween,
                                                         children: [
                                                           Flexible(
-                                                            child: SizedBox(
-                                                              width: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width *
-                                                                  0.25,
-                                                              child: commonText(
-                                                                data: searchData[
-                                                                            index]
-                                                                        .matches?[
-                                                                            i]
-                                                                        .homeTeam
-                                                                        ?.toString() ??
-                                                                    "Not available",
-                                                                fontSize: 14,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w400,
-                                                                fontFamily:
-                                                                    "Poppins",
-                                                                color: Colors
-                                                                    .black,
-                                                              ),
+                                                            child: Column(
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              children: [
+                                                                SizedBox(
+                                                                  width: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .width *
+                                                                      0.3,
+                                                                  child: commonText(
+                                                                    data: searchData[
+                                                                                index]
+                                                                            .matches?[
+                                                                                i]
+                                                                            .homeTeam
+                                                                            ?.toString() ??
+                                                                        "Not available",
+                                                                    fontSize: 14,
+                                                                    maxLines: 2,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                    fontFamily:
+                                                                        "Poppins",
+                                                                    color: Colors
+                                                                        .black,
+                                                                  ),
+                                                                ),
+                                                              ],
                                                             ),
                                                           ),
                                                           Container(
-                                                            width: 25.w,
+                                                            width: 20.w,
                                                             padding: EdgeInsets
                                                                 .symmetric(
                                                                     horizontal:
@@ -338,21 +344,20 @@ class _SearchScreenState extends State<SearchScreen> {
                                                                 color: black,
                                                               ),
                                                             ),
-                                                          ).pOnly(
-                                                              left: 32,
-                                                              right: 32),
+                                                          ),
+                                                          SizedBox(width: 10,),
                                                           Flexible(
                                                             child: Column(
                                                               crossAxisAlignment:
                                                                   CrossAxisAlignment
-                                                                      .start,
+                                                                      .center,
                                                               children: [
                                                                 SizedBox(
                                                                   width: MediaQuery.of(
                                                                               context)
                                                                           .size
                                                                           .width *
-                                                                      0.25,
+                                                                      0.40,
                                                                   child:
                                                                       commonText(
                                                                     data: searchData[index]
@@ -362,6 +367,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                                                         "Not available",
                                                                     fontSize:
                                                                         14,
+                                                                    alignment: TextAlign.center,
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .w400,
@@ -444,7 +450,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                                             child: Column(
                                                               crossAxisAlignment:
                                                                   CrossAxisAlignment
-                                                                      .start,
+                                                                      .center,
                                                               children: [
                                                                 SizedBox(
                                                                   width: MediaQuery.of(
@@ -461,6 +467,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                                                         "N/A",
                                                                     fontSize:
                                                                         14,
+                                                                    alignment: TextAlign.center,
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .w400,
@@ -547,7 +554,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                                               ],
                                                             ),
                                                           ),
-                                                          Center(
+                                                          searchData[index].matches![i].winningTeamName!=null?    Center(
                                                             child: commonText(
                                                               alignment:
                                                                   TextAlign
@@ -563,12 +570,28 @@ class _SearchScreenState extends State<SearchScreen> {
                                                               color:
                                                                   Colors.black,
                                                             ),
+                                                          ):Center(
+                                                            child: commonText(
+                                                              alignment:
+                                                              TextAlign
+                                                                  .center,
+                                                              data:
+                                                              "N/A",
+                                                              fontSize: 10,
+                                                              fontWeight:
+                                                              FontWeight
+                                                                  .w700,
+                                                              fontFamily:
+                                                              "Poppins",
+                                                              color:
+                                                              Colors.black,
+                                                            ),
                                                           ),
                                                           Flexible(
                                                             child: Column(
                                                               crossAxisAlignment:
                                                                   CrossAxisAlignment
-                                                                      .start,
+                                                                      .center,
                                                               children: [
                                                                 SizedBox(
                                                                   width: MediaQuery.of(
@@ -585,6 +608,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                                                               "N/A",
                                                                           fontSize:
                                                                               14,
+                                                                          alignment: TextAlign.center,
                                                                           fontWeight:
                                                                               FontWeight.w400,
                                                                           fontFamily:
@@ -623,6 +647,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                                                                 "${searchData[index].matches![i].awayTeamRuns![AwayRunsIndex]}/${searchData[index].matches![i].awayTeamWickets![AwayRunsIndex]}",
                                                                             fontSize:
                                                                                 14,
+                                                                            alignment: TextAlign.center,
                                                                             fontWeight:
                                                                                 FontWeight.w500,
                                                                             fontFamily:
@@ -643,6 +668,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                                                             FontWeight.w500,
                                                                         fontFamily:
                                                                             "Poppins",
+                                                                  alignment: TextAlign.center,
                                                                         color: Colors
                                                                             .black,
                                                                       ),

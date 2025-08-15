@@ -199,7 +199,7 @@ class LiveScoreRepository {
     try {
       final response = await ApiService()
           .sendRequest
-          .get("/series/started?page=${pageno}&size=10");
+          .get("/series/started?page=${pageno}&size=20");
       // await ApiService().sendRequest.get("http://192.168.4.25:8080/api/series/started?page=0&size=10");
       return ResponseData(
           statusCode: response.statusCode,

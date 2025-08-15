@@ -16,26 +16,36 @@ class SplashImages extends StatefulWidget {
 
 class _SplashImagesState extends State<SplashImages> {
   List splashscreenData = [
-  'assets/images/welcome1.png',
-  'assets/images/welcome2.png',
+    'assets/images/welcome1.png',
+    'assets/images/welcome2.png',
   ];
   int _currentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
+    final screenHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
     return Scaffold(
       backgroundColor: Color(0xff001648),
-      body:CarouselSlider.builder(
+      body: CarouselSlider.builder(
         itemCount: splashscreenData.length,
         options: CarouselOptions(
-          height: double.infinity, // Make the carousel fill the available height
+          height: double.infinity,
+          // Make the carousel fill the available height
           // aspectRatio: 16 / 9, // Set the aspect ratio as desired
-          aspectRatio: screenWidth / screenHeight, // Set the aspect ratio as desired
+          aspectRatio: screenWidth / screenHeight,
+          // Set the aspect ratio as desired
           viewportFraction: 1.0,
-          autoPlay: true,// Make each image occupy the full width
+          autoPlay: true,
+          // Make each image occupy the full width
           enableInfiniteScroll: false,
-          autoPlayInterval : const Duration(seconds: 2),
+          autoPlayInterval: const Duration(seconds: 2),
           //    autoPlayCurve: Curves.easeInOutCubic,
           //   autoPlayAnimationDuration: Duration(milliseconds: 800),
           onPageChanged: (index, reason) {
@@ -45,14 +55,18 @@ class _SplashImagesState extends State<SplashImages> {
                 Timer(const Duration(milliseconds: 1200), () async {
                   /*  Navigator.of(context).pushReplacement(MaterialPageRoute(builder:
                       (BuildContext context) => const SignUp()));*/
-                  if(loginValue==true){
-                    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (c) => Dashboard(menuScreenContext: context)), (route) => false);
-                  }else{
+                  if (loginValue == true) {
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (c) =>
+                            Dashboard(menuScreenContext: context)), (
+                        route) => false);
+                  } else {
                     // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (c) => Dashboard(menuScreenContext: context)), (route) => false);
 
-                     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => const Login()));
+                    Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (
+                            BuildContext context) => const Login()));
                   }
-
                 });
               }
             });

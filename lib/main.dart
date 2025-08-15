@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:kisma_livescore/bottomnavbar.dart';
 import 'package:kisma_livescore/constants.dart';
 import 'package:kisma_livescore/cubit/livescore_cubit.dart';
@@ -19,12 +18,10 @@ String selectedDate = "";
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await PreferenceManager.init();
 
   getStoredValue();
   await Future.delayed(const Duration(seconds: 2));
-  FlutterNativeSplash.remove();
   runApp(const MyApp());
 }
 /*Future<void> main() async {
@@ -55,7 +52,7 @@ class _MyAppState extends State<MyApp> {
           DeviceOrientation.portraitDown,
         ]);
         return MaterialApp(
-          title: 'Live Score',
+          title: 'CricLivePro',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff001548)),

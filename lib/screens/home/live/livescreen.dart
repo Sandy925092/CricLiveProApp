@@ -334,69 +334,103 @@ class _LiveScreenState extends State<LiveScreen>
 
                                   List teamAInnings = inningsList
                                       .where((inning) =>
-                                  inning.inningNumber == 1 &&
-                                      inning.battingTeam?.teamId != null)
+                                          inning.inningNumber! % 2 == 1 &&
+                                          inning.battingTeam?.teamId != null)
                                       .toList();
 
                                   List teamBInnings = inningsList
                                       .where((inning) =>
-                                  inning.inningNumber == 2 &&
-                                      inning.battingTeam?.teamId != null)
+                                          inning.inningNumber! % 2 == 0 &&
+                                          inning.battingTeam?.teamId != null)
                                       .toList();
 
                                   final match = liveData?[index].matches?[i];
 
 // Check if all innings have null teamId
-                                  final allInningsTeamIdNull = inningsList.every((inning) => inning.battingTeam?.teamId == null);
+                                  final allInningsTeamIdNull =
+                                      inningsList.every((inning) =>
+                                          inning.battingTeam?.teamId == null);
+                                  Set<String> teamIds = {};
 
-                                  if (inningsList.isEmpty || allInningsTeamIdNull) {
+                                  if (inningsList.isEmpty ||
+                                      allInningsTeamIdNull) {
                                     // Fallback: No innings or no valid teamId in innings
                                     teamAName = match?.teamAName ?? "";
                                     teamAId = match?.teamAId.toString() ?? "";
                                     teamBName = match?.teamBName ?? "";
                                     teamBId = match?.teamBId.toString() ?? "";
                                   } else {
+                                    for (var inning in inningsList) {
+                                      final teamId = inning.battingTeam?.teamId;
+                                      final inningNumber = inning.inningNumber;
 
-                                  for (var inning in inningsList) {
-                                    final teamId = inning.battingTeam?.teamId;
+                                      if (inningNumber == 1) {
+                                        print("coming in 1");
+                                        if (teamId == match?.teamAId) {
+                                          print("coming in 2");
+                                          teamAName = match?.teamAName ?? "";
+                                          teamAId =
+                                              match?.teamAId.toString() ?? "";
+                                          teamBName = match?.teamBName ?? "";
+                                          teamBId =
+                                              match?.teamBId.toString() ?? "";
+                                        } else if (teamId == match?.teamBId) {
+                                          print("coming in 3");
+                                          teamAName = match?.teamBName ?? "";
+                                          teamAId =
+                                              match?.teamBId.toString() ?? "";
 
-                                    if (inning.inningNumber == 1) {
-                                      if (teamId == match?.teamAId) {
-                                        teamAName = match?.teamAName ?? "";
-                                        teamAId = match?.teamAId.toString() ?? "";
-                                      } else if (teamId == match?.teamBId) {
-                                        teamAName = match?.teamBName ?? "";
-                                        teamAId = match?.teamBId.toString() ?? "";
-                                      } else if (teamId == null) {
-                                        // Fallback if teamId is null
-                                        teamAName = match?.teamAName ?? "";
-                                      }
-                                    } else if (inning.inningNumber == 2) {
-                                      if (teamId == match?.teamAId) {
-                                        teamBName = match?.teamAName ?? "";
-                                        teamBId = match?.teamAName ?? "";
-                                      } else if (teamId == match?.teamBId) {
-                                        teamBName = match?.teamBName ?? "";
-                                        teamBId = match?.teamBId.toString() ?? "";
-                                      } else if (teamId == null) {
-                                        // Fallback if teamId is null
-                                        teamBName = match?.teamBName ?? "";
+                                          teamBName = match?.teamAName ?? "";
+                                          teamBId =
+                                              match?.teamAId.toString() ?? "";
+                                        } else if (teamId == null) {
+                                          print("coming in 4");
+                                          // Fallback if teamId is null
+                                          teamAName = match?.teamAName ?? "";
+                                          teamAId =
+                                              match?.teamAId.toString() ?? "";
+                                          teamBName = match?.teamBName ?? "";
+                                          teamBId =
+                                              match?.teamBId.toString() ?? "";
+                                        }
+                                      } else if (inningNumber == 2) {
+                                        print("coming in 2");
+                                        if (teamId == match?.teamAId) {
+                                          teamBName = match?.teamAName ?? "";
+                                          teamBId =
+                                              match?.teamAId.toString() ?? "";
+                                          teamAName = match?.teamBName ?? "";
+                                          teamAId =
+                                              match?.teamBId.toString() ?? "";
+                                        } else if (teamId == match?.teamBId) {
+                                          teamBName = match?.teamBName ?? "";
+                                          teamBId =
+                                              match?.teamBId.toString() ?? "";
+                                          teamAName = match?.teamAName ?? "";
+                                          teamAId =
+                                              match?.teamAId.toString() ?? "";
+                                        } else if (teamId == null) {
+                                          // Fallback if teamId is null
+                                          teamBName = match?.teamBName ?? "";
+                                          teamBId =
+                                              match?.teamBId.toString() ?? "";
+                                          teamAName = match?.teamBName ?? "";
+                                          teamAId =
+                                              match?.teamAId.toString() ?? "";
+                                        }
                                       }
                                     }
                                   }
-                                }
-
 
                                   print("team Innings");
                                   print(teamAName);
                                   print(teamBName);
 
-                                  if(match?.tossInfo!=null){
-                                     tossWinnerTeamId =
-                                        match?.tossInfo?.tossWinnerTeamId??0;
-                                     tossDecision =
+                                  if (match?.tossInfo != null) {
+                                    tossWinnerTeamId =
+                                        match?.tossInfo?.tossWinnerTeamId ?? 0;
+                                    tossDecision =
                                         match?.tossInfo?.decision ?? "";
-
 
                                     if (tossWinnerTeamId == match?.teamAId) {
                                       tossWinningTeamName =
@@ -408,11 +442,8 @@ class _LiveScreenState extends State<LiveScreen>
                                     }
                                   }
 
-
-
-
                                   print(
-                                    "Toss winner team$tossWinnerTeamId and chose to $tossDecision");
+                                      "Toss winner team$tossWinnerTeamId and chose to $tossDecision");
                                   // print(
                                   //     "Toss winner team$teamAInnings and chose to $teamBInnings");
 
@@ -427,7 +458,9 @@ class _LiveScreenState extends State<LiveScreen>
                                           MaterialPageRoute(
                                             builder: (context) =>
                                                 SeriesMatchScorecardScreen(
-                                                    matchList: match, teamAName:teamAName,teamBName:teamBName),
+                                                    matchList: match,
+                                                    teamAName: teamAName,
+                                                    teamBName: teamBName),
                                           ),
                                         );
                                         // Navigator.push(context, MaterialPageRoute(builder: (context) => SeriesMatchApiScorecardScreen(matchList: match),),);
@@ -453,14 +486,17 @@ class _LiveScreenState extends State<LiveScreen>
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                commonText(
-                                                  data:
-                                                      "$tossWinningTeamName won the toss and chose to $tossDecision",
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w400,
-                                                  fontFamily: "Poppins",
-                                                  color: Colors.black,
-                                                ),
+                                                tossWinnerTeamId != 0
+                                                    ? commonText(
+                                                        data:
+                                                            "$tossWinningTeamName won the toss and chose to $tossDecision",
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        fontFamily: "Poppins",
+                                                        color: Colors.black,
+                                                      )
+                                                    : SizedBox(),
                                                 SizedBox(
                                                   height: 10,
                                                 ),
@@ -479,22 +515,33 @@ class _LiveScreenState extends State<LiveScreen>
                                                         SizedBox(
                                                           width: 25.w,
                                                           child: commonText(
-                                                            alignment: TextAlign.center,
-                                                            data: (teamAName == null || teamAName.trim().isEmpty) &&
-                                                                (teamAId == null || teamAId.toString().trim().isEmpty)
+                                                            alignment: TextAlign
+                                                                .center,
+                                                            data: (
+                                                                        teamAName
+                                                                            .trim()
+                                                                            .isEmpty) &&
+                                                                    (teamAId
+                                                                            .toString()
+                                                                            .trim()
+                                                                            .isEmpty)
                                                                 ? "Not available"
-                                                                : (teamAName == "Unknown Team" ? "$teamAId" : "$teamAName"),
+                                                                : (teamAName ==
+                                                                        "Unknown Team"
+                                                                    ? "$teamAId"
+                                                                    : "$teamAName"),
                                                             fontSize: 14,
-                                                            fontWeight: FontWeight.w500,
-                                                            fontFamily: "Poppins",
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontFamily:
+                                                                "Poppins",
                                                             color: Colors.black,
                                                           ),
                                                         ),
-
                                                         SizedBox(
                                                           height: 10,
                                                         ),
-                                                        teamAInnings?.length !=
+                                                        teamAInnings.length !=
                                                                 0
                                                             ? Column(
                                                                 children: [
@@ -511,7 +558,7 @@ class _LiveScreenState extends State<LiveScreen>
                                                                     child: ListView
                                                                         .builder(
                                                                       itemCount:
-                                                                          teamAInnings?.length ??
+                                                                          teamAInnings.length ??
                                                                               0,
                                                                       physics:
                                                                           NeverScrollableScrollPhysics(),
@@ -519,7 +566,7 @@ class _LiveScreenState extends State<LiveScreen>
                                                                           (context,
                                                                               inningIndex) {
                                                                         final inning =
-                                                                            teamAInnings![inningIndex];
+                                                                            teamAInnings[inningIndex];
                                                                         return Container(
                                                                           margin:
                                                                               EdgeInsets.only(bottom: 5),
@@ -632,18 +679,28 @@ class _LiveScreenState extends State<LiveScreen>
                                                         SizedBox(
                                                           width: 25.w,
                                                           child: commonText(
-                                                            alignment: TextAlign.center,
-                                                            data: (teamBName.trim().isEmpty) &&
-                                                                (teamBId.toString().trim().isEmpty)
+                                                            alignment: TextAlign
+                                                                .center,
+                                                            data: (teamBName
+                                                                        .trim()
+                                                                        .isEmpty) &&
+                                                                    (teamBId
+                                                                        .toString()
+                                                                        .trim()
+                                                                        .isEmpty)
                                                                 ? "Not available"
-                                                                : (teamBName == "Unknown Team" ? "$teamBId" : "$teamBName"),
+                                                                : (teamBName ==
+                                                                        "Unknown Team"
+                                                                    ? "$teamBId"
+                                                                    : "$teamBName"),
                                                             fontSize: 14,
-                                                            fontWeight: FontWeight.w500,
-                                                            fontFamily: "Poppins",
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontFamily:
+                                                                "Poppins",
                                                             color: Colors.black,
                                                           ),
                                                         ),
-
                                                         SizedBox(
                                                           height: 10,
                                                         ),
@@ -749,12 +806,15 @@ class _LiveScreenState extends State<LiveScreen>
                                                                   },
                                                                 ),
                                                               )
-                                                            :
-                                                        Padding(
-                                                          padding: const EdgeInsets.only(right: 20.0),
-                                                          child: Text(
-                                                                  "Yet to bat"),
-                                                        ),
+                                                            : Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .only(
+                                                                        right:
+                                                                            20.0),
+                                                                child: Text(
+                                                                    "Yet to bat"),
+                                                              ),
                                                       ],
                                                     ),
                                                   ],
