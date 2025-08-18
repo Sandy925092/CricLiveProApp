@@ -112,25 +112,6 @@ class _FinishedScreenState extends State<FinishedScreen> {
         }
       });
 
-      // if (response.responseData != null) {
-      //   final smileGalleryProResponse =
-      //   response.responseData as SmileGalleryProResponse;
-      //   final newItems = smileGalleryProResponse.smileDesignPro ?? [];
-      //   final isLastPage = newItems.isEmpty;
-      //
-      //   if (isLastPage) {
-      //     _pagingController.appendLastPage(newItems); // This was missing
-      //     print('hereeee');
-      //   } else {
-      //     final nextPageKey = pageKey + 1;
-      //     _pagingController.appendPage(newItems, nextPageKey);
-      //   }
-      // }
-      // else {
-      //   _pagingController.error = Exception(
-      //       'Failed to load data: ${response.responseData.message ??
-      //           "Unknown error"}');
-      // }
     } catch (error) {
       _pagingController.error = error;
       debugPrint('Error loading page $pageKey: $error');
@@ -187,22 +168,6 @@ class _FinishedScreenState extends State<FinishedScreen> {
               matchData.clear();
             }
           }
-          print("Match data details after");
-          print(matchData.length);
-
-          // if (state.status == LiveScoreStatus.finishedSeriesSuccess) {
-          //   var newData = (state.responseData?.response as FinishedMatchResponse).data;
-          //
-          //   if (newData == null) {
-          //     hasMoreData = false;
-          //   } else {
-          //     if (pageNo == 0) {
-          //       finishedSeriesResponse = state.responseData?.response as FinishedMatchResponse;
-          //     } else {
-          //       finishedSeriesResponse.data = newData; // This now works since `data` is not final
-          //     }
-          //   }
-          // }
 
           setState(() {
             isLoadingMore = false;
@@ -220,9 +185,6 @@ class _FinishedScreenState extends State<FinishedScreen> {
             UiHelper.toastMessage(message);
           }
 
-          // if (state.status == LiveScoreStatus.upcomingSeriesLoading) {
-          //   Loader.show(context);
-          // }
         }, builder: (context, state) {
           if (state.status == LiveScoreStatus.finishedSeriesLoading &&
               pageNo == 0) {
@@ -453,7 +415,10 @@ class _FinishedScreenState extends State<FinishedScreen> {
 
                                                           }
                                                         },
-                                                        child: Container(
+                                                        child:
+
+                                                        items.result ==
+                                                            true  && RegExp(r'[a-zA-Z]').hasMatch(items.homeTeam ?? '') && RegExp(r'[a-zA-Z]').hasMatch(items.awayTeam ?? '') ?Container(
                                                           margin:
                                                               EdgeInsets.only(
                                                                   left: 15,
@@ -623,7 +588,7 @@ class _FinishedScreenState extends State<FinishedScreen> {
                                                               ],
                                                             ),
                                                           ),
-                                                        ),
+                                                        ):SizedBox()
                                                       ),
                                                     )
                                                     .toList(),

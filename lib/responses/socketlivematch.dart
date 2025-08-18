@@ -30,6 +30,8 @@ class Matches {
   final String? teamAName;
   final num? teamBId;
   final String? teamBName;
+  final String? teamAFlagUrl;
+  final String? teamBFlagUrl;
   final TossInfo? tossInfo;
   final List<Innings>? innings;
   final Interruptions? interruptions;
@@ -46,6 +48,8 @@ class Matches {
     this.teamAName,
     this.teamBId,
     this.teamBName,
+    this.teamAFlagUrl,
+    this.teamBFlagUrl,
     this.tossInfo,
     this.innings,
     this.interruptions,
@@ -63,6 +67,8 @@ class Matches {
         teamAName = json['teamAName'] as String?,
         teamBId = json['teamBId'] as int?,
         teamBName = json['teamBName'] as String?,
+        teamAFlagUrl = json['teamAFlagUrl'] as String?,
+        teamBFlagUrl = json['teamBFlagUrl'] as String?,
         tossInfo = (json['tossInfo'] as Map<String,dynamic>?) != null ? TossInfo.fromJson(json['tossInfo'] as Map<String,dynamic>) : null,
         innings = (json['innings'] as List?)?.map((dynamic e) => Innings.fromJson(e as Map<String,dynamic>)).toList(),
         interruptions = (json['interruption'] as Map<String,dynamic>?) != null ? Interruptions.fromJson(json['interruption'] as Map<String,dynamic>) : null,
@@ -79,6 +85,8 @@ class Matches {
     'teamAName' : teamAName,
     'teamBId' : teamBId,
     'teamBName' : teamBName,
+    'teamAFlagUrl' : teamAFlagUrl,
+    'teamBFlagUrl' : teamBFlagUrl,
     'tossInfo' : tossInfo?.toJson(),
     'innings' : innings?.map((e) => e.toJson()).toList(),
     'interruption' : interruptions?.toJson(),

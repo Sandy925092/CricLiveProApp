@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:buttons_tabbar/buttons_tabbar.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,14 +19,12 @@ import '../../responses/socketlivematch.dart';
 
 class SeriesMatchScorecardScreen extends StatefulWidget {
   final Matches matchList;
-  String teamAName = "";
-  String teamBName = "";
+  Map<String, dynamic> matchDetails= {};
 
   SeriesMatchScorecardScreen(
       {super.key,
       required this.matchList,
-      required this.teamAName,
-      required this.teamBName});
+      required this.matchDetails});
 
   @override
   State<SeriesMatchScorecardScreen> createState() =>
@@ -83,12 +82,13 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
 
   String teamAName = "";
   String teamBName = "";
+  String teamAFlag = "";
+  String teamBFlag = "";
 
   void initState() {
     print("selected match");
     // log(widget.matchList);
     print(widget.matchList);
-    print(widget.teamAName);
     // updatedMatch = state.socketLiveData
     //     ?.expand((e) => e.matches ?? [])
     //     .firstWhere(
@@ -99,8 +99,10 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
     teamAId = widget.matchList.teamAId;
     teamBId = widget.matchList.teamBId;
 
-    teamAName = widget.teamAName;
-    teamBName = widget.teamBName;
+    teamAName = widget.matchDetails['teamAName'];
+    teamAFlag = widget.matchDetails['teamAFlag'];
+    teamBName = widget.matchDetails['teamBName'];
+    teamBFlag = widget.matchDetails['teamBFlag'];
     // teamAInnings = widget.matchList.innings
     //     ?.where((inning) => inning.battingTeam?.teamId == teamAId)
     //     .toList();
@@ -211,9 +213,9 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
           elevation: 0.0,
           leadingWidth: 30,
           centerTitle: false,
-          title:widget.teamAName.toString().isNotEmpty && widget.teamAName.toString().isNotEmpty? commonText(
+          title:teamAName.toString().isNotEmpty && teamBName.toString().isNotEmpty? commonText(
                   data:
-                      "${widget.teamAName.toString()} vs ${widget.teamBName.toString()}",
+                      "${teamAName.toString()} vs ${teamBName.toString()}",
                   // data: "dsads",
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
@@ -262,88 +264,6 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
               teamBInnings = updatedMatch.innings
                   ?.where((inning) => inning.inningNumber%2 == 0 && inning.battingTeam?.teamId != null)
                   .toList();
-              //
-              // final inningsList =
-              //     updatedMatch.innings ??
-              //         [];
-
-              // for (var inning in inningsList) {
-              //   final teamId = inning.battingTeam?.teamId;
-              //
-              //   if (inning.inningNumber == 1) {
-              //     if (teamId == match?.teamAId) {
-              //       teamAName =
-              //           match?.teamAName.toString() ?? "";
-              //     } else if (teamId == match?.teamBId) {
-              //       teamAName = match?.teamBName ?? "";
-              //     }
-              //   } else if (inning.inningNumber == 2) {
-              //     if (teamId == match?.teamAId) {
-              //       teamBName = match?.teamAName ?? "";
-              //     } else if (teamId == match?.teamBId) {
-              //       teamBName = match?.teamBName ?? "";
-              //     }
-              //   }
-              // }
-
-              // 1. Combine and label innings from both teams
-
-              // final maxLength =
-              //     (teamAInnings?.length ?? 0) > (teamBInnings?.length ?? 0)
-              //         ? (teamAInnings?.length ?? 0)
-              //         : (teamBInnings?.length ?? 0);
-              //
-              // for (int i = 0; i < maxLength; i++) {
-              //   if (i < (teamAInnings?.length ?? 0)) {
-              //     final inning = teamAInnings![i];
-              //     allInnings.add({
-              //       'team': updatedMatch.teamAName ??
-              //           updatedMatch.teamAId.toString() ??
-              //           '',
-              //       'runs': inning.battingTeam?.runs ?? "0",
-              //       'wickets': inning.battingTeam?.wickets ?? "0",
-              //       'overs': inning.battingTeam?.overs ?? '0.0',
-              //       'inningData': inning,
-              //     });
-              //   }
-              //   if (i < (teamBInnings?.length ?? 0)) {
-              //     final inning = teamBInnings![i];
-              //     allInnings.add({
-              //       'team': updatedMatch.teamBName ??
-              //           updatedMatch.teamBId.toString() ??
-              //           '',
-              //       'runs': inning.battingTeam?.runs ?? "0",
-              //       'wickets': inning.battingTeam?.wickets ?? "0",
-              //       'overs': inning.battingTeam?.overs ?? '0.0',
-              //       'inningData': inning,
-              //     });
-              //   }
-              // }
-
-              // for (var inning in teamAInnings ?? []) {
-              //   allInnings.add({
-              //     'team':updatedMatch?.teamAName ??
-              //         updatedMatch?.teamAId.toString() ??
-              //         '' , // or use teamAName dynamically
-              //     'runs': inning.battingTeam?.runs ?? "0",
-              //     'wickets': inning.battingTeam?.wickets ?? "0",
-              //     'overs': inning.battingTeam?.overs ?? '0.0',
-              //   });
-              // }
-              //
-              // for (var inning in teamBInnings ?? []) {
-              //   allInnings.add({
-              //     'team': updatedMatch?.teamBName ??
-              //         updatedMatch?.teamBId.toString() ??
-              //         '', // or use teamBName dynamically
-              //     'runs': inning.battingTeam?.runs ?? "0",
-              //     'wickets': inning.battingTeam?.wickets ?? "0",
-              //     'overs': inning.battingTeam?.overs ?? '0.0',
-              //   });
-              // }
-
-              // updateTabController();
-
               getAllInningsInitial();
 
               print("updatedMatch.toString()");
@@ -369,9 +289,27 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                           children: [
                             Column(
                               children: [
-                                Image.asset(
-                                  'assets/images/indiaflag.png',
-                                  scale: 3,
+                                CachedNetworkImage(
+                                  imageUrl: teamAFlag.isNotEmpty?teamAFlag
+                                      : "assets/images/iv_noflag.png",
+                                  // better fallback
+                                  fit: BoxFit.cover,
+                                  placeholder: (context, url) => const Center(
+                                    child: SizedBox(
+                                      width: 20,
+                                      height: 20,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        color: Colors.blue,
+                                      ),
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) => Image.asset(
+                                    "assets/images/iv_noflag.png",
+                                    fit: BoxFit.cover,
+                                  ),
+                                  height: 30,
+                                  width: 30,
                                 ),
                                 1.heightBox,
                                 Column(
@@ -382,7 +320,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                       child: commonText(
                                         alignment: TextAlign.center,
                                         // data: updatedMatch?.teamAName ?? updatedMatch?.teamAId.toString() ?? '',
-                                        data: widget.teamAName ?? '',
+                                        data: teamAName ?? '',
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
                                         fontFamily: "Poppins",
@@ -460,9 +398,27 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                             ),
                             Column(
                               children: [
-                                Image.asset(
-                                  'assets/images/ausflag.png',
-                                  scale: 3,
+                                CachedNetworkImage(
+                                  imageUrl: teamBFlag.isNotEmpty?teamBFlag
+                                      : "assets/images/iv_noflag.png",
+                                  // better fallback
+                                  fit: BoxFit.cover,
+                                  placeholder: (context, url) => const Center(
+                                    child: SizedBox(
+                                      width: 20,
+                                      height: 20,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        color: Colors.blue,
+                                      ),
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) => Image.asset(
+                                    "assets/images/iv_noflag.png",
+                                    fit: BoxFit.cover,
+                                  ),
+                                  height: 30,
+                                  width: 30,
                                 ),
                                 1.h.heightBox,
                                 Column(
@@ -473,7 +429,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
                                       child: commonText(
                                         alignment: TextAlign.center,
                                         // data: updatedMatch?.teamAName ?? updatedMatch?.teamAId.toString() ?? '',
-                                        data: widget.teamBName.toString() ?? '',
+                                        data: teamBName.toString() ?? '',
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
                                         fontFamily: "Poppins",
@@ -2284,7 +2240,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
 
         allInnings.add({
           // 'team': updatedMatch.teamAName ?? updatedMatch.teamAId.toString() ??'',
-          'team': widget.teamAName,
+          'team': teamAName,
           'runs': inning.battingTeam?.runs ?? "0",
           'wickets': inning.battingTeam?.wickets ?? "0",
           'overs': inning.battingTeam?.overs ?? '0.0',
@@ -2295,7 +2251,7 @@ class _SeriesMatchScorecardScreenState extends State<SeriesMatchScorecardScreen>
         final inning = teamBInnings![i];
         allInnings.add({
           // 'team': updatedMatch.teamBName ?? updatedMatch.teamBId.toString() ?? '',
-          'team': widget.teamBName,
+          'team': teamBName,
 
           'runs': inning.battingTeam?.runs ?? "0",
           'wickets': inning.battingTeam?.wickets ?? "0",
