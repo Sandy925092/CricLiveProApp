@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
@@ -30,11 +31,6 @@ class FinishedScreen extends StatefulWidget {
 
 class _FinishedScreenState extends State<FinishedScreen> {
   FinishedSeriesResponse finishedSeriesResponse = FinishedSeriesResponse();
-
-  // FinishedMatchResponse  finishedSeriesResponse= FinishedMatchResponse();
-
-  // late ExpandedTileController _controller;
-
   bool? isTrue;
   List<bool> isTrueList = [false, false];
   ScrollController _scrollController = ScrollController();
@@ -43,8 +39,19 @@ class _FinishedScreenState extends State<FinishedScreen> {
   bool hasMoreData = true;
   List<SeriesName> seriesName = [];
   List<MatchData> matchData = [];
+  String selectedFilter = "International";
+  int selectedIndex = 0;
+  int selectedSeriesIndex = -1;
+
+  List<String> filterTypes = [
+    "International",
+    "InternationalClubs",
+    "Domestic",
+    "Other",
+    "Unknown"
+  ];
   int? expandedIndex;
-      late final PagingController<int, SeriesName> _pagingController;
+  late final PagingController<int, SeriesName> _pagingController;
 
   Future<void> getFinished({bool isLoadMore = false}) async {
     if (isLoadMore) {
@@ -52,17 +59,15 @@ class _FinishedScreenState extends State<FinishedScreen> {
         isLoadingMore = true;
       });
     }
-
-    isInternetConnected().then((value) async {
-      if (value == true) {
-        await BlocProvider.of<LiveScoreCubit>(context)
-            .getFinishedSeries(pageNo.toString());
-      } else {
-        showToast(context: context, message: notConnected);
-      }
-    });
-
-
+    //
+    // isInternetConnected().then((value) async {
+    //   if (value == true) {
+    //     await BlocProvider.of<LiveScoreCubit>(context)
+    //         .getFinishedSeries(pageNo.toString());
+    //   } else {
+    //     showToast(context: context, message: notConnected);
+    //   }
+    // });
   }
 
   Future<void> _refreshPage() async {
@@ -83,8 +88,7 @@ class _FinishedScreenState extends State<FinishedScreen> {
   void initState() {
     super.initState();
     print("call inittstate");
-    // _controller = ExpandedTileController(isExpanded: true);
-    // isTrue = _controller.isExpanded;
+    _scrollController.addListener(_scrollListener);
 
     _pagingController = PagingController(
       firstPageKey: 0,
@@ -94,10 +98,18 @@ class _FinishedScreenState extends State<FinishedScreen> {
 
     _fetchPage(pageNo);
 
-    _pagingController.addPageRequestListener((pageKey) {
-      _fetchPage(pageKey);
-    });
+    // _pagingController.addPageRequestListener((pageKey) {
+    //   _fetchPage(pageKey);
+    // });
     print("call inittstate2");
+  }
+
+  void _scrollListener() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 100) {
+      pageNo++;
+      _fetchPage(pageNo);
+    }
   }
 
   Future<void> _fetchPage(int pageKey) async {
@@ -106,12 +118,11 @@ class _FinishedScreenState extends State<FinishedScreen> {
       isInternetConnected().then((value) async {
         if (value == true) {
           await BlocProvider.of<LiveScoreCubit>(context)
-              .getFinishedSeries(pageNo.toString());
+              .getFinishedSeries(pageNo.toString(), selectedFilter);
         } else {
           showToast(context: context, message: notConnected);
         }
       });
-
     } catch (error) {
       _pagingController.error = error;
       debugPrint('Error loading page $pageKey: $error');
@@ -126,31 +137,35 @@ class _FinishedScreenState extends State<FinishedScreen> {
         body: BlocConsumer<LiveScoreCubit, LiveScoreState>(
             listener: (context, state) {
           print(state.status.toString() + " this is status");
-            if (state.status == LiveScoreStatus.finishedSeriesSuccess) {
-              finishedSeriesResponse =
-                  state.responseData?.response as FinishedSeriesResponse;
-              Loader.hide();
+          if (state.status == LiveScoreStatus.finishedSeriesSuccess) {
+            finishedSeriesResponse =
+                state.responseData?.response as FinishedSeriesResponse;
+            Loader.hide();
 
-              if (finishedSeriesResponse.data?.content?.length != 0) {
-                // seriesName.addAll(finishedSeriesResponse.data?.content ?? []);
+            if (finishedSeriesResponse.data?.content?.length != 0) {
+              // seriesName.addAll(finishedSeriesResponse.data?.content ?? []);
 
-                final newItems = finishedSeriesResponse.data?.content ?? [];
-                final isLastPage = finishedSeriesResponse.data?.last ?? true;
-
-                if (isLastPage) {
-                  _pagingController.appendLastPage(newItems);
-                } else {
-                  final nextPageKey =
-                      (finishedSeriesResponse.data?.number ?? 0) + 1;
-                  pageNo = (finishedSeriesResponse.data?.number ?? 0) + 1;
-                  _pagingController.appendPage(newItems, nextPageKey);
-                }
-                seriesName.addAll(newItems);
-
-                print("seriesLength");
-                print(seriesName.length);
+              if (pageNo == 0) {
+                seriesName.clear();
               }
+
+              final newItems = finishedSeriesResponse.data?.content ?? [];
+              final isLastPage = finishedSeriesResponse.data?.last ?? true;
+
+              if (isLastPage) {
+                _pagingController.appendLastPage(newItems);
+              } else {
+                final nextPageKey =
+                    (finishedSeriesResponse.data?.number ?? 0) + 1;
+                pageNo = (finishedSeriesResponse.data?.number ?? 0) + 1;
+                _pagingController.appendPage(newItems, nextPageKey);
+              }
+              seriesName.addAll(newItems);
+
+              print("seriesLength");
+              print(seriesName.length);
             }
+          }
 
           if (state.status == LiveScoreStatus.finishedMatchSuccess) {
             FinishedMatchResponse finishedMatchResponse =
@@ -162,8 +177,10 @@ class _FinishedScreenState extends State<FinishedScreen> {
             print(matchData.length);
 
             if (finishedMatchResponse.data?.length != 0) {
+              final matches = finishedMatchResponse.data ?? [];
+
               matchData.clear();
-              matchData.addAll(finishedMatchResponse.data ?? []);
+              matchData.addAll(matches.where((m) => m.result == true));
             } else {
               matchData.clear();
             }
@@ -182,438 +199,673 @@ class _FinishedScreenState extends State<FinishedScreen> {
 
             print(message);
             matchData.clear();
-            UiHelper.toastMessage(message);
+            // UiHelper.toastMessage(message);
           }
-
         }, builder: (context, state) {
           if (state.status == LiveScoreStatus.finishedSeriesLoading &&
               pageNo == 0) {
-            return const Center(
-              child: CircularProgressIndicator(color: Color(0xFF0DA9AF)),
+            return Column(
+              children: [
+                SizedBox(
+                  height: 15,
+                ),
+                SizedBox(
+                  height: 40,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: filterTypes.length,
+                    itemBuilder: (context, index) {
+                      final item = filterTypes[index];
+                      final isSelected = selectedIndex == index;
+
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            pageNo = 0;
+                            selectedIndex = index;
+                            selectedFilter = item;
+                            _pagingController.refresh();
+
+                            _fetchPage(0);
+                          });
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 10),
+                          margin: const EdgeInsets.symmetric(horizontal: 8),
+                          decoration: BoxDecoration(
+                            color: isSelected ? neonColor : Colors.white,
+                            borderRadius: BorderRadius.circular(25),
+                            border: Border.all(
+                                color: isSelected ? neonColor : Colors.grey),
+                          ),
+                          child: Center(
+                            child: Text(
+                              item,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: 40,
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.5,
+                  child: const Center(
+                    child: CircularProgressIndicator(color: Color(0xFF0DA9AF)),
+                  ),
+                ),
+              ],
             );
           }
           if (state.status == LiveScoreStatus.finishedSeriesError) {
             int statusCode = state.errorData?.code ?? 0;
             String? error = state.errorData?.message ?? state.error;
             print('error:$error');
-            return RefreshIndicator(
-              onRefresh: _refreshPage,
-              child: SingleChildScrollView(
-                controller: _scrollController,
-                physics: const AlwaysScrollableScrollPhysics(),
-                child: SizedBox(
-                  height: screenHeight * 0.5,
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.only(left: 14, right: 14, top: 14),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        //  Image.asset('assets/images/error.png', height: 45, width: 45),
-                        const SizedBox(height: 10),
-                        Padding(
-                          padding:
-                              const EdgeInsets.only(left: 50.0, right: 50.0),
-                          child: statusCode == 401
-                              ? mediumText14(context, "No data found",
-                                  //'You  have no internet connection Please enable Wi-fi or Mobile Data\nPull to refresh.',
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  textColor: const Color(0xffFFFFFF))
-                              : Center(
-                                  child: mediumText14(
-                                      // context, '$ No data found \n\nClick to refresh.',
-                                      context,
-                                      "${"No data found"}\n \n Click to refresh",
+            return Column(
+              children: [
+                SizedBox(
+                  height: 15,
+                ),
+                SizedBox(
+                  height: 40,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: filterTypes.length,
+                    itemBuilder: (context, index) {
+                      final item = filterTypes[index];
+                      final isSelected = selectedIndex == index;
+
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            pageNo = 0;
+                            selectedIndex = index;
+                            selectedFilter = item;
+                            _pagingController.refresh();
+
+                            _fetchPage(0);
+                          });
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 10),
+                          margin: const EdgeInsets.symmetric(horizontal: 8),
+                          decoration: BoxDecoration(
+                            color: isSelected ? neonColor : Colors.white,
+                            borderRadius: BorderRadius.circular(25),
+                            border: Border.all(
+                                color: isSelected ? neonColor : Colors.grey),
+                          ),
+                          child: Center(
+                            child: Text(
+                              item,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                RefreshIndicator(
+                  onRefresh: _refreshPage,
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: SizedBox(
+                      height: screenHeight * 0.5,
+                      child: Padding(
+                        padding:
+                            const EdgeInsets.only(left: 14, right: 14, top: 14),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            //  Image.asset('assets/images/error.png', height: 45, width: 45),
+                            const SizedBox(height: 10),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 50.0, right: 50.0),
+                              child: statusCode == 401
+                                  ? mediumText14(context, "No data found",
+                                      //'You  have no internet connection Please enable Wi-fi or Mobile Data\nPull to refresh.',
                                       fontSize: 16,
                                       fontWeight: FontWeight.w500,
-                                      textAlign: TextAlign.center,
-                                      textColor: const Color(0xffFFFFFF)),
-                                ),
+                                      textColor: const Color(0xffFFFFFF))
+                                  : Center(
+                                      child: mediumText14(
+                                          // context, '$ No data found \n\nClick to refresh.',
+                                          context,
+                                          "${"No data found"}",
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                          textAlign: TextAlign.center,
+                                          textColor: const Color(0xffFFFFFF)),
+                                    ),
+                            ),
+                            if (isLoadingMore)
+                              Padding(
+                                padding: EdgeInsets.symmetric(vertical: 10),
+                                child: CircularProgressIndicator(
+                                    color: Colors.white),
+                              ),
+                          ],
                         ),
-                        IconButton(
-                          icon: const Icon(
-                            Icons.refresh,
-                            color: Colors.white,
-                            size: 35,
-                          ),
-                          onPressed: () {
-                            // getFinished();
-                            // Handle refresh action here
-                          },
-                        ),
-                        if (isLoadingMore)
-                          Padding(
-                            padding: EdgeInsets.symmetric(vertical: 10),
-                            child:
-                                CircularProgressIndicator(color: Colors.white),
-                          ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
-              ),
+              ],
             );
           }
-          return RefreshIndicator(
-            onRefresh: _refreshPage,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  2.h.heightBox,
-                  finishedSeriesResponse.data?.content?.length == null &&
-                          finishedSeriesResponse.data?.content?.length == 0
-                      ? Center(
-                          child: mediumText14(context, 'No Finished Series',
-                              fontSize: 16,
+          return Column(
+            children: [
+              SizedBox(
+                height: 15,
+              ),
+              SizedBox(
+                height: 40,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: filterTypes.length,
+                  itemBuilder: (context, index) {
+                    final item = filterTypes[index];
+                    final isSelected = selectedIndex == index;
+
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          pageNo = 0;
+                          selectedIndex = index;
+                          selectedFilter = item;
+                          _pagingController.refresh();
+
+                          _fetchPage(0);
+                        });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 10),
+                        margin: const EdgeInsets.symmetric(horizontal: 8),
+                        decoration: BoxDecoration(
+                          color: isSelected ? neonColor : Colors.white,
+                          borderRadius: BorderRadius.circular(25),
+                          border: Border.all(
+                              color: isSelected ? neonColor : Colors.grey),
+                        ),
+                        child: Center(
+                          child: Text(
+                            item,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.black,
                               fontWeight: FontWeight.w500,
-                              textAlign: TextAlign.center,
-                              textColor: const Color(0xffFFFFFF)),
-                        )
-                      : (finishedSeriesResponse.data?.content?.isNotEmpty ??
-                              false)
-                          ? SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.7,
-                              child: PagedListView<int, SeriesName>(
-                                  pagingController: _pagingController,
-                                  builderDelegate:
-                                      PagedChildBuilderDelegate<SeriesName>(
-                                    itemBuilder: (context, item, index) {
-                                      final isExpanded = expandedIndex == index;
-                                      return ExpansionTile(
-                                        key: PageStorageKey(
-                                            'expansion_tile_$index'),
-                                        initiallyExpanded: isExpanded,
-                                        trailing: Transform.rotate(
-                                          angle: isExpanded
-                                              ? 3.1
-                                              : 0, // 90 degrees
-                                          child: Icon(
-                                            Icons.arrow_forward_ios_outlined,
-                                            color: Color(0xff96A0B7),
-                                          ).rotate90(),
-                                        ),
-                                        onExpansionChanged: (expanded) async {
-                                          expandedIndex =
-                                              expanded ? index : null;
-                                          print(
-                                              "Tapped index: $index, expanded: ${seriesName[index].id2.toString()}");
-                                          await BlocProvider.of<LiveScoreCubit>(
-                                                  context)
-                                              .getFinishMatch(
-                                                  pageNo.toString(),
-                                                  seriesName[index]
-                                                      .id2
-                                                      .toString());
-                                          // });
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              RefreshIndicator(
+                onRefresh: _refreshPage,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      2.h.heightBox,
+                      finishedSeriesResponse.data?.content?.length == null &&
+                              finishedSeriesResponse.data?.content?.length == 0
+                          ? Column(
+                              children: [
+                                SizedBox(height: 15),
+                                SizedBox(
+                                  height: 40,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: filterTypes.length,
+                                    itemBuilder: (context, index) {
+                                      final item = filterTypes[index];
+                                      final isSelected = selectedIndex == index;
+                                      return GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            pageNo = 0;
+                                            selectedIndex = index;
+                                            selectedFilter = item;
+                                            _pagingController.refresh();
+                                            _fetchPage(0);
+                                          });
                                         },
-                                        title: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Image.asset(
-                                                  "assets/images/doticon.png",
-                                                  height: 25,
-                                                  width: 25,
-                                                ),
-                                                // _controller.isExpanded
-                                                //     ? Image.asset(
-                                                //   "assets/images/doticon.png",
-                                                //   height: 25,
-                                                //   width: 25,
-                                                // )
-                                                //     : SizedBox(),
-                                                2.w.widthBox,
-                                                Flexible(
-                                                  flex: 20,
-                                                  child: commonText(
-                                                      data: seriesName[index]
-                                                              .name
-                                                              .toString() ??
-                                                          "",
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontFamily: "Poppins",
-                                                      color: white,
-                                                      maxLines: 3,
-                                                      overflow: TextOverflow
-                                                          .ellipsis),
-                                                ),
-                                              ],
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 12.0, right: 12.0),
-                                              child: Divider(
-                                                thickness: 1.0,
-                                                color: buttonColors,
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 16, vertical: 10),
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 8),
+                                          decoration: BoxDecoration(
+                                            color: isSelected
+                                                ? neonColor
+                                                : Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(25),
+                                            border: Border.all(
+                                                color: isSelected
+                                                    ? neonColor
+                                                    : Colors.grey),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              item,
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w500,
                                               ),
                                             ),
-                                          ],
+                                          ),
                                         ),
-                                        children: [
-                                          if (isExpanded)
-                                            if (state.status ==
-                                                LiveScoreStatus
-                                                    .finishedMatchLoading)
-                                              Center(
-                                                child: SizedBox(
-                                                  height: 30,
-                                                  width: 30,
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                    color: Colors.white,
-                                                  ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                                SizedBox(height: 10),
+                                Center(
+                                  child: mediumText14(
+                                    context,
+                                    'No Finished Series',
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    textAlign: TextAlign.center,
+                                    textColor: const Color(0xffFFFFFF),
+                                  ),
+                                ),
+                              ],
+                            )
+                          : SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.64,
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                controller: _scrollController,
+                                physics: AlwaysScrollableScrollPhysics(),
+                                itemCount:
+                                    seriesName.length + (isLoadingMore ? 1 : 0),
+                                itemBuilder: (context, index) {
+                                  if (index == seriesName.length) {
+                                    return const Center(
+                                      child: Padding(
+                                        padding: EdgeInsets.all(16.0),
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                    );
+                                  }
+                                  final series = seriesName[index];
+                                  final isExpanded = expandedIndex == index;
+
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () async {
+                                          setState(() async {
+                                            matchData.clear();
+                                            expandedIndex =
+                                                isExpanded ? null : index;
+                                            print(
+                                                "Tapped index: $index, expanded: ${seriesName[index].id2.toString()}");
+                                            pageNo = 0;
+
+                                            selectedSeriesIndex = index;
+                                            await BlocProvider.of<
+                                                    LiveScoreCubit>(context)
+                                                .getFinishMatch(
+                                                    pageNo.toString(),
+                                                    seriesName[index]
+                                                        .id2
+                                                        .toString());
+                                          });
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 15.0, right: 15),
+                                          child: Row(
+                                            children: [
+                                              ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                child: Container(
+                                                  height: 15,
+                                                  width: 15,
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.white),
                                                 ),
-                                              )
-                                            else if (matchData.isEmpty)
-                                              Center(
-                                                child: mediumText14(
-                                                  context,
-                                                  'No match found',
+                                              ),
+                                              SizedBox(width: 10),
+                                              Expanded(
+                                                child: commonText(
+                                                  data: series.name ?? "",
                                                   fontSize: 16,
-                                                  fontWeight: FontWeight.w500,
-                                                  textAlign: TextAlign.center,
-                                                  textColor:
-                                                      const Color(0xffFFFFFF),
+                                                  fontWeight: FontWeight.w700,
+                                                  fontFamily: "Poppins",
+                                                  color: white,
+                                                  maxLines: 3,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                 ),
-                                              )
-                                            else
-                                              Column(
-                                                children: matchData
-                                                    .map(
-                                                      (items) =>
-                                                          GestureDetector(
-                                                        onTap: () {
-                                                          if (items.result ==
-                                                              true) {
-                                                            Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                              builder:
-                                                                  (context) {
-                                                                return FinishedMatchScorecardScreen(
-                                                                    matchId: items
-                                                                            .fixtureId
-                                                                            .toString() ??
-                                                                        "",
-                                                                    winningTeam:
-                                                                        items.winningTeamName.toString() ??
-                                                                            "");
-                                                              },
-                                                            ));
-                                                          } else {
-                                                            UiHelper.toastMessage(
-                                                                resultNotfound ?? '');
+                                              ),
+                                              GestureDetector(
+                                                onTap: () async {
+                                                  setState(() async {
+                                                    matchData.clear();
+                                                    expandedIndex = isExpanded
+                                                        ? null
+                                                        : index;
+                                                    print(
+                                                        "Tapped index: $index, expanded: ${seriesName[index].id2.toString()}");
+                                                    pageNo = 0;
 
-                                                          }
-                                                        },
-                                                        child:
-
-                                                        items.result ==
-                                                            true  && RegExp(r'[a-zA-Z]').hasMatch(items.homeTeam ?? '') && RegExp(r'[a-zA-Z]').hasMatch(items.awayTeam ?? '') ?Container(
-                                                          margin:
-                                                              EdgeInsets.only(
-                                                                  left: 15,
-                                                                  right: 15,
-                                                                  top: 0,
-                                                                  bottom: 10),
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: Colors.white,
-                                                            border: Border.all(
-                                                                color: Colors
-                                                                    .white),
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        7),
-                                                          ),
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(1.0),
+                                                    selectedSeriesIndex = index;
+                                                    await BlocProvider.of<
+                                                                LiveScoreCubit>(
+                                                            context)
+                                                        .getFinishMatch(
+                                                            pageNo.toString(),
+                                                            seriesName[index]
+                                                                .id2
+                                                                .toString());
+                                                  });
+                                                },
+                                                child: Icon(
+                                                  isExpanded
+                                                      ? Icons.keyboard_arrow_up
+                                                      : Icons
+                                                          .keyboard_arrow_down,
+                                                  color: Colors.white,
+                                                  size: 30,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      const Divider(
+                                        thickness: 1.0,
+                                        color: Colors.grey,
+                                      ),
+                                      const SizedBox(height: 10),
+                                      if (state.status ==
+                                              LiveScoreStatus
+                                                  .finishedMatchLoading &&
+                                          selectedSeriesIndex == index)
+                                        const Center(
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                            color: Colors.blue,
+                                          ),
+                                        ),
+                                      if (isExpanded && matchData.isNotEmpty)
+                                        ListView.builder(
+                                          shrinkWrap: true,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          itemCount: matchData.length,
+                                          itemBuilder: (context, index2) {
+                                            final fixture = matchData[index2];
+                                            return GestureDetector(
+                                              onTap: () {
+                                                if (matchData[index2]
+                                                    .resultType
+                                                    .toString()
+                                                    .lowerCamelCase
+                                                    .contains("won")) {
+                                                  if (matchData[index2]
+                                                          .homeTeamRuns
+                                                          ?.length ==
+                                                      0) {
+                                                    showToast(
+                                                        context: context,
+                                                        message:
+                                                            "No data found");
+                                                  } else {
+                                                    Navigator.push(context,
+                                                        MaterialPageRoute(
+                                                      builder: (context) {
+                                                        return FinishedMatchScorecardScreen(
+                                                            matchId: matchData[
+                                                                        index2]
+                                                                    .fixtureId
+                                                                    .toString() ??
+                                                                "",
+                                                            winningTeam: matchData[
+                                                                        index2]
+                                                                    .winningTeamName
+                                                                    .toString() ??
+                                                                "");
+                                                      },
+                                                    ));
+                                                  }
+                                                }
+                                              },
+                                              child: Container(
+                                                margin:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 16,
+                                                        vertical: 6),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white
+                                                      .withOpacity(0.15),
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                ),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(
+                                                      12.0),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Expanded(
                                                             child: Column(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
                                                               children: [
-                                                                Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                          .all(
-                                                                          12.0),
-                                                                  child: Row(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .spaceBetween,
-                                                                    children: [
-                                                                      Flexible(
-                                                                        child:
-                                                                            Column(
-                                                                          crossAxisAlignment:
-                                                                              CrossAxisAlignment.center,
-                                                                          children: [
-                                                                            SizedBox(
-                                                                              width: MediaQuery.of(context).size.width * 0.35,
-                                                                              child: commonText(
-                                                                                data: items.homeTeam ?? "N/A",
-                                                                                fontSize: 14,
-                                                                                alignment: TextAlign.center,
-                                                                                fontWeight: FontWeight.w400,
-                                                                                fontFamily: "Poppins",
-                                                                                color: Colors.black,
-                                                                                maxLines: 2,
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                              ),
-                                                                            ),
-
-                                                                            SizedBox(height: 20),
-                                                                            items.homeTeamRuns!.isNotEmpty
-                                                                                ? Column(
-                                                                              children: List.generate(
-                                                                                items.homeTeamRuns?.length ?? 0,
-                                                                                    (index) => commonText(
-                                                                                  data: "${items.homeTeamRuns![index]}/${items.homeTeamWickets![index]}",
-                                                                                  fontSize: 14,
-                                                                                      alignment: TextAlign.center,
-                                                                                  fontWeight: FontWeight.w500,
-                                                                                  fontFamily: "Poppins",
-                                                                                  color: Colors.black,
-                                                                                ),
-                                                                              ),
-                                                                            )
-                                                                            // optional else case
-
-                                                                                : commonText(
-                                                                                    data: "N/A",
-                                                                              alignment: TextAlign.center,
-                                                                                    fontSize: 14,
-                                                                                    fontWeight: FontWeight.w500,
-                                                                                    fontFamily: "Poppins",
-                                                                                    color: Colors.black,
-                                                                                  ),
-                                                                          ],
-                                                                        ),
+                                                                CachedNetworkImage(
+                                                                  imageUrl:
+                                                                      fixture.homeTeamFlag ??
+                                                                          "",
+                                                                  placeholder: (context,
+                                                                          url) =>
+                                                                      const Center(
+                                                                    child:
+                                                                        SizedBox(
+                                                                      width: 20,
+                                                                      height:
+                                                                          20,
+                                                                      child:
+                                                                          CircularProgressIndicator(
+                                                                        strokeWidth:
+                                                                            2,
+                                                                        color: Colors
+                                                                            .blue,
                                                                       ),
-                                                                      items.resultType != null
-                                                                          ? Center(
-                                                                        child: commonText(
-                                                                          alignment: TextAlign.center,
-                                                                          data: (items.resultType?.toString() == "Won")
-                                                                              ? "${items.winningTeamName.toString()} Won"
-                                                                              : (items.resultType?.toString() ?? "N/A"),
-                                                                          fontSize: 10,
-                                                                          fontWeight: FontWeight.w700,
-                                                                          fontFamily: "Poppins",
-                                                                          color: Colors.black,
-                                                                        ),
-                                                                      )
-
-                                                                          : Center(
-                                                                        child: commonText(
-                                                                          alignment: TextAlign.center,
-                                                                          data: "N/A",
-                                                                          fontSize: 10,
-                                                                          fontWeight: FontWeight.w700,
-                                                                          fontFamily: "Poppins",
-                                                                          color: Colors.black,
-                                                                        ),
-                                                                      ),
-                                                                      SizedBox(width: 10,),
-
-                                                                      Flexible(
-                                                                        child:
-                                                                            Column(
-                                                                          crossAxisAlignment:
-                                                                              CrossAxisAlignment.center,
-                                                                          children: [
-                                                                            SizedBox(
-                                                                              width: MediaQuery.of(context).size.width * 0.35,
-                                                                              child: items.awayTeam != null
-                                                                                  ? commonText(
-                                                                                      data: items.awayTeam ?? "N/A",
-                                                                                      fontSize: 14,
-                                                                                      maxLines: 2,
-                                                                                      fontWeight: FontWeight.w400,
-                                                                                      fontFamily: "Poppins",
-                                                                                      color: Colors.black,
-                                                                                alignment: TextAlign.center,
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                                    )
-                                                                                  : commonText(
-                                                                                      data: "Not available",
-                                                                                      fontSize: 14,
-                                                                                      fontWeight: FontWeight.w400,
-                                                                                      fontFamily: "Poppins",
-                                                                                      color: Colors.black,
-                                                                                    ),
-                                                                            ),
-                                                                            SizedBox(height: 20),
-                                                                            items.awayTeamRuns!.isNotEmpty
-                                                                                ? Column(
-                                                                              children: List.generate(
-                                                                                items.awayTeamRuns?.length ?? 0,
-                                                                                    (index) => commonText(
-                                                                                  data: "${items.awayTeamRuns![index]}/${items.awayTeamWickets![index]}",
-                                                                                  fontSize: 14,
-                                                                                  fontWeight: FontWeight.w500,
-                                                                                  fontFamily: "Poppins",
-                                                                                  color: Colors.black,
-                                                                                ),
-                                                                              ),
-                                                                            )
-                                                                            // optional else case
-
-                                                                                : commonText(
-                                                                              data: "N/A",
-                                                                              fontSize: 14,
-                                                                              fontWeight: FontWeight.w500,
-                                                                              fontFamily: "Poppins",
-                                                                              color: Colors.black,
-                                                                            ),
-                                                                          ],
-                                                                        ),
-                                                                      ),
-                                                                    ],
+                                                                    ),
+                                                                  ),
+                                                                  errorWidget: (c,
+                                                                          u,
+                                                                          e) =>
+                                                                      Image
+                                                                          .asset(
+                                                                    "assets/images/iv_noflag.png",
+                                                                    height: 30,
+                                                                    width: 30,
+                                                                  ),
+                                                                  height: 30,
+                                                                  width: 30,
+                                                                ),
+                                                                const SizedBox(
+                                                                    height: 4),
+                                                                Text(
+                                                                  fixture.homeTeam ??
+                                                                      "Team ${fixture.fixtureId ?? ""}",
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    fontSize:
+                                                                        14,
+                                                                    color: Colors
+                                                                        .white,
                                                                   ),
                                                                 ),
                                                               ],
                                                             ),
                                                           ),
-                                                        ):SizedBox()
+                                                          Container(
+                                                            width: 25.w,
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .symmetric(
+                                                                    horizontal:
+                                                                        10,
+                                                                    vertical:
+                                                                        3),
+                                                            child: Center(
+                                                              child: commonText(
+                                                                alignment:
+                                                                    TextAlign
+                                                                        .center,
+                                                                data: () {
+                                                                  final resultType =
+                                                                      matchData[index2]
+                                                                              .resultType
+                                                                              ?.toLowerCase() ??
+                                                                          "";
+                                                                  final winningTeam =
+                                                                      matchData[index2]
+                                                                              .winningTeamName ??
+                                                                          "";
+
+                                                                  if (resultType ==
+                                                                      "abandoned") {
+                                                                    return "Match Abandoned";
+                                                                  } else if (resultType
+                                                                      .contains(
+                                                                          "cancel")) {
+                                                                    return "Match Cancelled";
+                                                                  } else if (winningTeam
+                                                                      .isNotEmpty) {
+                                                                    return "$winningTeam ${matchData[index2].resultType}";
+                                                                  } else {
+                                                                    return matchData[index2]
+                                                                            .resultType ??
+                                                                        "Result Pending";
+                                                                  }
+                                                                }(),
+                                                                fontSize: 10,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                                fontFamily:
+                                                                    "Poppins",
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                            ),
+                                                          ).pOnly(
+                                                              left: 32,
+                                                              right: 32),
+                                                          Expanded(
+                                                            child: Column(
+                                                              children: [
+                                                                CachedNetworkImage(
+                                                                  imageUrl:
+                                                                      fixture.awayTeamFlag ??
+                                                                          "",
+                                                                  placeholder: (context,
+                                                                          url) =>
+                                                                      const Center(
+                                                                    child:
+                                                                        SizedBox(
+                                                                      width: 20,
+                                                                      height:
+                                                                          20,
+                                                                      child:
+                                                                          CircularProgressIndicator(
+                                                                        strokeWidth:
+                                                                            2,
+                                                                        color: Colors
+                                                                            .blue,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  errorWidget: (c,
+                                                                          u,
+                                                                          e) =>
+                                                                      Image
+                                                                          .asset(
+                                                                    "assets/images/iv_noflag.png",
+                                                                    height: 30,
+                                                                    width: 30,
+                                                                  ),
+                                                                  height: 30,
+                                                                  width: 30,
+                                                                ),
+                                                                const SizedBox(
+                                                                    height: 4),
+                                                                Text(
+                                                                  fixture.awayTeam ??
+                                                                      "Team ${fixture.fixtureId ?? ""}",
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    fontSize:
+                                                                        14,
+                                                                    color: Colors
+                                                                        .white,
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ],
                                                       ),
-                                                    )
-                                                    .toList(),
-                                              )
-                                        ],
-                                      );
-                                    },
-                                  )),
-                            )
-                          : SizedBox(
-                    height: MediaQuery.of(context).size.height*0.7,
-                            child: Center(
-                                child: mediumText14(
-                                  context,
-                                  'No Finished Series',
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  textAlign: TextAlign.center,
-                                  textColor: const Color(0xffFFFFFF),
-                                ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        )
+                                    ],
+                                  );
+                                },
                               ),
-                          ),
-                ],
-              ),
-            ),
+                            ),
+                    ],
+                  ),
+                ),
+              )
+            ],
           );
         }));
   }

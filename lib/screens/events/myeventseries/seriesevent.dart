@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
@@ -106,7 +107,6 @@ class _SeriesEventScreenState extends State<SeriesEventScreen> {
           }
         },
         builder: (context, state) {
-
           // if (seriesCategoryList.isEmpty) {
           //   return Center(
 
@@ -116,9 +116,10 @@ class _SeriesEventScreenState extends State<SeriesEventScreen> {
           print("Page no in builder");
           print(pageNo.toString());
 
-          if (state.status == LiveScoreStatus.seriesMatchesLoading && pageNo==0) {
+          if (state.status == LiveScoreStatus.seriesMatchesLoading &&
+              pageNo == 0) {
             return SizedBox(
-              height: MediaQuery.of(context).size.height*0.3,
+              height: MediaQuery.of(context).size.height * 0.3,
               child: Center(
                 child: CircularProgressIndicator(
                   color: Colors.white,
@@ -185,8 +186,31 @@ class _SeriesEventScreenState extends State<SeriesEventScreen> {
                   children: [
                     Flexible(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
+                          CachedNetworkImage(
+                            imageUrl: item.homeTeamFlag.toString().isNotEmpty
+                                ? item.homeTeamFlag.toString()
+                                : "assets/images/iv_noflag.png",
+                            // better fallback
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => const Center(
+                              child: SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.blue,
+                                ),
+                              ),
+                            ),
+                            errorWidget: (context, url, error) => Image.asset(
+                              "assets/images/iv_noflag.png",
+                              fit: BoxFit.cover,
+                            ),
+                            height: 30,
+                            width: 30,
+                          ),
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.25,
                             child: commonText(
@@ -223,8 +247,31 @@ class _SeriesEventScreenState extends State<SeriesEventScreen> {
                     ).pOnly(left: 32, right: 32),
                     Flexible(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
+                          CachedNetworkImage(
+                            imageUrl: item.awayTeamFlag.toString().isNotEmpty
+                                ? item.awayTeamFlag.toString()
+                                : "assets/images/iv_noflag.png",
+                            // better fallback
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => const Center(
+                              child: SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.blue,
+                                ),
+                              ),
+                            ),
+                            errorWidget: (context, url, error) => Image.asset(
+                              "assets/images/iv_noflag.png",
+                              fit: BoxFit.cover,
+                            ),
+                            height: 30,
+                            width: 30,
+                          ),
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.25,
                             child: commonText(
@@ -333,25 +380,25 @@ class _SeriesEventScreenState extends State<SeriesEventScreen> {
                       ),
                       item.winningTeamName != null
                           ? Center(
-                        child: commonText(
-                          alignment: TextAlign.center,
-                          data: "${item.winningTeamName} won" ?? "N/A",
-                          fontSize: 10,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: "Poppins",
-                          color: Colors.black,
-                        ),
-                      )
+                              child: commonText(
+                                alignment: TextAlign.center,
+                                data: "${item.winningTeamName} won" ?? "N/A",
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: "Poppins",
+                                color: Colors.black,
+                              ),
+                            )
                           : Center(
-                        child: commonText(
-                          alignment: TextAlign.center,
-                          data: "N/A",
-                          fontSize: 10,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: "Poppins",
-                          color: Colors.black,
-                        ),
-                      ),
+                              child: commonText(
+                                alignment: TextAlign.center,
+                                data: "N/A",
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: "Poppins",
+                                color: Colors.black,
+                              ),
+                            ),
                       Flexible(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

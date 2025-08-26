@@ -6,6 +6,7 @@ import 'package:kisma_livescore/bottomnavbar.dart';
 import 'package:kisma_livescore/main.dart';
 import 'package:kisma_livescore/screens/auth/login.dart';
 import 'package:kisma_livescore/screens/auth/signup.dart';
+import 'package:kisma_livescore/utils/shared_preference.dart';
 
 class SplashImages extends StatefulWidget {
   const SplashImages({super.key});
@@ -20,6 +21,12 @@ class _SplashImagesState extends State<SplashImages> {
     'assets/images/welcome2.png',
   ];
   int _currentIndex = 0;
+
+  @override
+  void initState() {
+  getToken();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -130,5 +137,12 @@ class _SplashImagesState extends State<SplashImages> {
         },
       ),*/
     );
+  }
+
+  void getToken() {
+
+    String token = PreferenceManager.getStringValue(key: "token")??'';
+    print("token");
+    print(token);
   }
 }

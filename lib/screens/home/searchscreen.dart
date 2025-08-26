@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
@@ -8,6 +9,7 @@ import 'package:kisma_livescore/utils/colorfile.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../../commonwidget.dart';
 import '../../constants.dart';
 import '../../cubit/livescore_cubit.dart';
 import '../../utils/custom_widgets.dart';
@@ -28,6 +30,16 @@ class _SearchScreenState extends State<SearchScreen> {
   bool? isTrue;
   SearchResponse searchResponse = SearchResponse();
   bool isDataEmpty = true;
+  int selectedIndex = -1;
+  String selectedFilter = "";
+
+  List<String> filterTypes = [
+    "International",
+    "InternationalClubs",
+    "Domestic",
+    "Other",
+    "Unknown"
+  ];
 
   @override
   void initState() {
@@ -109,7 +121,8 @@ class _SearchScreenState extends State<SearchScreen> {
                     if (value == true) {
                       await BlocProvider.of<LiveScoreCubit>(context)
                           .getSearchMatches(
-                              searchController.text.toString().trim());
+                              searchController.text.toString().trim(),
+                              selectedFilter);
                       setState(() {
                         searchData.clear();
                       });
@@ -167,460 +180,217 @@ class _SearchScreenState extends State<SearchScreen> {
                 return state.status == LiveScoreStatus.searchMatchesLoading
                     ? CircularProgressIndicator()
                     : searchData.isNotEmpty
-                        ? ExpandedTileList.builder(
-                            itemCount: searchData.length ?? 0,
-                            shrinkWrap: true,
-                            // padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                            itemBuilder: (context, index, con) {
-                              return ExpandedTile(
-                                trailing: Icon(
-                                  Icons.arrow_forward_ios_outlined,
-                                  color: Color(0xff96A0B7),
-                                ).rotate90(),
-                                contentseparator: 3.0,
-                                trailingRotation: 180,
-                                theme: const ExpandedTileThemeData(
-                                  headerPadding: EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 10),
-                                  contentPadding:
-                                      EdgeInsets.symmetric(horizontal: 20),
-                                  headerColor: bgColor,
-                                  headerSplashColor: transparent,
-                                  contentBackgroundColor: bgColor,
-                                ),
-                                controller: _controller,
-                                title: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        _controller.isExpanded
-                                            ? Image.asset(
-                                                "assets/images/doticon.png",
-                                                height: 25,
-                                                width: 25,
-                                              )
-                                            : SizedBox(),
-                                        2.w.widthBox,
-                                        Flexible(
-                                          flex: 20,
-                                          child: commonText(
-                                              data: searchData[index]
-                                                      .seriesName ??
-                                                  "",
-                                              // data:  "asdsada",
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w700,
-                                              fontFamily: "Poppins",
-                                              color: white,
-                                              maxLines: 3,
-                                              overflow: TextOverflow.ellipsis),
+                        ? Column(
+                            children: [
+                              SizedBox(
+                                height: 40,
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: filterTypes.length,
+                                  itemBuilder: (context, index) {
+                                    final item = filterTypes[index];
+                                    final isSelected = selectedIndex == index;
+
+                                    return GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          selectedIndex = index;
+
+                                          isInternetConnected()
+                                              .then((value) async {
+                                            if (value == true) {
+                                              await BlocProvider.of<
+                                                      LiveScoreCubit>(context)
+                                                  .getSearchMatches(
+                                                      searchController.text
+                                                          .toString()
+                                                          .trim(),
+                                                      selectedFilter);
+                                              setState(() {
+                                                searchData.clear();
+                                              });
+                                            } else {
+                                              showToast(
+                                                  context: context,
+                                                  message: notConnected);
+                                            }
+                                          });
+                                        });
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 16, vertical: 10),
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 8),
+                                        decoration: BoxDecoration(
+                                          color: isSelected
+                                              ? neonColor
+                                              : Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(25),
+                                          border: Border.all(
+                                              color: isSelected
+                                                  ? neonColor
+                                                  : Colors.grey),
                                         ),
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 12.0, right: 12.0),
-                                      child: Divider(
-                                        thickness: 1.0,
-                                        color: buttonColors,
+                                        child: Center(
+                                          child: Text(
+                                            item,
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    );
+                                  },
                                 ),
-                                // content: SizedBox(),
-                                content: searchData[index].matches?.length == 0
-                                    ? Center(
-                                        child: mediumText14(
-                                            context, 'No match found',
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500,
-                                            textAlign: TextAlign.center,
-                                            textColor: const Color(0xffFFFFFF)),
-                                      )
-                                    : ListView.builder(
-                                        shrinkWrap: true,
-                                        itemCount:
-                                            searchData[index].matches?.length ??
-                                                0,
-                                        physics: NeverScrollableScrollPhysics(),
-                                        itemBuilder: (context, i) {
-                                          if (searchData[index]
-                                                  .matches?[i]
-                                                  .upcoming ==
-                                              true) {
-                                            return GestureDetector(
-                                              onTap: () {
-                                                print("Tapped fixture index: ");
-                                              },
-                                              child: Container(
-                                                margin:
-                                                    EdgeInsets.only(top: 10),
-                                                decoration: BoxDecoration(
-                                                    color: Colors.white
-                                                        .withOpacity(0.2),
-                                                    border: Border.all(
-                                                        color: disableColors),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            7)),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              12.0),
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: [
-                                                          Flexible(
-                                                            child: Column(
-                                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                                              children: [
-                                                                SizedBox(
-                                                                  width: MediaQuery.of(
-                                                                              context)
-                                                                          .size
-                                                                          .width *
-                                                                      0.3,
-                                                                  child: commonText(
-                                                                    data: searchData[
-                                                                                index]
-                                                                            .matches?[
-                                                                                i]
-                                                                            .homeTeam
-                                                                            ?.toString() ??
-                                                                        "Not available",
-                                                                    fontSize: 14,
-                                                                    maxLines: 2,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w400,
-                                                                    fontFamily:
-                                                                        "Poppins",
-                                                                    color: Colors
-                                                                        .black,
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          Container(
-                                                            width: 20.w,
-                                                            padding: EdgeInsets
-                                                                .symmetric(
-                                                                    horizontal:
-                                                                        10,
-                                                                    vertical:
-                                                                        3),
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          20.0),
-                                                              color:
-                                                                  buttonColors,
-                                                            ),
-                                                            child: Center(
-                                                              child: commonText(
-                                                                alignment:
-                                                                    TextAlign
-                                                                        .center,
-                                                                data:
-                                                                    "Starting on\n ${DateFormat("d/M/yy").format(DateTime.parse(searchData[index].matches?[i].startDateTime?.toString() ?? "2025-04-04T10:00:00"))}",
-                                                                fontSize: 10,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w700,
-                                                                fontFamily:
-                                                                    "Poppins",
-                                                                color: black,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          SizedBox(width: 10,),
-                                                          Flexible(
-                                                            child: Column(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .center,
-                                                              children: [
-                                                                SizedBox(
-                                                                  width: MediaQuery.of(
-                                                                              context)
-                                                                          .size
-                                                                          .width *
-                                                                      0.40,
-                                                                  child:
-                                                                      commonText(
-                                                                    data: searchData[index]
-                                                                            .matches?[i]
-                                                                            .awayTeam
-                                                                            ?.toString() ??
-                                                                        "Not available",
-                                                                    fontSize:
-                                                                        14,
-                                                                    alignment: TextAlign.center,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w400,
-                                                                    fontFamily:
-                                                                        "Poppins",
-                                                                    color: Colors
-                                                                        .black,
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
+                              ),
+                              SizedBox(
+                                height: 15,
+                              ),
+                              ExpandedTileList.builder(
+                                  itemCount: searchData.length ?? 0,
+                                  shrinkWrap: true,
+                                  // padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                  itemBuilder: (context, index, con) {
+                                    return ExpandedTile(
+                                      trailing: Icon(
+                                        Icons.arrow_forward_ios_outlined,
+                                        color: Color(0xff96A0B7),
+                                      ).rotate90(),
+                                      contentseparator: 3.0,
+                                      trailingRotation: 180,
+                                      theme: const ExpandedTileThemeData(
+                                        headerPadding: EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 10),
+                                        contentPadding: EdgeInsets.symmetric(
+                                            horizontal: 20),
+                                        headerColor: bgColor,
+                                        headerSplashColor: transparent,
+                                        contentBackgroundColor: bgColor,
+                                      ),
+                                      controller: _controller,
+                                      title: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              _controller.isExpanded
+                                                  ? Image.asset(
+                                                      "assets/images/doticon.png",
+                                                      height: 25,
+                                                      width: 25,
+                                                    )
+                                                  : SizedBox(),
+                                              2.w.widthBox,
+                                              Flexible(
+                                                flex: 20,
+                                                child: commonText(
+                                                    data: searchData[index]
+                                                            .seriesName ??
+                                                        "",
+                                                    // data:  "asdsada",
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w700,
+                                                    fontFamily: "Poppins",
+                                                    color: white,
+                                                    maxLines: 3,
+                                                    overflow:
+                                                        TextOverflow.ellipsis),
                                               ),
-                                            );
-                                          } else {
-                                            return GestureDetector(
-                                              onTap: () {
+                                            ],
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 12.0, right: 12.0),
+                                            child: Divider(
+                                              thickness: 1.0,
+                                              color: buttonColors,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      // content: SizedBox(),
+                                      content: searchData[index]
+                                                  .matches
+                                                  ?.length ==
+                                              0
+                                          ? Center(
+                                              child: mediumText14(
+                                                  context, 'No match found',
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w500,
+                                                  textAlign: TextAlign.center,
+                                                  textColor:
+                                                      const Color(0xffFFFFFF)),
+                                            )
+                                          : ListView.builder(
+                                              shrinkWrap: true,
+                                              itemCount: searchData[index]
+                                                      .matches
+                                                      ?.length ??
+                                                  0,
+                                              physics:
+                                                  NeverScrollableScrollPhysics(),
+                                              itemBuilder: (context, i) {
                                                 if (searchData[index]
                                                         .matches?[i]
-                                                        .result ==
+                                                        .upcoming ==
                                                     true) {
-                                                  Navigator.push(context,
-                                                      MaterialPageRoute(
-                                                    builder: (context) {
-                                                      return FinishedMatchScorecardScreen(
-                                                          matchId: searchData[
-                                                                      index]
-                                                                  .matches?[i]
-                                                                  .fixtureId
-                                                                  .toString() ??
-                                                              "",
-                                                          winningTeam: searchData[
-                                                                      index]
-                                                                  .matches?[i]
-                                                                  .winningTeamName
-                                                                  .toString() ??
-                                                              "");
+                                                  return GestureDetector(
+                                                    onTap: () {
+                                                      print(
+                                                          "Tapped fixture index: ");
                                                     },
-                                                  ));
-                                                } else {
-                                                  showToast(
-                                                      context: context,
-                                                      message:
-                                                          "Result not found");
-                                                }
-                                              },
-                                              child: Container(
-                                                margin: EdgeInsets.only(
-                                                  top: 10,
-                                                ),
-
-                                                decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    // color: Colors.white
-                                                    //     .withOpacity(0.2),
-                                                    // border: Border.all(
-                                                    //     color: disableColors),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            7)),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              12.0),
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
+                                                    child: Container(
+                                                      margin: EdgeInsets.only(
+                                                          top: 10),
+                                                      decoration: BoxDecoration(
+                                                          color: Colors.white
+                                                              .withOpacity(0.2),
+                                                          border: Border.all(
+                                                              color:
+                                                                  disableColors),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(7)),
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
                                                         children: [
-                                                          Flexible(
-                                                            child: Column(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .center,
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(12.0),
+                                                            child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
                                                               children: [
-                                                                SizedBox(
-                                                                  width: MediaQuery.of(
-                                                                              context)
-                                                                          .size
-                                                                          .width *
-                                                                      0.25,
-                                                                  child:
-                                                                      commonText(
-                                                                    data: searchData[index]
-                                                                            .matches![i]
-                                                                            .homeTeam
-                                                                            .toString() ??
-                                                                        "N/A",
-                                                                    fontSize:
-                                                                        14,
-                                                                    alignment: TextAlign.center,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w400,
-                                                                    fontFamily:
-                                                                        "Poppins",
-                                                                    color: Colors
-                                                                        .black,
-                                                                  ),
-                                                                ),
-                                                                SizedBox(
-                                                                    height: 20),
-
-                                                                searchData[index]
-                                                                        .matches![
-                                                                            i]
-                                                                        .homeTeamRuns!
-                                                                        .isNotEmpty
-                                                                    ? Column(
-                                                                        children:
-                                                                            List.generate(
-                                                                          searchData[index].matches![i].homeTeamRuns?.length ??
-                                                                              0,
-                                                                          (indexRuns) =>
-                                                                              commonText(
-                                                                            data:
-                                                                                "${searchData[index].matches![i].homeTeamRuns![indexRuns]}/${searchData[index].matches![i].homeTeamWickets![indexRuns]}",
-                                                                            fontSize:
-                                                                                14,
-                                                                            fontWeight:
-                                                                                FontWeight.w500,
-                                                                            fontFamily:
-                                                                                "Poppins",
-                                                                            color:
-                                                                                Colors.black,
-                                                                          ),
-                                                                        ),
-                                                                      )
-                                                                    // optional else case
-
-                                                                    : commonText(
-                                                                        data:
-                                                                            "Not found",
-                                                                        fontSize:
-                                                                            14,
-                                                                        fontWeight:
-                                                                            FontWeight.w500,
-                                                                        fontFamily:
-                                                                            "Poppins",
-                                                                        color: Colors
-                                                                            .black,
-                                                                      ),
-
-                                                                // searchData[index]
-                                                                //             .matches![
-                                                                //                 i]
-                                                                //             .homeTeamRuns !=
-                                                                //         null
-                                                                //     ? commonText(
-                                                                //         data:
-                                                                //             "${searchData[index].matches![i].homeTeamRuns.toString() ?? "N/A"}/${searchData[index].matches![i].homeTeamWickets.toString() ?? "N/A"}",
-                                                                //         fontSize:
-                                                                //             14,
-                                                                //         fontWeight:
-                                                                //             FontWeight
-                                                                //                 .w500,
-                                                                //         fontFamily:
-                                                                //             "Poppins",
-                                                                //         color: Colors
-                                                                //             .black,
-                                                                //       )
-                                                                //     : commonText(
-                                                                //         data:
-                                                                //             "Not found",
-                                                                //         fontSize:
-                                                                //             14,
-                                                                //         fontWeight:
-                                                                //             FontWeight
-                                                                //                 .w500,
-                                                                //         fontFamily:
-                                                                //             "Poppins",
-                                                                //         color: Colors
-                                                                //             .black,
-                                                                //       ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          searchData[index].matches![i].winningTeamName!=null?    Center(
-                                                            child: commonText(
-                                                              alignment:
-                                                                  TextAlign
-                                                                      .center,
-                                                              data:
-                                                                  "${"${searchData[index].matches![i].winningTeamName.toString()} won" ?? ""}",
-                                                              fontSize: 10,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700,
-                                                              fontFamily:
-                                                                  "Poppins",
-                                                              color:
-                                                                  Colors.black,
-                                                            ),
-                                                          ):Center(
-                                                            child: commonText(
-                                                              alignment:
-                                                              TextAlign
-                                                                  .center,
-                                                              data:
-                                                              "N/A",
-                                                              fontSize: 10,
-                                                              fontWeight:
-                                                              FontWeight
-                                                                  .w700,
-                                                              fontFamily:
-                                                              "Poppins",
-                                                              color:
-                                                              Colors.black,
-                                                            ),
-                                                          ),
-                                                          Flexible(
-                                                            child: Column(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .center,
-                                                              children: [
-                                                                SizedBox(
-                                                                  width: MediaQuery.of(
-                                                                              context)
-                                                                          .size
-                                                                          .width *
-                                                                      0.25,
-                                                                  child: searchData[index]
-                                                                              .matches![i]
-                                                                              .awayTeam !=
-                                                                          null
-                                                                      ? commonText(
-                                                                          data: searchData[index].matches![i].awayTeam.toString() ??
-                                                                              "N/A",
-                                                                          fontSize:
-                                                                              14,
-                                                                          alignment: TextAlign.center,
-                                                                          fontWeight:
-                                                                              FontWeight.w400,
-                                                                          fontFamily:
-                                                                              "Poppins",
-                                                                          color:
-                                                                              Colors.black,
-                                                                        )
-                                                                      : commonText(
-                                                                          data:
+                                                                Flexible(
+                                                                  child: Column(
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .start,
+                                                                    children: [
+                                                                      SizedBox(
+                                                                        width: MediaQuery.of(context).size.width *
+                                                                            0.3,
+                                                                        child:
+                                                                            commonText(
+                                                                          data: searchData[index].matches?[i].homeTeam?.toString() ??
                                                                               "Not available",
                                                                           fontSize:
                                                                               14,
+                                                                          maxLines:
+                                                                              2,
                                                                           fontWeight:
                                                                               FontWeight.w400,
                                                                           fontFamily:
@@ -628,89 +398,642 @@ class _SearchScreenState extends State<SearchScreen> {
                                                                           color:
                                                                               Colors.black,
                                                                         ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                Container(
+                                                                  width: 20.w,
+                                                                  padding: EdgeInsets
+                                                                      .symmetric(
+                                                                          horizontal:
+                                                                              10,
+                                                                          vertical:
+                                                                              3),
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            20.0),
+                                                                    color:
+                                                                        buttonColors,
+                                                                  ),
+                                                                  child: Center(
+                                                                    child:
+                                                                        commonText(
+                                                                      alignment:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      data:
+                                                                          "Starting on\n ${DateFormat("d/M/yy").format(DateTime.parse(searchData[index].matches?[i].startDateTime?.toString() ?? "2025-04-04T10:00:00"))}",
+                                                                      fontSize:
+                                                                          10,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w700,
+                                                                      fontFamily:
+                                                                          "Poppins",
+                                                                      color:
+                                                                          black,
+                                                                    ),
+                                                                  ),
                                                                 ),
                                                                 SizedBox(
-                                                                    height: 20),
-                                                                searchData[index]
-                                                                        .matches![
-                                                                            i]
-                                                                        .awayTeamRuns!
-                                                                        .isNotEmpty
-                                                                    ? Column(
-                                                                        children:
-                                                                            List.generate(
-                                                                          searchData[index].matches![i].awayTeamRuns?.length ??
-                                                                              0,
-                                                                          (AwayRunsIndex) =>
-                                                                              commonText(
-                                                                            data:
-                                                                                "${searchData[index].matches![i].awayTeamRuns![AwayRunsIndex]}/${searchData[index].matches![i].awayTeamWickets![AwayRunsIndex]}",
-                                                                            fontSize:
-                                                                                14,
-                                                                            alignment: TextAlign.center,
-                                                                            fontWeight:
-                                                                                FontWeight.w500,
-                                                                            fontFamily:
-                                                                                "Poppins",
-                                                                            color:
-                                                                                Colors.black,
+                                                                  width: 10,
+                                                                ),
+                                                                Flexible(
+                                                                  child: Column(
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .center,
+                                                                    children: [
+                                                                      CachedNetworkImage(
+                                                                        imageUrl: (searchData[index].matches?[i].awayTeamFlag !=
+                                                                                null)
+                                                                            ? searchData[index].matches![i].awayTeamFlag.toString()
+                                                                            : "assets/images/iv_noflag.png",
+                                                                        // better fallback
+                                                                        fit: BoxFit
+                                                                            .cover,
+                                                                        placeholder:
+                                                                            (context, url) =>
+                                                                                const Center(
+                                                                          child:
+                                                                              SizedBox(
+                                                                            width:
+                                                                                20,
+                                                                            height:
+                                                                                20,
+                                                                            child:
+                                                                                CircularProgressIndicator(
+                                                                              strokeWidth: 2,
+                                                                              color: Colors.blue,
+                                                                            ),
                                                                           ),
                                                                         ),
-                                                                      )
-                                                                    // optional else case
-
-                                                                    : commonText(
-                                                                        data:
-                                                                            "Not found",
-                                                                        fontSize:
-                                                                            14,
-                                                                        fontWeight:
-                                                                            FontWeight.w500,
-                                                                        fontFamily:
-                                                                            "Poppins",
-                                                                  alignment: TextAlign.center,
-                                                                        color: Colors
-                                                                            .black,
+                                                                        errorWidget: (context,
+                                                                                url,
+                                                                                error) =>
+                                                                            Image.asset(
+                                                                          "assets/images/iv_noflag.png",
+                                                                          fit: BoxFit
+                                                                              .cover,
+                                                                        ),
+                                                                        height:
+                                                                            30,
+                                                                        width:
+                                                                            30,
                                                                       ),
+                                                                      SizedBox(
+                                                                        width: MediaQuery.of(context).size.width *
+                                                                            0.40,
+                                                                        child:
+                                                                            commonText(
+                                                                          data: searchData[index].matches?[i].awayTeam?.toString() ??
+                                                                              "Not available",
+                                                                          fontSize:
+                                                                              14,
+                                                                          alignment:
+                                                                              TextAlign.center,
+                                                                          fontWeight:
+                                                                              FontWeight.w400,
+                                                                          fontFamily:
+                                                                              "Poppins",
+                                                                          color:
+                                                                              Colors.black,
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
                                                               ],
                                                             ),
                                                           ),
                                                         ],
                                                       ),
                                                     ),
-                                                  ],
-                                                ),
-                                              ),
-                                            );
-                                          }
-                                        }),
-                                onTap: () {
-                                  if (_controller.isExpanded == true) {
-                                    setState(() {
-                                      isTrue = _controller.isExpanded;
-                                    });
-                                  } else {
-                                    setState(() {
-                                      isTrue = false;
-                                    });
-                                  }
-                                  debugPrint("tapped!!");
-                                },
-                                onLongTap: () {
-                                  debugPrint("long tapped!!");
-                                },
-                              );
-                            })
+                                                  );
+                                                } else {
+                                                  return GestureDetector(
+                                                    onTap: () {
+                                                      if (searchData[index]
+                                                              .matches?[i]
+                                                              .result ==
+                                                          true) {
+                                                        Navigator.push(context,
+                                                            MaterialPageRoute(
+                                                          builder: (context) {
+                                                            return FinishedMatchScorecardScreen(
+                                                                matchId: searchData[
+                                                                            index]
+                                                                        .matches?[
+                                                                            i]
+                                                                        .fixtureId
+                                                                        .toString() ??
+                                                                    "",
+                                                                winningTeam: searchData[
+                                                                            index]
+                                                                        .matches?[
+                                                                            i]
+                                                                        .winningTeamName
+                                                                        .toString() ??
+                                                                    "");
+                                                          },
+                                                        ));
+                                                      } else {
+                                                        showToast(
+                                                            context: context,
+                                                            message:
+                                                                "Result not found");
+                                                      }
+                                                    },
+                                                    child: Container(
+                                                      margin: EdgeInsets.only(
+                                                        top: 10,
+                                                      ),
+                                                      decoration: BoxDecoration(
+                                                          color: Colors.white,
+                                                          // color: Colors.white
+                                                          //     .withOpacity(0.2),
+                                                          // border: Border.all(
+                                                          //     color: disableColors),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(7)),
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(12.0),
+                                                            child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                Flexible(
+                                                                  child: Column(
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .center,
+                                                                    children: [
+                                                                      CachedNetworkImage(
+                                                                        imageUrl: (searchData[index].matches?[i].homeTeamFlag !=
+                                                                                null)
+                                                                            ? searchData[index].matches![i].homeTeamFlag.toString()
+                                                                            : "assets/images/iv_noflag.png",
+                                                                        // better fallback
+                                                                        fit: BoxFit
+                                                                            .cover,
+                                                                        placeholder:
+                                                                            (context, url) =>
+                                                                                const Center(
+                                                                          child:
+                                                                              SizedBox(
+                                                                            width:
+                                                                                20,
+                                                                            height:
+                                                                                20,
+                                                                            child:
+                                                                                CircularProgressIndicator(
+                                                                              strokeWidth: 2,
+                                                                              color: Colors.blue,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        errorWidget: (context,
+                                                                                url,
+                                                                                error) =>
+                                                                            Image.asset(
+                                                                          "assets/images/iv_noflag.png",
+                                                                          fit: BoxFit
+                                                                              .cover,
+                                                                        ),
+                                                                        height:
+                                                                            30,
+                                                                        width:
+                                                                            30,
+                                                                      ),
+                                                                      SizedBox(
+                                                                        width: MediaQuery.of(context).size.width *
+                                                                            0.25,
+                                                                        child:
+                                                                            commonText(
+                                                                          data: searchData[index].matches![i].homeTeam.toString() ??
+                                                                              "N/A",
+                                                                          fontSize:
+                                                                              14,
+                                                                          alignment:
+                                                                              TextAlign.center,
+                                                                          fontWeight:
+                                                                              FontWeight.w400,
+                                                                          fontFamily:
+                                                                              "Poppins",
+                                                                          color:
+                                                                              Colors.black,
+                                                                        ),
+                                                                      ),
+                                                                      SizedBox(
+                                                                          height:
+                                                                              20),
+                                                                      searchData[index]
+                                                                              .matches![i]
+                                                                              .homeTeamRuns!
+                                                                              .isNotEmpty
+                                                                          ? Column(
+                                                                              children: List.generate(
+                                                                                searchData[index].matches![i].homeTeamRuns?.length ?? 0,
+                                                                                (indexRuns) => commonText(
+                                                                                  data: "${searchData[index].matches![i].homeTeamRuns![indexRuns]}/${searchData[index].matches![i].homeTeamWickets![indexRuns]}",
+                                                                                  fontSize: 14,
+                                                                                  fontWeight: FontWeight.w500,
+                                                                                  fontFamily: "Poppins",
+                                                                                  color: Colors.black,
+                                                                                ),
+                                                                              ),
+                                                                            )
+                                                                          // optional else case
+
+                                                                          : commonText(
+                                                                              data: "Not found",
+                                                                              fontSize: 14,
+                                                                              fontWeight: FontWeight.w500,
+                                                                              fontFamily: "Poppins",
+                                                                              color: Colors.black,
+                                                                            ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                searchData[index]
+                                                                            .matches![i]
+                                                                            .winningTeamName !=
+                                                                        null
+                                                                    ? Center(
+                                                                        child:
+                                                                            commonText(
+                                                                          alignment:
+                                                                              TextAlign.center,
+                                                                          data:
+                                                                              "${"${searchData[index].matches![i].winningTeamName.toString()} won" ?? ""}",
+                                                                          fontSize:
+                                                                              10,
+                                                                          fontWeight:
+                                                                              FontWeight.w700,
+                                                                          fontFamily:
+                                                                              "Poppins",
+                                                                          color:
+                                                                              Colors.black,
+                                                                        ),
+                                                                      )
+                                                                    : Center(
+                                                                        child:
+                                                                            commonText(
+                                                                          alignment:
+                                                                              TextAlign.center,
+                                                                          data:
+                                                                              "Match ${searchData[index].matches![i].resultType.toString()}",
+                                                                          fontSize:
+                                                                              10,
+                                                                          fontWeight:
+                                                                              FontWeight.w700,
+                                                                          fontFamily:
+                                                                              "Poppins",
+                                                                          color:
+                                                                              Colors.black,
+                                                                        ),
+                                                                      ),
+                                                                Flexible(
+                                                                  child: Column(
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .center,
+                                                                    children: [
+                                                                      CachedNetworkImage(
+                                                                        imageUrl: (searchData[index].matches?[i].awayTeamFlag !=
+                                                                                null)
+                                                                            ? searchData[index].matches![i].awayTeamFlag.toString()
+                                                                            : "assets/images/iv_noflag.png",
+                                                                        // better fallback
+                                                                        fit: BoxFit
+                                                                            .cover,
+                                                                        placeholder:
+                                                                            (context, url) =>
+                                                                                const Center(
+                                                                          child:
+                                                                              SizedBox(
+                                                                            width:
+                                                                                20,
+                                                                            height:
+                                                                                20,
+                                                                            child:
+                                                                                CircularProgressIndicator(
+                                                                              strokeWidth: 2,
+                                                                              color: Colors.blue,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        errorWidget: (context,
+                                                                                url,
+                                                                                error) =>
+                                                                            Image.asset(
+                                                                          "assets/images/iv_noflag.png",
+                                                                          fit: BoxFit
+                                                                              .cover,
+                                                                        ),
+                                                                        height:
+                                                                            30,
+                                                                        width:
+                                                                            30,
+                                                                      ),
+                                                                      SizedBox(
+                                                                        width: MediaQuery.of(context).size.width *
+                                                                            0.25,
+                                                                        child: searchData[index].matches![i].awayTeam !=
+                                                                                null
+                                                                            ? commonText(
+                                                                                data: searchData[index].matches![i].awayTeam.toString() ?? "N/A",
+                                                                                fontSize: 14,
+                                                                                alignment: TextAlign.center,
+                                                                                fontWeight: FontWeight.w400,
+                                                                                fontFamily: "Poppins",
+                                                                                color: Colors.black,
+                                                                              )
+                                                                            : commonText(
+                                                                                data: "Not available",
+                                                                                fontSize: 14,
+                                                                                fontWeight: FontWeight.w400,
+                                                                                fontFamily: "Poppins",
+                                                                                color: Colors.black,
+                                                                              ),
+                                                                      ),
+                                                                      SizedBox(
+                                                                          height:
+                                                                              20),
+                                                                      searchData[index]
+                                                                              .matches![i]
+                                                                              .awayTeamRuns!
+                                                                              .isNotEmpty
+                                                                          ? Column(
+                                                                              children: List.generate(
+                                                                                searchData[index].matches![i].awayTeamRuns?.length ?? 0,
+                                                                                (AwayRunsIndex) => commonText(
+                                                                                  data: "${searchData[index].matches![i].awayTeamRuns![AwayRunsIndex]}/${searchData[index].matches![i].awayTeamWickets![AwayRunsIndex]}",
+                                                                                  fontSize: 14,
+                                                                                  alignment: TextAlign.center,
+                                                                                  fontWeight: FontWeight.w500,
+                                                                                  fontFamily: "Poppins",
+                                                                                  color: Colors.black,
+                                                                                ),
+                                                                              ),
+                                                                            )
+                                                                          // optional else case
+
+                                                                          : commonText(
+                                                                              data: "Not found",
+                                                                              fontSize: 14,
+                                                                              fontWeight: FontWeight.w500,
+                                                                              fontFamily: "Poppins",
+                                                                              alignment: TextAlign.center,
+                                                                              color: Colors.black,
+                                                                            ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  );
+                                                }
+                                              }),
+                                      onTap: () {
+                                        if (_controller.isExpanded == true) {
+                                          setState(() {
+                                            isTrue = _controller.isExpanded;
+                                          });
+                                        } else {
+                                          setState(() {
+                                            isTrue = false;
+                                          });
+                                        }
+                                        debugPrint("tapped!!");
+                                      },
+                                      onLongTap: () {
+                                        debugPrint("long tapped!!");
+                                      },
+                                    );
+                                  }),
+                            ],
+                          )
                         : Center(
                             child: state.status ==
                                     LiveScoreStatus.searchMatchesLoading
-                                ? CircularProgressIndicator()
-                                : isDataEmpty
-                                    ? SizedBox()
-                                    : commonText(
-                                        data: "No result found",
-                                        fontSize: 15,
-                                        color: Colors.white),
+                                ? SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.5,
+                                    child: CircularProgressIndicator())
+                                : searchData.length == 0
+                                    ? SizedBox(
+                              height: MediaQuery.of(context).size.height*0.5,
+                                      child: Column(
+                                        children: [
+                                          SizedBox(
+                                            height: 40,
+                                            child: ListView.builder(
+                                              scrollDirection:
+                                              Axis.horizontal,
+                                              itemCount: filterTypes.length,
+                                              itemBuilder: (context, index) {
+                                                final item =
+                                                filterTypes[index];
+                                                final isSelected =
+                                                    selectedIndex == index;
+
+                                                return GestureDetector(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      selectedIndex = index;
+
+                                                      isInternetConnected()
+                                                          .then(
+                                                              (value) async {
+                                                            if (value == true) {
+                                                              await BlocProvider
+                                                                  .of<LiveScoreCubit>(
+                                                                  context)
+                                                                  .getSearchMatches(
+                                                                  searchController
+                                                                      .text
+                                                                      .toString()
+                                                                      .trim(),
+                                                                  selectedFilter);
+                                                              setState(() {
+                                                                searchData
+                                                                    .clear();
+                                                              });
+                                                            } else {
+                                                              showToast(
+                                                                  context:
+                                                                  context,
+                                                                  message:
+                                                                  notConnected);
+                                                            }
+                                                          });
+                                                    });
+                                                  },
+                                                  child: Container(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 16,
+                                                        vertical: 10),
+                                                    margin: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 8),
+                                                    decoration: BoxDecoration(
+                                                      color: isSelected
+                                                          ? neonColor
+                                                          : Colors.white,
+                                                      borderRadius:
+                                                      BorderRadius
+                                                          .circular(25),
+                                                      border: Border.all(
+                                                          color: isSelected
+                                                              ? neonColor
+                                                              : Colors.grey),
+                                                    ),
+                                                    child: Center(
+                                                      child: Text(
+                                                        item,
+                                                        style:
+                                                        const TextStyle(
+                                                          fontSize: 14,
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                          FontWeight.w500,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: MediaQuery.of(context).size.height*0.25,
+                                          ),
+                                          Center(
+                                              child: commonText(
+                                                  data: "No result found",
+                                                  fontSize: 15,
+                                                  color: Colors.white),
+                                            ),
+                                        ],
+                                      ),
+                                    )
+                                    : SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.5,
+                                        child: Column(
+                                          children: [
+                                            SizedBox(
+                                              height: 40,
+                                              child: ListView.builder(
+                                                scrollDirection:
+                                                    Axis.horizontal,
+                                                itemCount: filterTypes.length,
+                                                itemBuilder: (context, index) {
+                                                  final item =
+                                                      filterTypes[index];
+                                                  final isSelected =
+                                                      selectedIndex == index;
+
+                                                  return GestureDetector(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        selectedIndex = index;
+
+                                                        isInternetConnected()
+                                                            .then(
+                                                                (value) async {
+                                                          if (value == true) {
+                                                            await BlocProvider
+                                                                    .of<LiveScoreCubit>(
+                                                                        context)
+                                                                .getSearchMatches(
+                                                                    searchController
+                                                                        .text
+                                                                        .toString()
+                                                                        .trim(),
+                                                                    selectedFilter);
+                                                            setState(() {
+                                                              searchData
+                                                                  .clear();
+                                                            });
+                                                          } else {
+                                                            showToast(
+                                                                context:
+                                                                    context,
+                                                                message:
+                                                                    notConnected);
+                                                          }
+                                                        });
+                                                      });
+                                                    },
+                                                    child: Container(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 16,
+                                                          vertical: 10),
+                                                      margin: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 8),
+                                                      decoration: BoxDecoration(
+                                                        color: isSelected
+                                                            ? neonColor
+                                                            : Colors.white,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(25),
+                                                        border: Border.all(
+                                                            color: isSelected
+                                                                ? neonColor
+                                                                : Colors.grey),
+                                                      ),
+                                                      child: Center(
+                                                        child: Text(
+                                                          item,
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 14,
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 15,
+                                            ),
+                                            Center(
+                                              child: commonText(
+                                                  data: "No result found",
+                                                  fontSize: 15,
+                                                  color: Colors.white),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                           );
               },
             )

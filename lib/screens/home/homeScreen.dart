@@ -4,12 +4,15 @@ import 'package:kisma_livescore/customwidget/commonwidget.dart';
 import 'package:kisma_livescore/screens/home/finished/finishscreen.dart';
 import 'package:kisma_livescore/screens/home/foryou/foryou.dart';
 import 'package:kisma_livescore/screens/home/live/livescreen.dart';
+import 'package:kisma_livescore/screens/home/notification.dart';
 import 'package:kisma_livescore/screens/home/searchscreen.dart';
 import 'package:kisma_livescore/screens/home/upcoming/upcomingmatchesscreen.dart';
 import 'package:kisma_livescore/utils/colorfile.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:velocity_x/velocity_x.dart';
+
+import 'editprofile.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -36,20 +39,54 @@ class _HomeScreenState extends State<HomeScreen> {
               leadingWidth: 130,
               centerTitle: false,
               actions: [
-                GestureDetector(
-                  onTap: () {
-                    PersistentNavBarNavigator.pushNewScreen(
-                      context,
-                      screen: const SearchScreen(),
-                      withNavBar: true, // OPTIONAL VALUE. True by default.
-                      pageTransitionAnimation:
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        PersistentNavBarNavigator.pushNewScreen(
+                          context,
+                          screen: const SearchScreen(),
+                          withNavBar: true, // OPTIONAL VALUE. True by default.
+                          pageTransitionAnimation:
+                              PageTransitionAnimation.cupertino,
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 10.0),
+                        child: Icon(Icons.search, color: buttonColors),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        PersistentNavBarNavigator.pushNewScreen(
+                          context,
+                          screen: const NotificationScreen(),
+                          withNavBar: false,
+                          pageTransitionAnimation:
                           PageTransitionAnimation.cupertino,
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 18.0),
-                    child: Icon(Icons.search, color: buttonColors),
-                  ),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 10.0),
+                        child: Icon(Icons.notifications_none_outlined, color: buttonColors),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        PersistentNavBarNavigator.pushNewScreen(
+                          context,
+                          screen: const ProfileScreen(),
+                          withNavBar: false,
+                          pageTransitionAnimation:
+                          PageTransitionAnimation.cupertino,
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 18.0),
+                        child: Icon(Icons.person, color: buttonColors),
+                      ),
+                    ),
+                  ],
                 )
               ],
               leading: Padding(

@@ -25,6 +25,8 @@ class MatchData {
   final num? fixtureId;
   final String? homeTeam;
   final String? awayTeam;
+  final String? homeTeamFlag;
+  final String? awayTeamFlag;
   final List<num>? homeTeamRuns;
   final List<num>? homeTeamWickets;
   final List<num>? awayTeamRuns;
@@ -37,6 +39,8 @@ class MatchData {
     this.fixtureId,
     this.homeTeam,
     this.awayTeam,
+    this.homeTeamFlag,
+    this.awayTeamFlag,
     this.homeTeamRuns,
     this.homeTeamWickets,
     this.awayTeamRuns,
@@ -50,6 +54,8 @@ class MatchData {
       : fixtureId = json['fixtureId'] as num?,
         homeTeam = json['homeTeam'] as String?,
         awayTeam = json['awayTeam'] as String?,
+        homeTeamFlag = json['homeTeamFlag'] as String?,
+        awayTeamFlag = json['awayTeamFlag'] as String?,
         homeTeamRuns = (json['homeTeamRuns'] as List?)?.map((dynamic e) => e as num).toList(),
         homeTeamWickets = (json['homeTeamWickets'] as List?)?.map((dynamic e) => e as num).toList(),
         awayTeamRuns = (json['awayTeamRuns'] as List?)?.map((dynamic e) => e as num).toList(),

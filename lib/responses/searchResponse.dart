@@ -48,6 +48,8 @@ class Matches {
   final num? fixtureId;
   final String? homeTeam;
   final String? awayTeam;
+  final String? homeTeamFlag;
+  final String? awayTeamFlag;
   final bool? result;
   final List<num>? homeTeamRuns;
   final List<num>? homeTeamWickets;
@@ -55,12 +57,15 @@ class Matches {
   final List<num>? awayTeamWickets;
   final String? winningTeamName;
   final String? startDateTime;
+  final String? resultType;
   final bool? upcoming;
 
   Matches({
     this.fixtureId,
     this.homeTeam,
     this.awayTeam,
+    this.homeTeamFlag,
+    this.awayTeamFlag,
     this.result,
     this.homeTeamRuns,
     this.homeTeamWickets,
@@ -68,6 +73,7 @@ class Matches {
     this.awayTeamWickets,
     this.winningTeamName,
     this.startDateTime,
+    this.resultType,
     this.upcoming,
   });
 
@@ -75,6 +81,8 @@ class Matches {
       : fixtureId = json['fixtureId'] as num?,
         homeTeam = json['homeTeam'] as String?,
         awayTeam = json['awayTeam'] as String?,
+        homeTeamFlag = json['homeTeamFlag'] as String?,
+        awayTeamFlag = json['awayTeamFlag'] as String?,
         result = json['result'] as bool?,
         homeTeamRuns = (json['homeTeamRuns'] as List?)?.map((dynamic e) => e as num).toList(),
         homeTeamWickets = (json['homeTeamWickets'] as List?)?.map((dynamic e) => e as num).toList(),
@@ -82,12 +90,15 @@ class Matches {
         awayTeamWickets = (json['awayTeamWickets'] as List?)?.map((dynamic e) => e as num).toList(),
         winningTeamName = json['winningTeamName'] as String?,
         startDateTime = json['startDateTime'] as String?,
+        resultType = json['resultType'] as String?,
         upcoming = json['upcoming'] as bool?;
 
   Map<String, dynamic> toJson() => {
     'fixtureId' : fixtureId,
     'homeTeam' : homeTeam,
     'awayTeam' : awayTeam,
+    'homeTeamFlag' : homeTeamFlag,
+    'awayTeamFlag' : awayTeamFlag,
     'result' : result,
     'homeTeamRuns' : homeTeamRuns,
     'homeTeamWickets' : homeTeamWickets,
@@ -95,6 +106,7 @@ class Matches {
     'awayTeamWickets' : awayTeamWickets,
     'winningTeamName' : winningTeamName,
     'startDateTime' : startDateTime,
+    'resultType' : resultType,
     'upcoming' : upcoming
   };
 }

@@ -196,14 +196,16 @@ class StartTimes {
 class HomeTeam {
   int? id;
   String? name;
+  String? flagUrl;
   String? ageCategory;
   String? gender;
 
-  HomeTeam({this.id, this.name, this.ageCategory, this.gender});
+  HomeTeam({this.id, this.name,this.flagUrl, this.ageCategory, this.gender});
 
   HomeTeam.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
+    flagUrl = json['flagUrl'];
     ageCategory = json['ageCategory'];
     gender = json['gender'];
   }
@@ -211,6 +213,7 @@ class HomeTeam {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
+    data['flagUrl'] = this.flagUrl;
     data['name'] = this.name;
     data['ageCategory'] = this.ageCategory;
     data['gender'] = this.gender;

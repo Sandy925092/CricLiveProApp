@@ -81,6 +81,8 @@ class MyEventsData {
   final String? seriesName;
   final num? fixtureId;
   final String? homeTeam;
+  final String? homeTeamFlag;
+  final String? awayTeamFlag;
   final String? awayTeam;
   final String? status;
   final String? matchDateTime;
@@ -96,6 +98,8 @@ class MyEventsData {
     this.seriesName,
     this.fixtureId,
     this.homeTeam,
+    this.homeTeamFlag,
+    this.awayTeamFlag,
     this.awayTeam,
     this.status,
     this.matchDateTime,
@@ -112,6 +116,8 @@ class MyEventsData {
         seriesName = json['seriesName'] as String?,
         fixtureId = json['fixtureId'] as num?,
         homeTeam = json['homeTeam'] as String?,
+        homeTeamFlag = json['homeTeamFlag'] as String?,
+        awayTeamFlag = json['awayTeamFlag'] as String?,
         awayTeam = json['awayTeam'] as String?,
         status = json['status'] as String?,
         matchDateTime = json['matchDateTime'] as String?,
@@ -127,6 +133,8 @@ class MyEventsData {
     'seriesName' : seriesName,
     'fixtureId' : fixtureId,
     'homeTeam' : homeTeam,
+    'homeTeamFlag' : homeTeamFlag,
+    'awayTeamFlag' : awayTeamFlag,
     'awayTeam' : awayTeam,
     'status' : status,
     'matchDateTime' : matchDateTime,

@@ -84,6 +84,8 @@ class MyEventsData {
   final String? awayTeam;
   final String? status;
   final String? matchDateTime;
+  final String? homeTeamFlag;
+  final String? awayTeamFlag;
   final List<num>? homeTeamRuns;
   final List<num>? homeTeamWickets;
   final List<num>? awayTeamRuns;
@@ -99,6 +101,8 @@ class MyEventsData {
     this.awayTeam,
     this.status,
     this.matchDateTime,
+    this.homeTeamFlag,
+    this.awayTeamFlag,
     this.homeTeamRuns,
     this.homeTeamWickets,
     this.awayTeamRuns,
@@ -115,6 +119,8 @@ class MyEventsData {
         awayTeam = json['awayTeam'] as String?,
         status = json['status'] as String?,
         matchDateTime = json['matchDateTime'] as String?,
+        homeTeamFlag = json['homeTeamFlag'] as String?,
+        awayTeamFlag = json['awayTeamFlag'] as String?,
         homeTeamRuns = (json['homeTeamRuns'] as List?)?.map((dynamic e) => e as num).toList(),
         homeTeamWickets = (json['homeTeamWickets'] as List?)?.map((dynamic e) => e as num).toList(),
         awayTeamRuns = (json['awayTeamRuns'] as List?)?.map((dynamic e) => e as num).toList(),
@@ -130,6 +136,8 @@ class MyEventsData {
     'awayTeam' : awayTeam,
     'status' : status,
     'matchDateTime' : matchDateTime,
+    'homeTeamFlag' : homeTeamFlag,
+    'awayTeamFlag' : awayTeamFlag,
     'homeTeamRuns' : homeTeamRuns,
     'homeTeamWickets' : homeTeamWickets,
     'awayTeamRuns' : awayTeamRuns,

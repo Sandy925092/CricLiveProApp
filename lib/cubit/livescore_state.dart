@@ -110,6 +110,33 @@ enum LiveScoreStatus {
   unLikematchError,
 
 
+
+  getProfileLoading,
+  getProfileSuccess,
+  getProfileError,
+
+  updateProfileLoading,
+  updateProfileSuccess,
+  updateProfileError,
+
+
+
+  getNotificationsLoading,
+  getNotificationsSuccess,
+  getNotificationsError,
+
+
+  logOutLoading,
+  logOutSuccess,
+  logOutError,
+
+
+
+ deleteAccountLoading,
+  deleteAccountSuccess,
+  deleteAccountError,
+
+
   liveMatchSocketUpdate
 }
 

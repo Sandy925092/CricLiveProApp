@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
@@ -30,6 +31,8 @@ class _MyAllEventsScreenState extends State<MyAllEventsScreen> {
   late final PagingController<int, MyEventsData> _pagingController;
   int pageNo = 0;
 
+  List<MyEventsData> myEventsList = [];
+
   @override
   void initState() {
     getCurrentDate();
@@ -56,53 +59,6 @@ class _MyAllEventsScreenState extends State<MyAllEventsScreen> {
       backgroundColor: bgColor,
       body: Column(
         children: [
-          // Row(
-          //   crossAxisAlignment: CrossAxisAlignment.end,
-          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //   children: [
-          //     Text(
-          //       'Today',
-          //       style: TextStyle(
-          //           color: white, fontSize: 16, fontWeight: FontWeight.w700),
-          //     ),
-          //     Column(
-          //       children: [
-          //         2.h.heightBox,
-          //         Text(
-          //           selectedDate,
-          //           style: TextStyle(
-          //               color: white,
-          //               fontSize: 14,
-          //               fontWeight: FontWeight.w700),
-          //         ),
-          //       ],
-          //     ),
-          //     GestureDetector(
-          //       onTap: () async {
-          //         DateTime? picked = await showDatePicker(
-          //           context: context,
-          //           initialDate: DateTime.now(),
-          //           firstDate: DateTime(1800),
-          //           lastDate: DateTime(2100),
-          //         );
-          //
-          //         if (picked != null) {
-          //           setState(() {
-          //             selectedDate = DateFormat('yyyy-MM-dd').format(picked);
-          //             // Reset pagination and load new data
-          //             _pagingController.refresh();
-          //             pageNo = 0;
-          //           });
-          //         }
-          //       },
-          //       child: Icon(
-          //         Icons.calendar_today, // Changed to Material icon
-          //         color: white,
-          //         size: 30,
-          //       ),
-          //     )
-          //   ],
-          // ).pSymmetric(h: 3),
           Expanded(
             child: BlocConsumer<LiveScoreCubit, LiveScoreState>(
               listener: (context, state) {
@@ -110,6 +66,21 @@ class _MyAllEventsScreenState extends State<MyAllEventsScreen> {
                   myEventsResponse =
                       state.responseData?.response as MyEventsResponse;
                   // Loader.hide();
+
+                  print("my events length");
+                  print(myEventsList.length);
+
+                  if (pageNo == 0) {
+                    myEventsList.clear();
+                  }
+
+                  if (myEventsResponse.data?.content?.length != 0) {
+                    myEventsList.addAll(myEventsResponse.data?.content ?? []);
+                  }
+
+
+                  print("my events length");
+                  print(myEventsList.length);
 
                   final newItems = myEventsResponse.data?.content ?? [];
                   final isLastPage = myEventsResponse.data?.last ?? true;
@@ -129,9 +100,13 @@ class _MyAllEventsScreenState extends State<MyAllEventsScreen> {
                       _pagingController.appendPage(newItems, pageNo + 1);
                     }
                   }
-                } else if (state.status == LiveScoreStatus.myEventsLoading &&
-                    pageNo == 0) {
+                }
+                if (state.status == LiveScoreStatus.myEventsError) {
                   // Loader.show(context);
+                  print("my events length in error");
+                  print(myEventsList.length);
+                  myEventsList.clear();
+
                 }
               },
               builder: (context, state) {
@@ -142,280 +117,418 @@ class _MyAllEventsScreenState extends State<MyAllEventsScreen> {
                   );
                 }
 
-                return PagedListView<int, MyEventsData>(
-                  pagingController: _pagingController,
-                  builderDelegate: PagedChildBuilderDelegate<MyEventsData>(
-                    noItemsFoundIndicatorBuilder: (context) => Center(
-                      child: mediumText14(
-                        context,
-                        'No Result found',
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        textAlign: TextAlign.center,
-                        textColor: const Color(0xffFFFFFF),
-                      ),
-                    ),
-                    itemBuilder: (context, item, index) {
-                      if (item.status == "Upcoming") {
-                        return _buildUpcomingMatchItem(item);
-                      } else {
-                        return _buildCompletedMatchItem(item);
-                      }
-                    },
-                  ),
-                ).pSymmetric(h: 10, v: 6);
+                return myEventsList.length != 0
+                    ? ListView.builder(
+                  itemCount: myEventsList.length,
+                        itemBuilder: (context, index) {
+                          if (myEventsList[index]
+                              .status
+                              .toString()
+                              .lowerCamelCase
+                              .contains("upcoming")) {
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 8.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(color: Colors.white),
+                                  borderRadius: BorderRadius.circular(7),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(1.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      const SizedBox(height: 10),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        child: commonText(
+                                          alignment: TextAlign.center,
+                                          data:
+                                              myEventsList[index].seriesName ??
+                                                  "",
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(12.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Flexible(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  CachedNetworkImage(
+                                                    imageUrl: myEventsList[
+                                                                index]
+                                                            .homeTeamFlag
+                                                            .toString()
+                                                            .isNotEmpty
+                                                        ? myEventsList[index]
+                                                            .homeTeamFlag
+                                                            .toString()
+                                                        : "assets/images/iv_noflag.png",
+                                                    // better fallback
+                                                    fit: BoxFit.cover,
+                                                    placeholder:
+                                                        (context, url) =>
+                                                            const Center(
+                                                      child: SizedBox(
+                                                        width: 20,
+                                                        height: 20,
+                                                        child:
+                                                            CircularProgressIndicator(
+                                                          strokeWidth: 2,
+                                                          color: Colors.blue,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    errorWidget:
+                                                        (context, url, error) =>
+                                                            Image.asset(
+                                                      "assets/images/iv_noflag.png",
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                    height: 30,
+                                                    width: 30,
+                                                  ),
+                                                  SizedBox(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.25,
+                                                    child: commonText(
+                                                      data: myEventsList[index]
+                                                              .homeTeam ??
+                                                          "N/A",
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      fontFamily: "Poppins",
+                                                      color: Colors.black,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 20),
+                                                ],
+                                              ),
+                                            ),
+                                            Container(
+                                              width: 25.w,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 3),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(20.0),
+                                                color: buttonColors,
+                                              ),
+                                              child: Center(
+                                                child: commonText(
+                                                  alignment: TextAlign.center,
+                                                  data:
+                                                      "Starting on\n ${DateFormat("d/M/yy").format(DateTime.parse(myEventsList[index].matchDateTime ?? "2025-04-04T10:00:00"))}",
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.w700,
+                                                  fontFamily: "Poppins",
+                                                  color: black,
+                                                ),
+                                              ),
+                                            ).pOnly(left: 32, right: 32),
+                                            Flexible(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  CachedNetworkImage(
+                                                    imageUrl: myEventsList[
+                                                                index]
+                                                            .awayTeamFlag
+                                                            .toString()
+                                                            .isNotEmpty
+                                                        ? myEventsList[index]
+                                                            .awayTeamFlag
+                                                            .toString()
+                                                        : "assets/images/iv_noflag.png",
+                                                    // better fallback
+                                                    fit: BoxFit.cover,
+                                                    placeholder:
+                                                        (context, url) =>
+                                                            const Center(
+                                                      child: SizedBox(
+                                                        width: 20,
+                                                        height: 20,
+                                                        child:
+                                                            CircularProgressIndicator(
+                                                          strokeWidth: 2,
+                                                          color: Colors.blue,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    errorWidget:
+                                                        (context, url, error) =>
+                                                            Image.asset(
+                                                      "assets/images/iv_noflag.png",
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                    height: 30,
+                                                    width: 30,
+                                                  ),
+                                                  SizedBox(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.25,
+                                                    child: commonText(
+                                                      data: myEventsList[index]
+                                                              .awayTeam ??
+                                                          "N/A",
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      fontFamily: "Poppins",
+                                                      color: Colors.black,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 20),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          } else {
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 8.0),
+                              child: GestureDetector(
+                                onTap: () {
+                                  if (myEventsList[index].result == true) {
+                                    Navigator.push(context, MaterialPageRoute(
+                                      builder: (context) {
+                                        return FinishedMatchScorecardScreen(
+                                            matchId: myEventsList[index]
+                                                    .fixtureId
+                                                    .toString() ??
+                                                "",
+                                            winningTeam: myEventsList[index]
+                                                    .winningTeamName
+                                                    .toString() ??
+                                                "");
+                                      },
+                                    ));
+                                  } else {
+                                    showToast(
+                                        context: context,
+                                        message: "Result not found");
+                                  }
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    border: Border.all(color: Colors.white),
+                                    borderRadius: BorderRadius.circular(7),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(1.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        const SizedBox(height: 10),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: commonText(
+                                            alignment: TextAlign.center,
+                                            data: myEventsList[index]
+                                                    .seriesName ??
+                                                "",
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(12.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Flexible(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    SizedBox(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.25,
+                                                      child: commonText(
+                                                        data:
+                                                            myEventsList[index]
+                                                                    .homeTeam ??
+                                                                "N/A",
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        fontFamily: "Poppins",
+                                                        color: Colors.black,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 20),
+                                                    if (myEventsList[index]
+                                                            .homeTeamRuns
+                                                            ?.isNotEmpty ??
+                                                        false)
+                                                      Column(
+                                                        children: List.generate(
+                                                          myEventsList[index]
+                                                              .homeTeamRuns!
+                                                              .length,
+                                                          (i) => commonText(
+                                                            data:
+                                                                "${myEventsList[index].homeTeamRuns![i]}/${myEventsList[index].homeTeamWickets![i]}",
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontFamily:
+                                                                "Poppins",
+                                                            color: Colors.black,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    else
+                                                      commonText(
+                                                        data: "N/A",
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        fontFamily: "Poppins",
+                                                        color: Colors.black,
+                                                      ),
+                                                  ],
+                                                ),
+                                              ),
+                                              myEventsList[index]
+                                                          .winningTeamName !=
+                                                      null
+                                                  ? Center(
+                                                      child: commonText(
+                                                        alignment:
+                                                            TextAlign.center,
+                                                        data:
+                                                            "${myEventsList[index].winningTeamName} won" ??
+                                                                "N/A",
+                                                        fontSize: 10,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontFamily: "Poppins",
+                                                        color: Colors.black,
+                                                      ),
+                                                    )
+                                                  : Center(
+                                                      child: commonText(
+                                                        alignment:
+                                                            TextAlign.center,
+                                                        data: "N/A",
+                                                        fontSize: 10,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontFamily: "Poppins",
+                                                        color: Colors.black,
+                                                      ),
+                                                    ),
+                                              Flexible(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    SizedBox(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.25,
+                                                      child: commonText(
+                                                        data:
+                                                            myEventsList[index]
+                                                                    .awayTeam ??
+                                                                "N/A",
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        fontFamily: "Poppins",
+                                                        color: Colors.black,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 20),
+                                                    if (myEventsList[index]
+                                                            .awayTeamRuns
+                                                            ?.isNotEmpty ??
+                                                        false)
+                                                      Column(
+                                                        children: List.generate(
+                                                          myEventsList[index]
+                                                              .awayTeamRuns!
+                                                              .length,
+                                                          (i) => commonText(
+                                                            data:
+                                                                "${myEventsList[index].awayTeamRuns![i]}/${myEventsList[index].awayTeamWickets![i]}",
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontFamily:
+                                                                "Poppins",
+                                                            color: Colors.black,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    else
+                                                      commonText(
+                                                        data: "N/A",
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        fontFamily: "Poppins",
+                                                        color: Colors.black,
+                                                      ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
+                        },
+                      )
+                    : Center(
+                        child: commonText(
+                            data: "No Data Found",
+                            fontSize: 14,
+                            color: Colors.white),
+                      );
               },
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildUpcomingMatchItem(MyEventsData item) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(color: Colors.white),
-          borderRadius: BorderRadius.circular(7),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(1.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: commonText(
-                  alignment: TextAlign.center,
-                  data: item.seriesName ?? "",
-                  fontSize: 14,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.25,
-                            child: commonText(
-                              data: item.homeTeam ?? "N/A",
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              fontFamily: "Poppins",
-                              color: Colors.black,
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      width: 25.w,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 3),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20.0),
-                        color: buttonColors,
-                      ),
-                      child: Center(
-                        child: commonText(
-                          alignment: TextAlign.center,
-                          data:
-                              "Starting on\n ${DateFormat("d/M/yy").format(DateTime.parse(item.matchDateTime ?? "2025-04-04T10:00:00"))}",
-                          fontSize: 10,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: "Poppins",
-                          color: black,
-                        ),
-                      ),
-                    ).pOnly(left: 32, right: 32),
-                    Flexible(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.25,
-                            child: commonText(
-                              data: item.awayTeam ?? "N/A",
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              fontFamily: "Poppins",
-                              color: Colors.black,
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCompletedMatchItem(MyEventsData item) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: GestureDetector(
-        onTap: () {
-          if (item.result == true) {
-            Navigator.push(context, MaterialPageRoute(
-              builder: (context) {
-                return FinishedMatchScorecardScreen(
-                    matchId: item.fixtureId.toString() ?? "",
-                    winningTeam: item.winningTeamName.toString() ?? "");
-              },
-            ));
-          } else {
-            showToast(context: context, message: "Result not found");
-          }
-        },
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(color: Colors.white),
-            borderRadius: BorderRadius.circular(7),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(1.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: commonText(
-                    alignment: TextAlign.center,
-                    data: item.seriesName ?? "",
-                    fontSize: 14,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.25,
-                              child: commonText(
-                                data: item.homeTeam ?? "N/A",
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                                fontFamily: "Poppins",
-                                color: Colors.black,
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                            if (item.homeTeamRuns?.isNotEmpty ?? false)
-                              Column(
-                                children: List.generate(
-                                  item.homeTeamRuns!.length,
-                                  (i) => commonText(
-                                    data:
-                                        "${item.homeTeamRuns![i]}/${item.homeTeamWickets![i]}",
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: "Poppins",
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              )
-                            else
-                              commonText(
-                                data: "N/A",
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                fontFamily: "Poppins",
-                                color: Colors.black,
-                              ),
-                          ],
-                        ),
-                      ),
-                      item.winningTeamName != null
-                          ? Center(
-                              child: commonText(
-                                alignment: TextAlign.center,
-                                data: "${item.winningTeamName} won" ?? "N/A",
-                                fontSize: 10,
-                                fontWeight: FontWeight.w700,
-                                fontFamily: "Poppins",
-                                color: Colors.black,
-                              ),
-                            )
-                          : Center(
-                        child: commonText(
-                          alignment: TextAlign.center,
-                          data: "N/A",
-                          fontSize: 10,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: "Poppins",
-                          color: Colors.black,
-                        ),
-                      ),
-                      Flexible(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.25,
-                              child: commonText(
-                                data: item.awayTeam ?? "N/A",
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                                fontFamily: "Poppins",
-                                color: Colors.black,
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                            if (item.awayTeamRuns?.isNotEmpty ?? false)
-                              Column(
-                                children: List.generate(
-                                  item.awayTeamRuns!.length,
-                                  (i) => commonText(
-                                    data:
-                                        "${item.awayTeamRuns![i]}/${item.awayTeamWickets![i]}",
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: "Poppins",
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              )
-                            else
-                              commonText(
-                                data: "N/A",
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                fontFamily: "Poppins",
-                                color: Colors.black,
-                              ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
       ),
     );
   }
@@ -429,11 +542,8 @@ class _MyAllEventsScreenState extends State<MyAllEventsScreen> {
     pageNo = pageKey;
     isInternetConnected().then((value) {
       if (value) {
-        BlocProvider.of<LiveScoreCubit>(context).getMyEvents(
-          selectedDate,
-          widget.tabType,
-          pageKey.toString(),
-        );
+        BlocProvider.of<LiveScoreCubit>(context)
+            .getMyEvents(selectedDate, widget.tabType, pageKey.toString(), "");
       } else {
         showToast(context: context, message: notConnected);
       }

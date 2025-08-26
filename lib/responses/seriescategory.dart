@@ -86,6 +86,8 @@ class SeriesCategory {
   final String? gender;
   final String? seriesType;
   final String? fixtureType;
+  final String? homeTeamFlag;
+  final String? awayTeamFlag;
   final dynamic getEntityKey;
 
   SeriesCategory({
@@ -98,6 +100,8 @@ class SeriesCategory {
     this.gender,
     this.seriesType,
     this.fixtureType,
+    this.homeTeamFlag,
+    this.awayTeamFlag,
     this.getEntityKey,
   });
 
@@ -111,6 +115,8 @@ class SeriesCategory {
         gender = json['Gender'] as String?,
         seriesType = json['SeriesType'] as String?,
         fixtureType = json['FixtureType'] as String?,
+        homeTeamFlag = json['homeTeamFlag'] as String?,
+        awayTeamFlag = json['awayTeamFlag'] as String?,
         getEntityKey = json['GetEntityKey'];
 
   Map<String, dynamic> toJson() => {
@@ -123,6 +129,8 @@ class SeriesCategory {
     'Gender' : gender,
     'SeriesType' : seriesType,
     'FixtureType' : fixtureType,
+    'homeTeamFlag' : homeTeamFlag,
+    'awayTeamFlag' : awayTeamFlag,
     'GetEntityKey' : getEntityKey
   };
 }

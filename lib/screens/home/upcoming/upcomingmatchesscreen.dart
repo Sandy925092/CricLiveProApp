@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
@@ -18,6 +19,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../../constants.dart';
+import '../countdown.dart';
 
 class UpcomingMatchScreen extends StatefulWidget {
   const UpcomingMatchScreen({Key? key}) : super(key: key);
@@ -34,15 +36,38 @@ class _UpcomingMatchScreenState extends State<UpcomingMatchScreen> {
   bool? isTrue;
   List<bool> isTrueList = [false, false];
   String token = "";
+  String selectedDay = "";
+  String selectedDayValue = "Today";
+  String selectedFilter = "International";
   int pageNo = 0;
   bool isLoadingMore = false;
   bool hasMoreData = true;
 
-  int selectedIndex = -1;
+  int selectedIndex = 0;
+  int selectedLikeIndex = -1;
+
+  int selectedDayIndex = -1;
+  int? selectedSeriesIndex;
+  int? selectedFixtureIndex;
   late final PagingController<int, UpComingContent> _pagingController;
+  final ScrollController _scrollController = ScrollController();
 
   List<UpComingContent> seriesName = [];
+
   List<Fixtures> fixtures = [];
+
+  List<String> filterTypes = [
+    "International",
+    "InternationalClubs",
+    "Domestic",
+    "Other",
+    "Unknown"
+  ];
+
+  List<String> filterDays = [
+    "Today",
+    "This Week",
+  ];
 
   Future<void> _refreshPage() async {
     _fetchPage(pageNo);
@@ -51,6 +76,7 @@ class _UpcomingMatchScreenState extends State<UpcomingMatchScreen> {
   @override
   void initState() {
     getToken();
+    _scrollController.addListener(_scrollListener);
 
     print("token");
     print(token);
@@ -71,6 +97,16 @@ class _UpcomingMatchScreenState extends State<UpcomingMatchScreen> {
     super.initState();
   }
 
+  void _scrollListener() {
+    if (_scrollController.position.pixels >=
+            _scrollController.position.maxScrollExtent - 100 &&
+        !isLoadingMore &&
+        hasMoreData) {
+      pageNo++;
+      _fetchPage(pageNo);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -83,9 +119,16 @@ class _UpcomingMatchScreenState extends State<UpcomingMatchScreen> {
             upcomingSeriesResponse =
                 state.responseData?.response as UpcomingSeriesResponse;
             Loader.hide();
-            if (upcomingSeriesResponse.data?.content?.length != 0) {
-              // seriesName.addAll(finishedSeriesResponse.data?.content ?? []);
 
+            if (pageNo == 0) {
+              seriesName.clear();
+            }
+            final allSeries = upcomingSeriesResponse.data?.content ?? [];
+
+            seriesName.addAll(allSeries
+                .where((series) => (series.fixtures?.isNotEmpty ?? false)));
+
+            if (upcomingSeriesResponse.data?.content?.isNotEmpty ?? false) {
               final newItems = upcomingSeriesResponse.data?.content ?? [];
               final isLastPage = upcomingSeriesResponse.data?.last ?? true;
 
@@ -94,30 +137,14 @@ class _UpcomingMatchScreenState extends State<UpcomingMatchScreen> {
               } else {
                 final nextPageKey =
                     (upcomingSeriesResponse.data?.number ?? 0) + 1;
-                pageNo = (upcomingSeriesResponse.data?.number ?? 0) + 1;
+                pageNo = nextPageKey;
                 _pagingController.appendPage(newItems, nextPageKey);
               }
-              seriesName.addAll(newItems);
 
-              print("seriesLength");
-              print(seriesName.length);
+              print("paging length => ${_pagingController.itemList?.length}");
             }
           }
 
-          if (state.status == LiveScoreStatus.likematchSuccess) {
-            setState(() {
-              fixtures[selectedIndex].liked = true;
-            });
-            UiHelper.toastMessage("Match added to wishlist" ?? '');
-            // showToast(context: context, message: "Match added to wishlist");
-          }
-
-          if (state.status == LiveScoreStatus.unLikematchSuccess) {
-            setState(() {
-              fixtures[selectedIndex].liked = false;
-            });
-            showToast(context: context, message: "Match removed from wishlist");
-          }
           if (state.status == LiveScoreStatus.upcomingSeriesError ||
               state.status == LiveScoreStatus.likematchError ||
               state.status == LiveScoreStatus.unLikematchError) {
@@ -132,8 +159,118 @@ class _UpcomingMatchScreenState extends State<UpcomingMatchScreen> {
         }, builder: (context, state) {
           if (state.status == LiveScoreStatus.upcomingSeriesLoading &&
               pageNo == 0) {
-            return const Center(
-              child: CircularProgressIndicator(color: Color(0xFF0DA9AF)),
+            return Column(
+              children: [
+                SizedBox(
+                  height: 15,
+                ),
+                SizedBox(
+                  height: 40,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: filterTypes.length,
+                    itemBuilder: (context, index) {
+                      final item = filterTypes[index];
+                      final isSelected = selectedIndex == index;
+
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            pageNo = 0;
+                            selectedIndex = index;
+                            selectedFilter = item;
+                            _pagingController.refresh();
+
+                            _fetchPage(0);
+                          });
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 10),
+                          margin: const EdgeInsets.symmetric(horizontal: 8),
+                          decoration: BoxDecoration(
+                            color: isSelected ? neonColor : Colors.white,
+                            borderRadius: BorderRadius.circular(25),
+                            border: Border.all(
+                                color: isSelected ? neonColor : Colors.grey),
+                          ),
+                          child: Center(
+                            child: Text(
+                              item,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                SizedBox(
+                  height: 40,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: filterDays.length,
+                    itemBuilder: (context, index) {
+                      final item = filterDays[index];
+                      final isSelected = selectedDayIndex == index;
+
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            pageNo = 0;
+                            selectedDayIndex = index;
+                            selectedDay = item;
+                            _pagingController.refresh();
+
+                            _fetchPage(0);
+                          });
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 10),
+                          margin: const EdgeInsets.symmetric(horizontal: 8),
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? Colors.blue
+                                : Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                                color: isSelected
+                                    ? Colors.blue
+                                    : Colors.grey),
+                          ),
+                          child: Center(
+                            child: Text(
+                              item,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: 50,
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height*0.5,
+                  child: const Center(
+                    child: CircularProgressIndicator(color: Color(0xFF0DA9AF)),
+                  ),
+                ),
+              ],
             );
           }
           if (state.status == LiveScoreStatus.upcomingSeriesError) {
@@ -157,6 +294,108 @@ class _UpcomingMatchScreenState extends State<UpcomingMatchScreen> {
                       children: [
                         //  Image.asset('assets/images/error.png', height: 45, width: 45),
                         const SizedBox(height: 10),
+
+                        SizedBox(
+                          height: 40,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: filterTypes.length,
+                            itemBuilder: (context, index) {
+                              final item = filterTypes[index];
+                              final isSelected = selectedIndex == index;
+
+                              return GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    pageNo = 0;
+                                    selectedIndex = index;
+                                    selectedFilter = item;
+
+                                    _fetchPage(0);
+                                  });
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 10),
+                                  margin:
+                                      const EdgeInsets.symmetric(horizontal: 8),
+                                  decoration: BoxDecoration(
+                                    color:
+                                        isSelected ? neonColor : Colors.white,
+                                    borderRadius: BorderRadius.circular(25),
+                                    border: Border.all(
+                                        color: isSelected
+                                            ? neonColor
+                                            : Colors.grey),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      item,
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        SizedBox(
+                          height: 40,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: filterDays.length,
+                            itemBuilder: (context, index) {
+                              final item = filterDays[index];
+                              final isSelected = selectedDayIndex == index;
+
+                              return GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    pageNo = 0;
+                                    selectedDayIndex = index;
+                                    selectedDay = item;
+                                    _pagingController.refresh();
+
+                                    _fetchPage(0);
+                                  });
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 10),
+                                  margin:
+                                      const EdgeInsets.symmetric(horizontal: 8),
+                                  decoration: BoxDecoration(
+                                    color: isSelected
+                                        ? Colors.blue
+                                        : Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                        color: isSelected
+                                            ? Colors.blue
+                                            : Colors.grey),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      item,
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
                         Padding(
                           padding:
                               const EdgeInsets.only(left: 50.0, right: 50.0),
@@ -201,86 +440,289 @@ class _UpcomingMatchScreenState extends State<UpcomingMatchScreen> {
               child: Column(
                 children: [
                   2.h.heightBox,
-                  upcomingSeriesResponse.data?.content?.length == null &&
-                          upcomingSeriesResponse.data?.content?.length == 0
-                      ? Center(
-                          child: mediumText14(context, 'No Upcoming Series',
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              textAlign: TextAlign.center,
-                              textColor: const Color(0xffFFFFFF)),
-                        )
-                      : (upcomingSeriesResponse.data?.content?.isNotEmpty ??
-                              false)
-                          ? SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.7,
-                              child: PagedListView<int, UpComingContent>(
-                                  pagingController: _pagingController,
-                                  builderDelegate: PagedChildBuilderDelegate<
-                                      UpComingContent>(
-                                    itemBuilder: (context, item, index) {
-                                      final isExpanded = expandedIndex == index;
-                                      return ExpansionTile(
-                                        key: PageStorageKey(
-                                            'expansion_tile_$index'),
-                                        initiallyExpanded: isExpanded,
-                                        trailing: Transform.rotate(
-                                          angle: isExpanded
-                                              ? 3.1
-                                              : 0, // 90 degrees
-                                          child: Icon(
-                                            Icons.arrow_forward_ios_outlined,
-                                            color: Color(0xff96A0B7),
-                                          ).rotate90(),
+                  seriesName.length == 0
+                      ? Column(
+                          children: [
+                            SizedBox(
+                              height: 40,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: filterTypes.length,
+                                itemBuilder: (context, index) {
+                                  final item = filterTypes[index];
+                                  final isSelected = selectedIndex == index;
+
+                                  return GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        pageNo = 0;
+                                        selectedIndex = index;
+                                        selectedFilter = item;
+
+                                        _fetchPage(0);
+                                      });
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16, vertical: 10),
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 8),
+                                      decoration: BoxDecoration(
+                                        color: isSelected
+                                            ? neonColor
+                                            : Colors.white,
+                                        borderRadius: BorderRadius.circular(25),
+                                        border: Border.all(
+                                            color: isSelected
+                                                ? neonColor
+                                                : Colors.grey),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          item,
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w500,
+                                          ),
                                         ),
-                                        onExpansionChanged: (expanded) async {
-                                          expandedIndex =
-                                              expanded ? index : null;
-                                          print(
-                                              "Tapped index: $index, expanded: $expanded");
-                                          fixtures.clear();
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            SizedBox(
+                              height: 40,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: filterDays.length,
+                                itemBuilder: (context, index) {
+                                  final item = filterDays[index];
+                                  final isSelected = selectedDayIndex == index;
 
-                                          fixtures.addAll(
-                                              seriesName[index].fixtures ?? []);
+                                  return GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        pageNo = 0;
+                                        selectedDayIndex = index;
+                                        selectedDay = item;
+                                        _pagingController.refresh();
 
-                                          print(jsonEncode(fixtures));
-                                          // await BlocProvider.of<LiveScoreCubit>(
-                                          //     context)
-                                          //     .getFinishMatch(
-                                          //     pageNo.toString(),
-                                          //     seriesName[index]
-                                          //         .id2
-                                          //         .toString());
-                                          // });
-                                          setState(() {});
+                                        _fetchPage(0);
+                                      });
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16, vertical: 10),
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 8),
+                                      decoration: BoxDecoration(
+                                        color: isSelected
+                                            ? Colors.blue
+                                            : Colors.white,
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                            color: isSelected
+                                                ? Colors.blue
+                                                : Colors.grey),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          item,
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height*0.5,
+                              child: Center(
+                                child: mediumText14(context, 'No Upcoming Series',
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    textAlign: TextAlign.center,
+                                    textColor: const Color(0xffFFFFFF)),
+                              ),
+                            ),
+                          ],
+                        )
+                      : (seriesName.length != 0)
+                          ? Column(
+                              children: [
+                                SizedBox(
+                                  height: 40,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: filterTypes.length,
+                                    itemBuilder: (context, index) {
+                                      final item = filterTypes[index];
+                                      final isSelected = selectedIndex == index;
+
+                                      return GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            pageNo = 0;
+                                            selectedIndex = index;
+                                            selectedFilter = item;
+
+                                            _fetchPage(0);
+                                          });
                                         },
-                                        title: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Image.asset(
-                                                  "assets/images/doticon.png",
-                                                  height: 25,
-                                                  width: 25,
-                                                ),
-                                                // _controller.isExpanded
-                                                //     ? Image.asset(
-                                                //   "assets/images/doticon.png",
-                                                //   height: 25,
-                                                //   width: 25,
-                                                // )
-                                                //     : SizedBox(),
-                                                2.w.widthBox,
-                                                Flexible(
-                                                  flex: 20,
-                                                  child: commonText(
-                                                      data: seriesName[index]
-                                                              .seriesName
-                                                              .toString() ??
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 16, vertical: 10),
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 8),
+                                          decoration: BoxDecoration(
+                                            color: isSelected
+                                                ? neonColor
+                                                : Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(25),
+                                            border: Border.all(
+                                                color: isSelected
+                                                    ? neonColor
+                                                    : Colors.grey),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              item,
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 15,
+                                ),
+                                SizedBox(
+                                  height: 40,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: filterDays.length,
+                                    itemBuilder: (context, index) {
+                                      final item = filterDays[index];
+                                      final isSelected =
+                                          selectedDayIndex == index;
+
+                                      return GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            pageNo = 0;
+                                            selectedDayIndex = index;
+                                            selectedDay = item;
+                                            _pagingController.refresh();
+
+                                            _fetchPage(0);
+                                          });
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 16, vertical: 10),
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 8),
+                                          decoration: BoxDecoration(
+                                            color: isSelected
+                                                ? neonColor
+                                                : Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(25),
+                                            border: Border.all(
+                                                color: isSelected
+                                                    ? neonColor
+                                                    : Colors.grey),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              item,
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.7,
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    controller: _scrollController,
+                                    itemCount: seriesName.length +
+                                        (isLoadingMore ? 1 : 0),
+                                    itemBuilder: (context, index) {
+                                      final series = seriesName[index];
+                                      final isExpanded = expandedIndex == index;
+
+                                      if (index == seriesName.length) {
+                                        return const Center(
+                                          child: Padding(
+                                            padding: EdgeInsets.all(16.0),
+                                            child: CircularProgressIndicator(),
+                                          ),
+                                        );
+                                      }
+
+                                      return Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              setState(() {
+                                                expandedIndex =
+                                                    isExpanded ? null : index;
+                                              });
+                                            },
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.only(left: 15.0, right: 15),
+                                              child: Row(
+                                                children: [
+
+                                                  ClipRRect(
+                                                    borderRadius: BorderRadius.circular(10),
+                                                    child: Container(
+                                                      height: 15,
+                                                      width: 15,
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.white
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: 10,),
+                                                  Expanded(
+                                                    child: commonText(
+                                                      data: series.seriesName ??
                                                           "",
                                                       fontSize: 16,
                                                       fontWeight:
@@ -288,613 +730,482 @@ class _UpcomingMatchScreenState extends State<UpcomingMatchScreen> {
                                                       fontFamily: "Poppins",
                                                       color: white,
                                                       maxLines: 3,
-                                                      overflow: TextOverflow
-                                                          .ellipsis),
-                                                ),
-                                              ],
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 12.0, right: 12.0),
-                                              child: Divider(
-                                                thickness: 1.0,
-                                                color: buttonColors,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                  Icon(
+                                                    isExpanded
+                                                        ? Icons
+                                                            .keyboard_arrow_up
+                                                        : Icons
+                                                            .keyboard_arrow_down,
+                                                    color: Colors.white,
+                                                    size: 30,
+                                                  ),
+                                                ],
                                               ),
                                             ),
-                                          ],
-                                        ),
-                                        children: [
-                                          if (isExpanded)
-                                            if (state.status ==
-                                                LiveScoreStatus
-                                                    .finishedMatchLoading)
-                                              Center(
-                                                child: SizedBox(
-                                                  height: 30,
-                                                  width: 30,
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                    color: Colors.white,
+                                          ),
+                                          const Divider(
+                                            thickness: 1.0,
+                                            color: Colors.grey,
+                                          ),
+                                          const SizedBox(height: 10),
+                                          if (isExpanded &&
+                                              (series.fixtures?.isNotEmpty ??
+                                                  false))
+                                            ListView.builder(
+                                              shrinkWrap: true,
+                                              physics:
+                                                  NeverScrollableScrollPhysics(),
+                                              itemCount:
+                                                  series.fixtures!.length,
+                                              itemBuilder: (context, index2) {
+                                                final fixture =
+                                                    series.fixtures![index2];
+                                                return Container(
+                                                  margin: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 16,
+                                                      vertical: 6),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.white
+                                                        .withOpacity(0.15),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12),
                                                   ),
-                                                ),
-                                              )
-                                            else if (seriesName.length == 0)
-                                              Center(
-                                                child: mediumText14(
-                                                  context,
-                                                  'No match found',
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w500,
-                                                  textAlign: TextAlign.center,
-                                                  textColor: Colors.red,
-                                                ),
-                                              )
-                                            else
-                                              fixtures.length != 0
-                                                  ? Column(
-                                                      children: fixtures
-                                                          .asMap()
-                                                          .entries
-                                                          .map(
-                                                        (entry) {
-                                                          final index1 =
-                                                              entry.key;
-                                                          final items =
-                                                              entry.value;
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            12.0),
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Align(
+                                                          alignment: Alignment
+                                                              .centerRight,
+                                                          child: state.status ==
+                                                                          LiveScoreStatus
+                                                                              .likematchLoading &&
+                                                                      selectedLikeIndex ==
+                                                                          index2 ||
+                                                                  state.status ==
+                                                                          LiveScoreStatus
+                                                                              .unLikematchLoading &&
+                                                                      selectedLikeIndex ==
+                                                                          index2
+                                                              ? const SizedBox(
+                                                                  height: 20,
+                                                                  width: 20,
+                                                                  child:
+                                                                      CircularProgressIndicator(
+                                                                    color: Colors
+                                                                        .blue,
+                                                                  ),
+                                                                )
+                                                              : GestureDetector(
+                                                                  onTap: () {
+                                                                    setState(
+                                                                        () {
+                                                                      selectedLikeIndex =
+                                                                          index2;
+                                                                    });
+                                                                    final matchDetails =
+                                                                        {
+                                                                      "seriesId":
+                                                                          series.seriesId?.toString() ??
+                                                                              "",
+                                                                      "seriesName":
+                                                                          series.seriesName?.toString() ??
+                                                                              "",
+                                                                      "fixtureId": fixture
+                                                                          .fixtureId
+                                                                          .toString(),
+                                                                      "teamAName": fixture
+                                                                              .homeTeam
+                                                                              ?.name
+                                                                              ?.toString() ??
+                                                                          "Team ${fixture.homeTeam?.id?.toString() ?? ""}",
+                                                                      "teamBName": fixture
+                                                                              .awayTeam
+                                                                              ?.name
+                                                                              ?.toString() ??
+                                                                          "Team ${fixture.awayTeam?.id?.toString() ?? ""}",
+                                                                      "matchStatus":
+                                                                          "Upcoming",
+                                                                      "matchDate": fixture
+                                                                              .startTimes
+                                                                              ?.first
+                                                                              .date
+                                                                              ?.toString() ??
+                                                                          "",
+                                                                    };
+                                                                    BlocProvider.of<LiveScoreCubit>(
+                                                                            context)
+                                                                        .likeMatch(
+                                                                            token,
+                                                                            matchDetails);
+                                                                  },
+                                                                  child: BlocConsumer<
+                                                                      LiveScoreCubit,
+                                                                      LiveScoreState>(
+                                                                    listener:
+                                                                        (context,
+                                                                            state) {
+                                                                      if (state
+                                                                              .status ==
+                                                                          LiveScoreStatus
+                                                                              .likematchSuccess) {
+                                                                        UiHelper.toastMessage(
+                                                                            "Match added to wishlist");
 
-                                                          return GestureDetector(
-                                                            onTap: () {
-                                                              print(
-                                                                  "Tapped fixture index: $index1");
+                                                                        setState(
+                                                                            () {
+                                                                          series
+                                                                              .fixtures![selectedLikeIndex]
+                                                                              .liked = true;
+                                                                        });
+                                                                        UiHelper.toastMessage(
+                                                                            "Match added to wishlist");
+                                                                      }
 
-                                                              // Example: Navigate or show toast
-                                                              // if (items.fixtures == true) {
-                                                              //   Navigator.push(context, MaterialPageRoute(builder: (context) {
-                                                              //     return FinishedMatchScorecardScreen(
-                                                              //       matchId: items.fixtureId?.toString() ?? "",
-                                                              //       winningTeam: items.winningTeamName?.toString() ?? "",
-                                                              //     );
-                                                              //   }));
-                                                              // } else {
-                                                              //   showToast(context: context, message: "Result not found");
-                                                              // }
-                                                            },
-                                                            child: Container(
-                                                              margin: EdgeInsets
-                                                                  .all(10),
-                                                              decoration: BoxDecoration(
-                                                                  color: Colors
-                                                                      .white
-                                                                      .withOpacity(
-                                                                          0.2),
-                                                                  border: Border
-                                                                      .all(
-                                                                          color:
-                                                                              disableColors),
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              7)),
-                                                              child: Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(
-                                                                        1.0),
-                                                                child: Column(
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .start,
-                                                                  children: [
-                                                                    Padding(
-                                                                      padding: const EdgeInsets
-                                                                          .only(
-                                                                          right:
-                                                                              10.0,
-                                                                          top:
-                                                                              5),
-                                                                      child:
-                                                                          Align(
-                                                                        alignment:
-                                                                            Alignment.centerRight,
-                                                                        child: state.status == LiveScoreStatus.likematchLoading && selectedIndex == index1 ||
-                                                                                state.status == LiveScoreStatus.unLikematchLoading && selectedIndex == index1
-                                                                            ? SizedBox(
-                                                                                height: 20,
-                                                                                width: 20,
-                                                                                child: CircularProgressIndicator(
-                                                                                  color: Colors.blue,
-                                                                                ))
-                                                                            : GestureDetector(
-                                                                                onTap: () {
-                                                                                  if (items.liked == true) {
-                                                                                    isInternetConnected().then((value) {
-                                                                                      if (value == true) {
-                                                                                        selectedIndex = index1;
+                                                                      if (state
+                                                                              .status ==
+                                                                          LiveScoreStatus
+                                                                              .unLikematchSuccess) {
+                                                                        showToast(
+                                                                            context:
+                                                                                context,
+                                                                            message:
+                                                                                "Match removed from wishlist");
 
-                                                                                        BlocProvider.of<LiveScoreCubit>(context).unLikeMatch(token, items.fixtureId.toString() ?? "");
-                                                                                      } else {
-                                                                                        showToast(context: context, message: notConnected);
-                                                                                      }
-                                                                                    });
-                                                                                  } else {
-                                                                                    isInternetConnected().then((value) {
-                                                                                      if (value == true) {
-                                                                                        print("series id index");
-                                                                                        print(index);
-                                                                                        print(index1);
-                                                                                        Map<String, dynamic> matchDetails = {
-                                                                                          "seriesId": upcomingSeriesResponse.data?.content![index1].seriesId?.toString() ?? "",
-                                                                                          "seriesName": upcomingSeriesResponse.data?.content![index1].seriesName?.toString() ?? "",
-                                                                                          "fixtureId": items.fixtureId?.toString() ?? "",
-                                                                                          "teamAName": items.homeTeam?.name?.toString() ?? "Team ${items.homeTeam?.id?.toString()}",
-                                                                                          "teamBName": items.awayTeam?.name?.toString() ?? "Team ${items.awayTeam?.id?.toString()}",
-                                                                                          "matchStatus": "Upcoming",
-                                                                                          "matchDate": items.startTimes?.first.date?.toString() ?? "",
-                                                                                        };
-
-                                                                                        selectedIndex = index1;
-
-                                                                                        print("matchDetails");
-                                                                                        print(matchDetails);
-
-                                                                                        BlocProvider.of<LiveScoreCubit>(context).likeMatch(token, matchDetails);
-                                                                                      } else {
-                                                                                        showToast(context: context, message: notConnected);
-                                                                                      }
-                                                                                    });
-                                                                                  }
-                                                                                },
-                                                                                child: Icon(
-                                                                                  items.liked == true ? Icons.favorite : Icons.favorite_outline_rounded,
-                                                                                  color: items.liked == true ? Colors.red : Colors.grey,
-                                                                                ),
-                                                                              ),
-                                                                      ),
-                                                                    ),
-                                                                    Padding(
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          12.0),
-                                                                      child:
-                                                                          Row(
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.spaceBetween,
-                                                                        children: [
-                                                                          Flexible(
-                                                                            child:
-                                                                                SizedBox(
-                                                                              width: MediaQuery.of(context).size.width * 0.4,
-                                                                              child: commonText(
-                                                                                data: items.homeTeam?.name != null ? items.homeTeam?.name?.toString() ?? "Not available" : " Team ${items.homeTeam?.id.toString()}" ?? "",
-                                                                                fontSize: 14,
-                                                                                maxLines: 2,
-                                                                                fontWeight: FontWeight.w400,
-                                                                                fontFamily: "Poppins",
-                                                                                color: Colors.black,
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                          Container(
-                                                                            width:
-                                                                                25.w,
-                                                                            padding:
-                                                                                EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-                                                                            decoration:
-                                                                                BoxDecoration(
-                                                                              borderRadius: BorderRadius.circular(20.0),
-                                                                              color: buttonColors,
-                                                                            ),
-                                                                            child:
-                                                                                Center(
-                                                                              child: commonText(
-                                                                                alignment: TextAlign.center,
-                                                                                data: "Starting on\n ${DateFormat("d/M/yy").format(DateTime.parse(items.startTimes?.first.date ?? "2025-04-04T10:00:00"))}",
-                                                                                fontSize: 10,
-                                                                                fontWeight: FontWeight.w700,
-                                                                                fontFamily: "Poppins",
-                                                                                color: black,
-                                                                              ),
-                                                                            ),
-                                                                          ).pOnly(
-                                                                              left: 32,
-                                                                              right: 32),
-                                                                          Flexible(
-                                                                            child:
-                                                                                Column(
-                                                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                                                              children: [
-                                                                                SizedBox(
-                                                                                  width: MediaQuery.of(context).size.width * 0.4,
-                                                                                  child: commonText(
-                                                                                    data: items.awayTeam?.name != null ? items.awayTeam?.name?.toString() ?? "Not available" : " Team ${items.awayTeam?.id.toString()}" ?? "",
-                                                                                    fontSize: 14,
-                                                                                    maxLines: 2,
-                                                                                    fontWeight: FontWeight.w400,
-                                                                                    fontFamily: "Poppins",
-                                                                                    color: Colors.black,
-                                                                                    overflow: TextOverflow.ellipsis,
-                                                                                  ),
-                                                                                ),
-                                                                              ],
-                                                                            ),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                  ],
+                                                                        setState(
+                                                                            () {
+                                                                          series
+                                                                              .fixtures![selectedLikeIndex]
+                                                                              .liked = false;
+                                                                        });
+                                                                      }
+                                                                    },
+                                                                    builder:
+                                                                        (context,
+                                                                            state) {
+                                                                      return Icon(
+                                                                        series.fixtures![index2].liked ==
+                                                                                true
+                                                                            ? Icons.favorite
+                                                                            : Icons.favorite_outline_rounded,
+                                                                        color: series.fixtures![index2].liked ==
+                                                                                true
+                                                                            ? Colors.red
+                                                                            : Colors.grey,
+                                                                      );
+                                                                    },
+                                                                  ),
                                                                 ),
+                                                        ),
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Expanded(
+                                                              child: Column(
+                                                                children: [
+                                                                  CachedNetworkImage(
+                                                                    imageUrl: fixture
+                                                                            .homeTeam
+                                                                            ?.flagUrl ??
+                                                                        "",
+                                                                    placeholder:
+                                                                        (context,
+                                                                                url) =>
+                                                                            const Center(
+                                                                      child:
+                                                                          SizedBox(
+                                                                        width:
+                                                                            20,
+                                                                        height:
+                                                                            20,
+                                                                        child:
+                                                                            CircularProgressIndicator(
+                                                                          strokeWidth:
+                                                                              2,
+                                                                          color:
+                                                                              Colors.blue,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    errorWidget: (c,
+                                                                            u,
+                                                                            e) =>
+                                                                        Image
+                                                                            .asset(
+                                                                      "assets/images/iv_noflag.png",
+                                                                      height:
+                                                                          30,
+                                                                      width: 30,
+                                                                    ),
+                                                                    height: 30,
+                                                                    width: 30,
+                                                                  ),
+                                                                  const SizedBox(
+                                                                      height:
+                                                                          4),
+                                                                  Text(
+                                                                    fixture.homeTeam
+                                                                            ?.name ??
+                                                                        "Team ${fixture.homeTeam?.id ?? ""}",
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style:
+                                                                        const TextStyle(
+                                                                      fontSize:
+                                                                          14,
+                                                                      color: Colors
+                                                                          .white,
+                                                                    ),
+                                                                  ),
+                                                                ],
                                                               ),
                                                             ),
-                                                          );
-                                                        },
-                                                      ).toList(),
-                                                    )
-                                                  : Center(
-                                                      child: mediumText14(
-                                                        context,
-                                                        'No match found',
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        textColor: Colors.white,
-                                                      ),
-                                                    )
+                                                            Container(
+                                                              width: 25.w,
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .symmetric(
+                                                                      horizontal:
+                                                                          10,
+                                                                      vertical:
+                                                                          3),
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            20.0),
+                                                                color:
+                                                                    buttonColors,
+                                                              ),
+                                                              child: Center(
+                                                                child: MatchCountdown(
+                                                                  startDate: DateTime.parse(
+                                                                      "${fixture.startTimes?.first.date} ${fixture.startTimes?.first.time}"
+                                                                  ).toLocal(),
+                                                                  style: TextStyle(
+                                                                    fontSize: 12,
+                                                                    fontWeight: FontWeight.w700,
+                                                                    fontFamily: "Poppins",
+                                                                    color: Colors.black,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ).pOnly(
+                                                                left: 32,
+                                                                right: 32),
+                                                            Expanded(
+                                                              child: Column(
+                                                                children: [
+                                                                  CachedNetworkImage(
+                                                                    imageUrl: fixture
+                                                                            .awayTeam
+                                                                            ?.flagUrl ??
+                                                                        "",
+                                                                    placeholder:
+                                                                        (context,
+                                                                                url) =>
+                                                                            const Center(
+                                                                      child:
+                                                                          SizedBox(
+                                                                        width:
+                                                                            20,
+                                                                        height:
+                                                                            20,
+                                                                        child:
+                                                                            CircularProgressIndicator(
+                                                                          strokeWidth:
+                                                                              2,
+                                                                          color:
+                                                                              Colors.blue,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    errorWidget: (c,
+                                                                            u,
+                                                                            e) =>
+                                                                        Image
+                                                                            .asset(
+                                                                      "assets/images/iv_noflag.png",
+                                                                      height:
+                                                                          30,
+                                                                      width: 30,
+                                                                    ),
+                                                                    height: 30,
+                                                                    width: 30,
+                                                                  ),
+                                                                  const SizedBox(
+                                                                      height:
+                                                                          4),
+                                                                  Text(
+                                                                    fixture.awayTeam
+                                                                            ?.name ??
+                                                                        "Team ${fixture.awayTeam?.id ?? ""}",
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style:
+                                                                        const TextStyle(
+                                                                      fontSize:
+                                                                          14,
+                                                                      color: Colors
+                                                                          .white,
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            ),
                                         ],
                                       );
                                     },
-                                  )),
+                                  ),
+                                ),
+                              ],
                             )
+                          : Column(
+                              children: [
+                                SizedBox(
+                                  height: 40,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: filterTypes.length,
+                                    itemBuilder: (context, index) {
+                                      final item = filterTypes[index];
+                                      final isSelected = selectedIndex == index;
 
-                          // ExpandedTileList.builder(
-                          //             itemCount: upcomingSeriesResponse
-                          //                     .data?.content?.length ??
-                          //                 0,
-                          //             shrinkWrap: true,
-                          //             // padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                          //             itemBuilder: (context, index, con) {
-                          //               return ExpandedTile(
-                          //                 trailing: Icon(
-                          //                   Icons.arrow_forward_ios_outlined,
-                          //                   color: Color(0xff96A0B7),
-                          //                 ).rotate90(),
-                          //                 contentseparator: 3.0,
-                          //                 trailingRotation: 180,
-                          //                 theme: const ExpandedTileThemeData(
-                          //                   headerPadding: EdgeInsets.symmetric(
-                          //                       horizontal: 10, vertical: 10),
-                          //                   contentPadding:
-                          //                       EdgeInsets.symmetric(horizontal: 20),
-                          //                   headerColor: bgColor,
-                          //                   headerSplashColor: transparent,
-                          //                   contentBackgroundColor: bgColor,
-                          //                 ),
-                          //                 controller: _controller,
-                          //                 title: Column(
-                          //                   crossAxisAlignment:
-                          //                       CrossAxisAlignment.start,
-                          //                   children: [
-                          //                     Row(
-                          //                       mainAxisAlignment:
-                          //                           MainAxisAlignment.start,
-                          //                       children: [
-                          //                         _controller.isExpanded
-                          //                             ? Image.asset(
-                          //                                 "assets/images/doticon.png",
-                          //                                 height: 25,
-                          //                                 width: 25,
-                          //                               )
-                          //                             : SizedBox(),
-                          //                         2.w.widthBox,
-                          //                         Flexible(
-                          //                           flex: 20,
-                          //                           child: commonText(
-                          //                               data: upcomingSeriesResponse
-                          //                                       .data
-                          //                                       ?.content?[index]
-                          //                                       .seriesName ??
-                          //                                   "",
-                          //                               fontSize: 16,
-                          //                               fontWeight: FontWeight.w700,
-                          //                               fontFamily: "Poppins",
-                          //                               color: white,
-                          //                               maxLines: 3,
-                          //                               overflow:
-                          //                                   TextOverflow.ellipsis),
-                          //                         ),
-                          //                       ],
-                          //                     ),
-                          //                     Padding(
-                          //                       padding: const EdgeInsets.only(
-                          //                           left: 12.0, right: 12.0),
-                          //                       child: Divider(
-                          //                         thickness: 1.0,
-                          //                         color: buttonColors,
-                          //                       ),
-                          //                     ),
-                          //                   ],
-                          //                 ),
-                          //                 content: upcomingSeriesResponse
-                          //                             .data
-                          //                             ?.content?[index]
-                          //                             .fixtures
-                          //                             ?.length ==
-                          //                         0
-                          //                     ? Center(
-                          //                         child: mediumText14(
-                          //                             context, 'No match found',
-                          //                             fontSize: 16,
-                          //                             fontWeight: FontWeight.w500,
-                          //                             textAlign: TextAlign.center,
-                          //                             textColor:
-                          //                                 const Color(0xffFFFFFF)),
-                          //                       )
-                          //                     : ListView.builder(
-                          //                         shrinkWrap: true,
-                          //                         itemCount: upcomingSeriesResponse
-                          //                                 .data
-                          //                                 ?.content?[index]
-                          //                                 .fixtures
-                          //                                 ?.length ??
-                          //                             0,
-                          //                         physics:
-                          //                             NeverScrollableScrollPhysics(),
-                          //                         itemBuilder: (context, i) {
-                          //                           return GestureDetector(
-                          //                             onTap: () {},
-                          //                             child: Column(
-                          //                               children: [
-                          //                                 2.h.heightBox,
-                          //                                 Container(
-                          //                                   margin: EdgeInsets.all(0),
-                          //                                   decoration: BoxDecoration(
-                          //                                       color: Colors.white
-                          //                                           .withOpacity(0.2),
-                          //                                       border: Border.all(
-                          //                                           color:
-                          //                                               disableColors),
-                          //                                       borderRadius:
-                          //                                           BorderRadius
-                          //                                               .circular(7)),
-                          //                                   child: Padding(
-                          //                                     padding:
-                          //                                         const EdgeInsets.all(
-                          //                                             1.0),
-                          //                                     child: Column(
-                          //                                       crossAxisAlignment:
-                          //                                           CrossAxisAlignment
-                          //                                               .start,
-                          //                                       children: [
-                          //                                         0.5.h.heightBox,
-                          //                                         Row(
-                          //                                           mainAxisAlignment:
-                          //                                               MainAxisAlignment
-                          //                                                   .end,
-                          //                                           children: [
-                          //                                             // commonText(
-                          //                                             //   data: upcomingSeriesResponse
-                          //                                             //           .data?[index]
-                          //                                             //           .seriesName ??
-                          //                                             //       "",
-                          //                                             //   fontSize: 14,
-                          //                                             //   fontWeight:
-                          //                                             //       FontWeight.w400,
-                          //                                             //   fontFamily: "Poppins",
-                          //                                             //   color: Colors.grey
-                          //                                             //       .withOpacity(0.9),
-                          //                                             // ).centered(),
-                          //
-                          //                                             GestureDetector(
-                          //                                                 onTap: () {},
-                          //                                                 child: Icon(Icons
-                          //                                                     .favorite_border)),
-                          //                                             SizedBox(
-                          //                                               width: 10,
-                          //                                             )
-                          //                                           ],
-                          //                                         ),
-                          //                                         Padding(
-                          //                                           padding:
-                          //                                               const EdgeInsets
-                          //                                                   .all(12.0),
-                          //                                           child: Row(
-                          //                                             mainAxisAlignment:
-                          //                                                 MainAxisAlignment
-                          //                                                     .spaceBetween,
-                          //                                             children: [
-                          //                                               // Flexible(
-                          //                                               //   child: SizedBox(
-                          //                                               //     width: 25.w,
-                          //                                               //     child:
-                          //                                               //         commonText(
-                          //                                               //       data: upcomingSeriesResponse
-                          //                                               //               .data?[
-                          //                                               //                   index]
-                          //                                               //               .fixtures?[
-                          //                                               //                   i]
-                          //                                               //               .homeTeam
-                          //                                               //               ?.name ??
-                          //                                               //           "N/A",
-                          //                                               //       fontSize: 14,
-                          //                                               //       fontWeight:
-                          //                                               //           FontWeight
-                          //                                               //               .w400,
-                          //                                               //       fontFamily:
-                          //                                               //           "Poppins",
-                          //                                               //       color: Colors
-                          //                                               //           .grey
-                          //                                               //           .withOpacity(
-                          //                                               //               0.9),
-                          //                                               //     ),
-                          //                                               //   ),
-                          //                                               // ),
-                          //
-                          //                                               Flexible(
-                          //                                                 child:
-                          //                                                     SizedBox(
-                          //                                                   width: 25.w,
-                          //                                                   child:
-                          //                                                       commonText(
-                          //                                                     data: upcomingSeriesResponse.data?.content?[index].fixtures?[i].homeTeam?.name !=
-                          //                                                             null
-                          //                                                         ? upcomingSeriesResponse
-                          //                                                             .data!
-                          //                                                             .content![index]
-                          //                                                             .fixtures![i]
-                          //                                                             .homeTeam!
-                          //                                                             .name!
-                          //                                                         : upcomingSeriesResponse.data!.content![index].fixtures![i].homeTeam?.id?.toString() ?? "N/A",
-                          //                                                     fontSize:
-                          //                                                         14,
-                          //                                                     fontWeight:
-                          //                                                         FontWeight
-                          //                                                             .w400,
-                          //                                                     fontFamily:
-                          //                                                         "Poppins",
-                          //                                                     color: Colors
-                          //                                                         .grey
-                          //                                                         .withOpacity(
-                          //                                                             0.9),
-                          //                                                   ),
-                          //                                                 ),
-                          //                                               ),
-                          //
-                          //                                               Container(
-                          //                                                 width: 25.w,
-                          //                                                 padding: EdgeInsets
-                          //                                                     .only(
-                          //                                                         left:
-                          //                                                             10,
-                          //                                                         right:
-                          //                                                             10,
-                          //                                                         top:
-                          //                                                             3,
-                          //                                                         bottom:
-                          //                                                             3),
-                          //                                                 decoration: BoxDecoration(
-                          //                                                     borderRadius:
-                          //                                                         BorderRadius.all(Radius.circular(
-                          //                                                             20.0)),
-                          //                                                     color:
-                          //                                                         buttonColors),
-                          //                                                 child: Center(
-                          //                                                   child:
-                          //                                                       commonText(
-                          //                                                     alignment:
-                          //                                                         TextAlign
-                          //                                                             .center,
-                          //                                                     data:
-                          //                                                         "Starting on\n ${DateFormat("d/M/yy").format(DateTime.parse(upcomingSeriesResponse.data?.content![index].fixtures?[i].startTimes?.first.date ?? "2025-04-04T10:00:00"))}",
-                          //                                                     fontSize:
-                          //                                                         10,
-                          //                                                     fontWeight:
-                          //                                                         FontWeight
-                          //                                                             .w700,
-                          //                                                     fontFamily:
-                          //                                                         "Poppins",
-                          //                                                     color:
-                          //                                                         black,
-                          //                                                   ),
-                          //                                                 ),
-                          //                                               ).pOnly(
-                          //                                                   left: 32,
-                          //                                                   right: 32),
-                          //                                               // Flexible(
-                          //                                               //   child: SizedBox(
-                          //                                               //     width: 25.w,
-                          //                                               //     child:
-                          //                                               //         commonText(
-                          //                                               //       data: upcomingSeriesResponse
-                          //                                               //               .data?[
-                          //                                               //                   index]
-                          //                                               //               .fixtures?[
-                          //                                               //                   i]
-                          //                                               //               .awayTeam
-                          //                                               //               ?.name ??
-                          //                                               //           "N/A",
-                          //                                               //       fontSize: 14,
-                          //                                               //       fontWeight:
-                          //                                               //           FontWeight
-                          //                                               //               .w400,
-                          //                                               //       fontFamily:
-                          //                                               //           "Poppins",
-                          //                                               //       color: Colors
-                          //                                               //           .grey
-                          //                                               //           .withOpacity(
-                          //                                               //               0.9),
-                          //                                               //     ),
-                          //                                               //   ),
-                          //                                               // ),
-                          //
-                          //                                               Flexible(
-                          //                                                 child:
-                          //                                                     SizedBox(
-                          //                                                   width: 25.w,
-                          //                                                   child:
-                          //                                                       commonText(
-                          //                                                     data: upcomingSeriesResponse.data?.content?[index].fixtures?[i].awayTeam?.name !=
-                          //                                                             null
-                          //                                                         ? upcomingSeriesResponse
-                          //                                                             .data!
-                          //                                                             .content![index]
-                          //                                                             .fixtures![i]
-                          //                                                             .awayTeam!
-                          //                                                             .name!
-                          //                                                         : upcomingSeriesResponse.data!.content![index].fixtures![i].awayTeam?.id?.toString() ?? "N/A",
-                          //                                                     fontSize:
-                          //                                                         14,
-                          //                                                     fontWeight:
-                          //                                                         FontWeight
-                          //                                                             .w400,
-                          //                                                     fontFamily:
-                          //                                                         "Poppins",
-                          //                                                     color: Colors
-                          //                                                         .grey
-                          //                                                         .withOpacity(
-                          //                                                             0.9),
-                          //                                                   ),
-                          //                                                 ),
-                          //                                               ),
-                          //                                             ],
-                          //                                           ),
-                          //                                         ),
-                          //                                       ],
-                          //                                     ),
-                          //                                   ),
-                          //                                 ),
-                          //                               ],
-                          //                             ),
-                          //                           );
-                          //                         }),
-                          //                 onTap: () {
-                          //                   if (_controller.isExpanded == true) {
-                          //                     setState(() {
-                          //                       isTrue = _controller.isExpanded;
-                          //                     });
-                          //                   } else {
-                          //                     setState(() {
-                          //                       isTrue = false;
-                          //                     });
-                          //                   }
-                          //                   debugPrint("tapped!!");
-                          //                 },
-                          //                 onLongTap: () {
-                          //                   debugPrint("long tapped!!");
-                          //                 },
-                          //               );
-                          //             })
+                                      return GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            pageNo = 0;
+                                            selectedIndex = index;
+                                            selectedFilter = item;
+                                            _pagingController.refresh();
 
-                          : Center(
-                              child: mediumText14(
-                                context,
-                                'No Upcoming Series',
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                textAlign: TextAlign.center,
-                                textColor: const Color(0xffFFFFFF),
-                              ),
+                                            _fetchPage(0);
+                                          });
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 16, vertical: 10),
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 8),
+                                          decoration: BoxDecoration(
+                                            color: isSelected
+                                                ? neonColor
+                                                : Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(25),
+                                            border: Border.all(
+                                                color: isSelected
+                                                    ? neonColor
+                                                    : Colors.grey),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              item,
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 15,
+                                ),
+                                SizedBox(
+                                  height: 40,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: filterDays.length,
+                                    itemBuilder: (context, index) {
+                                      final item = filterDays[index];
+                                      final isSelected =
+                                          selectedDayIndex == index;
+
+                                      return GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            pageNo = 0;
+                                            selectedDayIndex = index;
+                                            selectedDay = item;
+                                            _pagingController.refresh();
+
+                                            _fetchPage(0);
+                                          });
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 16, vertical: 10),
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 8),
+                                          decoration: BoxDecoration(
+                                            color: isSelected
+                                                ? neonColor
+                                                : Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(25),
+                                            border: Border.all(
+                                                color: isSelected
+                                                    ? neonColor
+                                                    : Colors.grey),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              item,
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 40,
+                                ),
+                                Center(
+                                  child: mediumText14(
+                                    context,
+                                    'No Upcoming Series',
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    textAlign: TextAlign.center,
+                                    textColor: const Color(0xffFFFFFF),
+                                  ),
+                                ),
+                              ],
                             ),
                 ],
               ),
@@ -913,8 +1224,8 @@ class _UpcomingMatchScreenState extends State<UpcomingMatchScreen> {
     try {
       isInternetConnected().then((value) async {
         if (value == true) {
-          await BlocProvider.of<LiveScoreCubit>(context)
-              .getUpcomingSeries(token, pageKey.toString());
+          await BlocProvider.of<LiveScoreCubit>(context).getUpcomingSeries(
+              token, pageKey.toString(), selectedFilter, selectedDay);
         } else {
           showToast(context: context, message: notConnected);
         }
@@ -922,6 +1233,25 @@ class _UpcomingMatchScreenState extends State<UpcomingMatchScreen> {
     } catch (error) {
       _pagingController.error = error;
       debugPrint('Error loading page $pageKey: $error');
+    }
+  }
+
+  String getCountdown(DateTime startDate) {
+    final now = DateTime.now();
+    final difference = startDate.difference(now);
+
+    final clockTime = DateFormat("hh:mm a").format(startDate); // format clock
+
+    if (difference.isNegative) {
+      return "Started";
+    } else if (difference.inDays > 0) {
+      return "${difference.inDays} day${difference.inDays > 1 ? "s" : ""} left";
+    } else if (difference.inHours > 0) {
+      return "${difference.inHours} hour${difference.inHours > 1 ? "s" : ""} left • $clockTime";
+    } else if (difference.inMinutes > 0) {
+      return "${difference.inMinutes} min left • $clockTime";
+    } else {
+      return "Starting soon • $clockTime";
     }
   }
 }

@@ -1,4 +1,5 @@
 import 'package:country_picker/country_picker.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -28,6 +29,15 @@ class _LoginState extends State<Login> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool _isPasswordVisible1 = false;
+  String  deviceToken="";
+
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
+  @override
+  void initState() {
+    getDeviceTokenDetails();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -149,7 +159,7 @@ class _LoginState extends State<Login> {
 
                          isInternetConnected().then((value) {
                            if (value == true) {
-                             BlocProvider.of<LiveScoreCubit>(context).loginCall(emailController.text.toString().toLowerCase(),passwordController.text);
+                             BlocProvider.of<LiveScoreCubit>(context).loginCall(emailController.text.toString().toLowerCase(),passwordController.text, deviceToken);
                            } else {
                              showToast(
                                  context: context,
@@ -175,5 +185,17 @@ class _LoginState extends State<Login> {
         },
       ),
     );
+  }
+
+  Future<void> getDeviceTokenDetails() async {
+    deviceToken = (await getDeviceToken())??"";
+    print("device Token==$deviceToken");
+
+    PreferenceManager.insertValue(key: "userDeviceToken", value: deviceToken);
+  }
+  Future<String?> getDeviceToken() async {
+    try {
+      return await _firebaseMessaging.getToken();
+    } catch (e) {}
   }
 }

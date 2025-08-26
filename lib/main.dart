@@ -1,3 +1,7 @@
+import 'dart:developer';
+
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +12,8 @@ import 'package:kisma_livescore/repository/livescore_repository.dart';
 import 'package:kisma_livescore/screens/auth/signup.dart';
 import 'package:kisma_livescore/screens/auth/splashscreens.dart';
 import 'package:kisma_livescore/screens/auth/welcome_screens.dart';
+import 'package:kisma_livescore/screens/home/firebase_options.dart';
+import 'package:kisma_livescore/screens/home/push_notification.dart';
 import 'package:kisma_livescore/screens/socket/ddd.dart';
 import 'package:kisma_livescore/utils/shared_preference.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -16,9 +22,23 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 bool loginValue = false;
 String selectedDate = "";
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage? message) async {
+  debugPrint("Firebase Messaging firebase is initialized in background");
+  log("REMOTE_MSG: ${message?.notification?.title ?? ''}");
+  await Firebase.initializeApp();
+}
+
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   await PreferenceManager.init();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await FirebaseMessaging.instance.requestPermission();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  await FirebaseNotifications().setupInteractedMessage();
 
   getStoredValue();
   await Future.delayed(const Duration(seconds: 2));

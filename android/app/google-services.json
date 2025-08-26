@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "714721251820",
+    "project_id": "criclivepro-88690",
+    "storage_bucket": "criclivepro-88690.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:714721251820:android:1b6c9553bffe1988f670c9",
+        "android_client_info": {
+          "package_name": "com.example.kisma_livescore"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCN7abY0_jPyEdDcREyzqvaFid6ZfOJzic"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

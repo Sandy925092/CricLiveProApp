@@ -25,11 +25,23 @@ class _MyEventsDaysScreenState extends State<MyEventsDaysScreen>
   TabController? _controller;
   final List<String> tabTypes = ['OneDay', 'T20', 'MultiDay', 'The100', 'T10'];
   String selectedTabType = 'OneDay';
+  String selectedFilter = "";
+
+  List<String> filterTypes = [
+    "International",
+    "InternationalClubs",
+    "Domestic",
+    "Other",
+    "Unknown"
+  ];
+  int selectedIndex = -1;
 
 
   @override
   void initState() {
     super.initState();
+
+
     _controller = TabController(length: tabTypes.length, vsync: this);
     selectedTabType = tabTypes[_controller!.index];
 
@@ -40,6 +52,7 @@ class _MyEventsDaysScreenState extends State<MyEventsDaysScreen>
 
           print("selectedTabType");
           print(selectedTabType);
+          getApi(0);
         });
       }
     });
@@ -81,6 +94,57 @@ class _MyEventsDaysScreenState extends State<MyEventsDaysScreen>
               ),
             ),
           ),
+
+          SizedBox(
+            height: 15,
+          ),
+          SizedBox(
+            height: 40,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: filterTypes.length,
+              itemBuilder: (context, index) {
+                final item = filterTypes[index];
+                final isSelected = selectedIndex == index;
+
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedIndex = index;
+                      selectedFilter = item;
+                      getApi(0);
+                    });
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 10),
+                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                    decoration: BoxDecoration(
+                      color: isSelected ? neonColor : Colors.white,
+                      borderRadius: BorderRadius.circular(25),
+                      border: Border.all(
+                          color: isSelected ? neonColor : Colors.grey),
+                    ),
+                    child: Center(
+                      child: Text(
+                        item,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          SizedBox(
+            height: 15,
+          ),
+
+
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -150,12 +214,15 @@ class _MyEventsDaysScreenState extends State<MyEventsDaysScreen>
   }
 
   void getApi(int pageKey) {
+
+    print("in my events days");
     isInternetConnected().then((value) {
       if (value == true) {
         BlocProvider.of<LiveScoreCubit>(context).getMyEvents(
           selectedDate,
           selectedTabType,
           pageKey.toString(),
+          selectedFilter.isEmpty?"International":selectedFilter
         );
       } else {
         showToast(context: context, message: notConnected);
